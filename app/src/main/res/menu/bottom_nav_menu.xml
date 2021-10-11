@@ -3,17 +3,17 @@
     <item
         android:id="@+id/home"
         android:title="Home"
-        android:icon="@drawable/ic_launcher_background"/>
+        android:icon="@drawable/ic_home"/>
     <item
         android:id="@+id/quran"
         android:title="Quran"
-        android:icon="@drawable/ic_launcher_background"/>
+        android:icon="@drawable/ic_quran"/>
     <item
         android:id="@+id/azkar"
         android:title="Azkar"
-        android:icon="@drawable/ic_launcher_background"/>
+        android:icon="@drawable/ic_azkar"/>
     <item
         android:id="@+id/more"
         android:title="More"
-        android:icon="@drawable/ic_launcher_background"/>
+        android:icon="@drawable/ic_more"/>
 </menu>

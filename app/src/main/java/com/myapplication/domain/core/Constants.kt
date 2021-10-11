@@ -1,9 +1,10 @@
-package com.myapplication
+package com.myapplication.domain.core
 
 object Constants {
     const val TOOLBAR_BG_COLOR = "toolbar_bg_color"
     const val TOOLBAR_TITLE_COLOR = "toolbar_title_color"
     const val TOOLBAR_TITLE = "toolbar_title"
+    const val ADAHAN_BASEURL = "http://api.aladhan.com/"
 
     //public static final String TOOLBAR_NAV_ICON = "toolbar_nav_icon";
     const val COMPASS_BG_COLOR = "compass_bg_color"

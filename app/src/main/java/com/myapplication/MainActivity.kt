@@ -1,15 +1,14 @@
 package com.myapplication
 
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     lateinit var bottomNavigationView: BottomNavigationView
-    var firstFragment = FirstFragment()
-    var secondFragment = SecondFragment()
+    var firstFragment = HomeFragment()
+    var secondFragment = MoreFragment()
     var thirdFragment = ThirdFragment()
     var moreFragment = MoreFragment()
 

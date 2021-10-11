@@ -1,14 +1,225 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".FirstFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <data>
+        <variable
+            name="home_viewmodel"
+            type="com.myapplication.ui.home.HomeViewModel" />
+
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:padding="@dimen/box_inset_layout_padding"
+        android:background="@color/backGroundColor"
+        tools:context=".QiblahActivity">
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_background"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageView
+            android:id="@+id/home_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_home_background"
+            app:layout_constraintBottom_toBottomOf="@id/background"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivQiblaDirection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/image_qibla"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:ignore="ContentDescription" />
+        <TextView
+            android:id="@+id/current_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:textColor="@color/appWhite"
+            android:fontFamily="@font/tajawalbold"
+            android:textSize="32sp"
+            android:layout_marginBottom="100dp"
+            app:layout_constraintTop_toTopOf="@id/background"
+            app:layout_constraintBottom_toBottomOf="@id/background"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+        <TextView
+            android:id="@+id/remaining_time_to_prayer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remaining time is 0:14 on Eisha"
+            android:textColor="@color/appWhite"
+            android:fontFamily="@font/tajawalregular"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@id/current_time"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+        <TextView
+            android:id="@+id/next_prayer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="maghreb"
+            android:textColor="@color/appWhite"
+            android:fontFamily="@font/tajawalbold"
+            android:textSize="16sp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintTop_toTopOf="@id/current_time"
+            app:layout_constraintBottom_toBottomOf="@id/current_time"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <TextView
+            android:id="@+id/next_prayer_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Next Prayer"
+            android:textColor="@color/appWhite"
+            android:fontFamily="@font/tajawalregular"
+            android:textSize="10sp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintTop_toBottomOf="@id/next_prayer"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_header"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/view_background_rounded"
+            android:elevation="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/background">
+
+            <ImageView
+                android:id="@+id/image_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:background="@drawable/ic_location"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="USA MSDLSDKSD"
+                android:textColor="@color/textColorGreen"
+                android:fontFamily="@font/tajawalregular"
+                android:textSize="12sp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toEndOf="@id/image_location"
+                app:layout_constraintTop_toTopOf="@id/image_location"
+                app:layout_constraintBottom_toBottomOf="@id/image_location"/>
+
+
+            <ImageView
+                android:id="@+id/date_hijri"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@drawable/ic_calendar"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="USA MSDLSDKSD"
+                android:textColor="@color/textColorGreen"
+                android:fontFamily="@font/tajawalregular"
+                android:textSize="12sp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toEndOf="@id/date_hijri"
+                app:layout_constraintTop_toTopOf="@id/date_hijri"
+                app:layout_constraintBottom_toBottomOf="@id/date_hijri"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_body"
+            android:layout_width="match_parent"
+            android:layout_height="330dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/view_background_rounded"
+            android:elevation="2dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/constraint_header">
+
+            <ImageView
+                android:id="@+id/prayer_times"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:background="@drawable/ic_clock"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/prayer_times"
+                android:textColor="@color/textColorGrey"
+                android:fontFamily="@font/tajawalregular"
+                android:textSize="14sp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toEndOf="@id/prayer_times"
+                app:layout_constraintTop_toTopOf="@id/prayer_times"
+                app:layout_constraintBottom_toBottomOf="@id/prayer_times"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/prayer_times_list"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/prayer_item"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="@id/prayer_times"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/prayer_times"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/tvHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="asdsad"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivQiblaDirection"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</layout>
