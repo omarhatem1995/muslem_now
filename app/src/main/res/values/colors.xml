@@ -13,4 +13,5 @@
     <color name="textColorGrey">#2C3135</color>
     <color name="defaultColor">#A4AAB5</color>
     <color name="yourSelectedColor">#29CF7F</color>
+    <color name="backgroundGrey">#E5E5E5</color>
 </resources>

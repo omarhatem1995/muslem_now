@@ -10,4 +10,7 @@
     <string name="open_location_settings">Open Location Settings</string>
     <string name="Cancel">Cancel</string>
     <string name="prayer_times">Prayer Times</string>
+    <string name="location_permission_msg">من فضلك أسمح للتطبيق بالحصول على موقعك طوال الوقت</string>
+    <string name="app_location_permission">الأذن للتطبيق بالحصول على موقعك</string>
+
 </resources>

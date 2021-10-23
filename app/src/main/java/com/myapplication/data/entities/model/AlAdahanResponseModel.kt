@@ -1,5 +1,6 @@
 package com.myapplication.data.entities.model
 
+import androidx.room.Entity
 import com.google.gson.JsonArray
 import com.google.gson.annotations.SerializedName
 

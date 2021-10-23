@@ -33,6 +33,7 @@ import android.provider.Settings
 import android.content.DialogInterface
 
 import android.location.LocationManager
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.*
@@ -43,19 +44,20 @@ import com.myapplication.domain.usecases.ui.AlAdahanUseCases
 import com.myapplication.ui.entities.AlAdahanViewState
 import com.myapplication.ui.home.PrayerAdapter
 import java.text.DateFormat
+import java.text.ParseException
 import java.text.SimpleDateFormat
 
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class HomeFragment : Fragment() , AlAdahanUseCases.View {
+class HomeFragment : Fragment(), AlAdahanUseCases.View {
 
     lateinit var binding: FragmentHomeBinding
     private lateinit var vm: HomeViewModel
 
     companion object {
-        const val TAG = "MainActivity"
+        const val TAG = "HomeFragmentLog"
         const val MARSHMALLOW = 23
 
         const val ACCESS_FINE_LOCATION_REQ_CODE = 35
@@ -70,19 +72,20 @@ class HomeFragment : Fragment() , AlAdahanUseCases.View {
     lateinit var sensorManager: SensorManager
     lateinit var sensor: Sensor
     lateinit var userLocation: Location
-    lateinit var ivQiblaDirection : ImageView
-    lateinit var tvHeading : TextView
+    lateinit var ivQiblaDirection: ImageView
+    lateinit var tvHeading: TextView
     lateinit var needleAnimation: RotateAnimation
-    lateinit var fusedLocationClient : FusedLocationProviderClient
-    lateinit var recyclerViewPrayer : RecyclerView
-    lateinit var prayerAdapter : PrayerAdapter
+    lateinit var fusedLocationClient: FusedLocationProviderClient
+    lateinit var recyclerViewPrayer: RecyclerView
+    lateinit var prayerAdapter: PrayerAdapter
     lateinit var linearLayoutManager: LinearLayoutManager
-    lateinit var currentTime : TextView
+    lateinit var currentTime: TextView
+    lateinit var localTime: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        vm = activity?.run{
+        vm = activity?.run {
             ViewModelProviders.of(this)[HomeViewModel::class.java]
         } ?: throw Exception("Invalid Activity")
         requireActivity().getWindow().setSoftInputMode(
@@ -96,7 +99,7 @@ class HomeFragment : Fragment() , AlAdahanUseCases.View {
         savedInstanceState: Bundle?
     ): View? {
 
-        var view : View = inflater.inflate(R.layout.fragment_home, container, false)
+        var view: View = inflater.inflate(R.layout.fragment_home, container, false)
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
             inflater,
@@ -121,128 +124,165 @@ class HomeFragment : Fragment() , AlAdahanUseCases.View {
         val date: DateFormat = SimpleDateFormat("HH:mm a")
         date.setTimeZone(TimeZone.getTimeZone("GMT+1:00"));
 
-        val localTime = date.format(currentLocalTime)
+        localTime = date.format(currentLocalTime)
+
+        Log.d("currentDate : is", localTime)
 
         val homeViewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
 
         binding.homeViewmodel = homeViewModel
         binding.lifecycleOwner = this
 
-        vm.getAlAdahanAPI("51.508515","-51.508515","2",
-            "4","2021")
+        vm.getAlAdahanAPI(
+            "51.508515", "-51.508515", "2",
+            "10", "2021"
+        )
 
-        vm.viewStateAlAdahan.observe(viewLifecycleOwner,{
-                viewState -> when (viewState){
-            is AlAdahanViewState.Loading ->{
-                renderLoading(viewState.show)
+        vm.viewStateAlAdahan.observe(viewLifecycleOwner, { viewState ->
+            when (viewState) {
+                is AlAdahanViewState.Loading -> {
+                    renderLoading(viewState.show)
+                }
+                is AlAdahanViewState.NetworkFailure -> {
+                    renderNetworkFailure()
+                }
+                is AlAdahanViewState.Data -> {
+                    Log.d("dataViewState", "is called in categories: " + viewState.data?.get(0))
+                    Log.d("dataViewState", "is called in categories: " + viewState.data?.get(0))
+                    renderParentTimings(viewState.data)
+                }
             }
-            is AlAdahanViewState.NetworkFailure -> {
-                renderNetworkFailure()
-            }
-            is AlAdahanViewState.Data -> {
-                Log.d("dataViewState", "is called in categories: "+viewState.data?.get(0))
-                renderParentTimings(viewState.data)
-            }
-        }
         })
         currentTime.text = localTime
 
-//        val apiInterface = AlAdahanGateway.provideGateWay().getAladahan("51.508515","-51.508515","2",
-//            "4","2021")
-
-//        aladahanGateway.getAladahan("51.508515","-51.508515","2",
-//        "4","2021")
-
-
-        initLocationPermissions()
+        initLocationListener()
         return view
     }
 
+    override fun renderParentTimings(data: List<Datum>) {
+        val cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+1:00"))
+        val currentLocalTime = cal.time
+        val dateFormat: DateFormat = SimpleDateFormat("dd-MM-yyyy")
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1:00"))
+        val localTime = dateFormat.format(currentLocalTime)
+        linearLayoutManager = LinearLayoutManager(requireContext())
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == HomeFragment.ACCESS_FINE_LOCATION_REQ_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                initLocationListener()
+        for (i in 0..data.size - 1) {
+
+            var date = data.get(i).date.gregorian.date
+
+            var fajrAdahanModel = PrayerTimeModel(
+                0, R.drawable.ic_elfajr,
+                "Fajr", data.get(i).timings.fajr, R.drawable.ic_volume_high, date
+            )
+
+            var sunRiseAdahanModel = PrayerTimeModel(
+                1, R.drawable.ic_elfajr,
+                "Sunrise", data.get(i).timings.sunrise, R.drawable.ic_volume_high, date
+            )
+
+            var dhurAdahanModel = PrayerTimeModel(
+                2, R.drawable.ic_elfajr,
+                "Dhur", data.get(i).timings.dhuhr, R.drawable.ic_volume_high, date
+            )
+
+            var asrAdahanModel = PrayerTimeModel(
+                3, R.drawable.ic_elfajr,
+                "Asr", data.get(i).timings.asr, R.drawable.ic_volume_high, date
+            )
+
+            var sunSetAdahanModel = PrayerTimeModel(
+                4, R.drawable.ic_elfajr,
+                "SunSet", data.get(i).timings.sunset, R.drawable.ic_volume_high, date
+            )
+
+            var maghribAdahanModel = PrayerTimeModel(
+                5, R.drawable.ic_elfajr,
+                "Maghrib", data.get(i).timings.maghrib, R.drawable.ic_volume_high, date
+            )
+
+            var ishaAdahanModel = PrayerTimeModel(
+                6, R.drawable.ic_elfajr,
+                "Isha", data.get(i).timings.dhuhr, R.drawable.ic_volume_high, date
+            )
+
+            var imsakAdahanModel = PrayerTimeModel(
+                7, R.drawable.ic_elfajr,
+                "Imsak", data.get(i).timings.imsak, R.drawable.ic_volume_high, date
+            )
+
+            var midnightAdahanModel = PrayerTimeModel(
+                8, R.drawable.ic_elfajr,
+                "Midnight", data.get(i).timings.midnight, R.drawable.ic_volume_high, date
+            )
+
+            val supplierNames1: MutableList<PrayerTimeModel> = ArrayList()
+            supplierNames1.add(0, fajrAdahanModel)
+            supplierNames1.add(1, sunRiseAdahanModel)
+            supplierNames1.add(2, dhurAdahanModel)
+            supplierNames1.add(3, asrAdahanModel)
+            supplierNames1.add(4, sunSetAdahanModel)
+            supplierNames1.add(5, maghribAdahanModel)
+            supplierNames1.add(6, ishaAdahanModel)
+            supplierNames1.add(7, imsakAdahanModel)
+            supplierNames1.add(8, midnightAdahanModel)
+
+            vm.savePrayerTimes(requireContext(), supplierNames1)
+            Log.d("savePrayer", supplierNames1.toString())
+            if (localTime.equals(date)) {
+                recyclerViewPrayer.adapter = PrayerAdapter(requireContext(), supplierNames1)
+                recyclerViewPrayer.isNestedScrollingEnabled = false
+                recyclerViewPrayer.layoutManager = linearLayoutManager
             }
         }
+
+        /*   vm.getPrayerTimes(requireContext()).observe(requireActivity(), androidx.lifecycle.Observer {
+               prayer -> Log.d("uuuiasd", "sdsd" + prayer)
+           })*/
+
     }
 
-    private fun initLocationPermissions() {
-        if (Build.VERSION.SDK_INT >= HomeFragment.MARSHMALLOW) {
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED
-            ) {
-                if(checkGPSEnabled()) {
-                    initLocationListener()
-                    Log.d("firstPermission", " is called")
-                }
+    override fun renderLoading(show: Boolean) {
+        Log.d("renderData", "data" + show)
+    }
+
+    override fun renderNetworkFailure() {
+        Log.d("renderData", "data")
+    }
+
+    private fun initLocationListener() {
+        fusedLocationClient =
+            activity?.let { LocationServices.getFusedLocationProviderClient(it) }!!
+        fusedLocationClient?.lastLocation?.addOnSuccessListener {
+            if (it == null) {
+                getLocationUpdates()
             } else {
-                requestPermission()
-                Log.d("firstPermission" , " is ss called")
+                Log.d(
+                    TAG,
+                    "User Location : Lat : ${it.latitude} Long : ${it.longitude}"
+                )
+                initQiblaDirection(it.latitude, it.longitude)
             }
-        } else {
-            initLocationListener()
-            Log.d("firstPermission" , " is ee called")
         }
-    }
-
-    private fun checkGPSEnabled(): Boolean{
-        val lm = requireContext().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        var gps_enabled = false
-        var network_enabled = false
-
-        try {
-            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
-        } catch (ex: java.lang.Exception) {
-        }
-
-        try {
-            network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-        } catch (ex: java.lang.Exception) {
-        }
-
-        if (!gps_enabled && !network_enabled) {
-            // notify user
-            AlertDialog.Builder(requireContext())
-                .setMessage(R.string.gps_network_not_enabled)
-                .setPositiveButton(R.string.open_location_settings,
-                    DialogInterface.OnClickListener { paramDialogInterface, paramInt ->
-                        requireContext().startActivity(
-                            Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                        )
-                    })
-                .setNegativeButton(R.string.Cancel, null)
+        fusedLocationClient?.lastLocation?.addOnFailureListener {
+            Toast.makeText(requireContext(), "Err: " + it.localizedMessage, Toast.LENGTH_SHORT)
                 .show()
-            return false
         }
-        return true
+
     }
 
-    override fun onResume() {
-        super.onResume()
-        if(checkGPSEnabled()){
-            initLocationListener()
-        }
-    }
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
 
-    private fun getLocationUpdates()
-    {
+    private fun getLocationUpdates() {
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
         locationRequest = LocationRequest()
-        locationRequest.interval = 50000
-        locationRequest.fastestInterval = 50000
+        locationRequest.interval = 10000
+        locationRequest.fastestInterval = 10000
         locationRequest.smallestDisplacement = 170f // 170 m = 0.1 mile
-        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY //set according to your app function
+        locationRequest.priority =
+            LocationRequest.PRIORITY_HIGH_ACCURACY //set according to your app function
+        Log.d(TAG, " is not" + locationRequest)
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 locationResult ?: return
@@ -258,59 +298,6 @@ class HomeFragment : Fragment() , AlAdahanUseCases.View {
 
             }
         }
-    }
-
-    private fun initLocationListener() {
-        val fusedLocationClient = activity?.let { LocationServices.getFusedLocationProviderClient(it) }
-            fusedLocationClient?.lastLocation?.addOnSuccessListener {
-                if (it == null) {
-                    getLocationUpdates()
-                } else {
-                    Log.d(
-                        TAG,
-                        "User Location : Lat : ${it.latitude} Long : ${it.longitude}"
-                    )
-                    initQiblaDirection(it.latitude, it.longitude)
-                }
-            }
-            fusedLocationClient?.lastLocation?.addOnFailureListener {
-                Toast.makeText(requireContext(), it.localizedMessage, Toast.LENGTH_SHORT).show()
-            }
-
-    }
-
-    private fun requestPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(
-                requireActivity(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-        ) {
-            AlertDialog.Builder(requireContext())
-                .setTitle(getString(R.string.location_permission_title))
-                .setMessage(getString(R.string.location_permission_message))
-                .setPositiveButton("Grant") { dialog, _ ->
-                    dialog.dismiss()
-                    ActivityCompat.requestPermissions(
-                        requireActivity(),
-                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                        HomeFragment.ACCESS_FINE_LOCATION_REQ_CODE
-                    )
-                }
-                .setNegativeButton("Deny") { dialog, _ ->
-                    dialog.dismiss()
-                    handlePermissionDenied()
-                }
-        } else {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                HomeFragment.ACCESS_FINE_LOCATION_REQ_CODE
-            )
-        }
-    }
-
-    private fun handlePermissionDenied() {
-
     }
 
     private fun initQiblaDirection(latitude: Double, longitude: Double) {
@@ -357,7 +344,10 @@ class HomeFragment : Fragment() , AlAdahanUseCases.View {
 
                 tvHeading.text = "Heading : $degree + degrees"
 
-                Log.d(HomeFragment.TAG, "Needle Degree : $currentNeedleDegree, Direction : $direction")
+                Log.d(
+                    HomeFragment.TAG,
+                    "Needle Degree : $currentNeedleDegree, Direction : $direction"
+                )
 
                 needleAnimation = RotateAnimation(
                     currentNeedleDegree,
@@ -378,79 +368,4 @@ class HomeFragment : Fragment() , AlAdahanUseCases.View {
             }
         }, sensor, SensorManager.SENSOR_DELAY_GAME)
     }
-
-    override fun renderParentTimings(data: List<Datum>) {
-        Log.d("renderData" , "data" + data.get(0).timings)
-        linearLayoutManager  = LinearLayoutManager(requireContext())
-        Log.d("languageList" , "is called")
-
-        var fajr = data.get(0).timings.fajr
-        var fajrAdahanModel = PrayerTimeModel(R.drawable.ic_elfajr,
-        "Fajr" , fajr , R.drawable.ic_volume_high)
-        fajrAdahanModel.name = "Fajr"
-
-        var sunRise = data.get(1).timings.sunrise
-        var sunRiseAdahanModel = PrayerTimeModel(R.drawable.ic_elfajr,
-        "Sunrise" , sunRise , R.drawable.ic_volume_high)
-        sunRiseAdahanModel.name = "Sunrise"
-
-        var duhr = data.get(2).timings.dhuhr
-        var dhurAdahanModel = PrayerTimeModel(R.drawable.ic_elfajr,
-        "Dhur" , duhr , R.drawable.ic_volume_high)
-        dhurAdahanModel.name = "Dhur"
-
-        var asr = data.get(3).timings.dhuhr
-        var asrAdahanModel = PrayerTimeModel(R.drawable.ic_elfajr,
-        "Asr" , asr , R.drawable.ic_volume_high)
-        asrAdahanModel.name = "Asr"
-
-        var sunSet = data.get(4).timings.asr
-        var sunSetAdahanModel = PrayerTimeModel(R.drawable.ic_elfajr,
-        "Asr" , sunSet , R.drawable.ic_volume_high)
-        sunSetAdahanModel.name = "Sunset"
-
-        var maghrib = data.get(5).timings.sunset
-        var maghribAdahanModel = PrayerTimeModel(R.drawable.ic_elfajr,
-        "Maghrib" , maghrib , R.drawable.ic_volume_high)
-        maghribAdahanModel.name = "maghrib"
-
-        var isha = data.get(6).timings.dhuhr
-        var ishaAdahanModel = PrayerTimeModel(R.drawable.ic_elfajr,
-            "Isha" , isha , R.drawable.ic_volume_high)
-        ishaAdahanModel.name = "Isha"
-
-        var imsak = data.get(7).timings.maghrib
-        var imsakAdahanModel = PrayerTimeModel(R.drawable.ic_elfajr,
-        "Imsak" , imsak , R.drawable.ic_volume_high)
-        imsakAdahanModel.name = "imsak"
-
-        var midnight = data.get(8).timings.dhuhr
-        var midnightAdahanModel = PrayerTimeModel(R.drawable.ic_elfajr,
-        "Midnight" , midnight , R.drawable.ic_volume_high)
-        midnightAdahanModel.name = "midnight"
-
-        val supplierNames1: MutableList<PrayerTimeModel> = ArrayList()
-        supplierNames1.add(0,fajrAdahanModel)
-        supplierNames1.add(1,sunRiseAdahanModel)
-        supplierNames1.add(2,dhurAdahanModel)
-        supplierNames1.add(3,asrAdahanModel)
-        supplierNames1.add(4,sunSetAdahanModel)
-        supplierNames1.add(5,maghribAdahanModel)
-        supplierNames1.add(6,ishaAdahanModel)
-        supplierNames1.add(7,imsakAdahanModel)
-        supplierNames1.add(8,midnightAdahanModel)
-
-        recyclerViewPrayer.adapter = PrayerAdapter(requireContext(),supplierNames1)
-        recyclerViewPrayer.isNestedScrollingEnabled = false
-        recyclerViewPrayer.layoutManager =linearLayoutManager
-    }
-
-    override fun renderLoading(show: Boolean) {
-        Log.d("renderData" , "data" + show)
-    }
-
-    override fun renderNetworkFailure() {
-        Log.d("renderData" , "data" )
-    }
-
 }

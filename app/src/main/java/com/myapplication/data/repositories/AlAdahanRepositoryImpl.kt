@@ -4,11 +4,11 @@ import android.util.Log
 import com.example.el_mared.data.entities.base.ApiResponse
 import com.myapplication.data.entities.model.AlAdahanResponseModel
 import com.myapplication.data.gateways.remote.aladahangateway.AlAdahanGateway
-import com.myapplication.domain.usecases.data.repo.AladahanRepo
+import com.myapplication.domain.usecases.data.repo.AlAdahanRepo
 
 class AlAdahanRepositoryImpl (
     val alAdahanGateway: AlAdahanGateway
-): AladahanRepo{
+): AlAdahanRepo{
     override suspend fun getAladahanTime(
         latitude: String,
         longitude: String,
