@@ -1,4 +1,4 @@
-package com.myapplication.ui.quran
+package com.myapplication.ui.fragments.quran
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

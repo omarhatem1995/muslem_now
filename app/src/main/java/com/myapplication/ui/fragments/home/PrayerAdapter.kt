@@ -1,4 +1,4 @@
-package com.myapplication.ui.home
+package com.myapplication.ui.fragments.home
 
 import android.content.Context
 import android.util.Log

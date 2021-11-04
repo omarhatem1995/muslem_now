@@ -1,4 +1,4 @@
-package com.myapplication.ui.home
+package com.myapplication.ui.fragments.home
 
 import android.content.Context
 import android.util.Log
@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.Room
 import com.example.el_mared.data.entities.base.ApiResponse
 import com.myapplication.data.entities.model.PrayerTimeModel
 import com.myapplication.data.gateways.dao.aladahangateway.AlAdahanDatabase
@@ -18,7 +17,6 @@ import com.myapplication.framework.AlAdahanUseCaseImpl
 import com.myapplication.ui.entities.AlAdahanViewState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
 
 class HomeViewModel : ViewModel() {
     val viewStateAlAdahan: MutableLiveData<AlAdahanViewState> = MutableLiveData()

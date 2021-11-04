@@ -82,5 +82,7 @@ internal class NetworkResponseCall<S : Any, E : Any>(
         throw UnsupportedOperationException("NetworkResponseCall doesn't support execute")
     }
     override fun request(): Request = delegate.request()
+    override fun timeout(): Timeout = delegate.timeout()
+
 
 }

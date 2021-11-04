@@ -18,9 +18,11 @@
             android:name=".ui.azkar.AzkarActivity"
             android:exported="true" />
         <activity
-            android:name=".QiblahActivity"
-            android:label="@string/title_activity_qiblah"></activity>
+            android:name=".QiblahActivity"></activity>
         <activity android:name=".MainActivity">
+
+        </activity>
+        <activity android:name=".ui.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
