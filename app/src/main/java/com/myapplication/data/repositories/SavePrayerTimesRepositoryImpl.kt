@@ -7,7 +7,7 @@ import com.myapplication.domain.usecases.data.repo.SavePrayerTimesRepo
 class SavePrayerTimesRepositoryImpl (
     val alAdahanDao: AlAdahanDao
 ): SavePrayerTimesRepo{
-    override suspend fun SaveAladahanTime(alAdahan: List<PrayerTimeModel>) {
+    override suspend fun SaveAladahanTime(alAdahan: PrayerTimeModel) {
         return alAdahanDao.addPrayerTimes(alAdahan)
     }
 

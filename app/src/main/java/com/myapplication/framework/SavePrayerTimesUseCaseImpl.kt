@@ -7,7 +7,7 @@ import com.myapplication.domain.usecases.ui.AlAdahanUseCases
 class SavePrayerTimesUseCaseImpl (
     val prayerTimesRepo: SavePrayerTimesRepo
     ) : AlAdahanUseCases.SaveAdahanTiming {
-    override suspend fun invoke(adahanList: List<PrayerTimeModel>) =
+    override suspend fun invoke(adahanList: PrayerTimeModel) =
         prayerTimesRepo.SaveAladahanTime(adahanList)
 
 }

@@ -2,18 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/home"
-        android:title="Home"
+        android:title="@string/home"
         android:icon="@drawable/ic_home"/>
     <item
         android:id="@+id/quran"
-        android:title="Quran"
+        android:title="@string/quran"
         android:icon="@drawable/ic_quran"/>
     <item
         android:id="@+id/azkar"
-        android:title="Azkar"
+        android:title="@string/azkar"
         android:icon="@drawable/ic_azkar"/>
-    <item
-        android:id="@+id/more"
-        android:title="More"
-        android:icon="@drawable/ic_more"/>
+
 </menu>

@@ -12,8 +12,11 @@ import com.myapplication.data.entities.model.PrayerTimeModel
 interface AlAdahanDao {
 
     @Insert(onConflict = IGNORE)
-    fun addPrayerTimes(prayerTimeList: List<PrayerTimeModel>)
+    fun addPrayerTimes(prayerTimeList: PrayerTimeModel)
 
     @Query("SELECT * FROM Prayer_Time")
     fun getCurrentPrayerTimes(): LiveData<List<PrayerTimeModel>>
+
+    @Query("SELECT * FROM Prayer_Time WHERE date = :date")
+    fun getSpecificDayPrayerTimes(date:String): LiveData<List<PrayerTimeModel>>
 }

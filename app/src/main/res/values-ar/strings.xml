@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello_blank_fragment">Hello</string>
+    <string name="elevation_degree">درجه اتجاه</string>
+    <string name="qiblahs_direction_to_your_position">اتجاه القبلة بالنسبة لموقعك</string>
+    <string name="Required_permission_not_granted_exiting">من فضلك أسمح للتطبيق بالحصول على موقعك طوال الوقت</string>
+    <string name="app_location_permission">الأذن للتطبيق بالحصول على موقعك</string>
+    <string name="location_permission_msg">من فضلك أسمح للتطبيق بالحصول على موقعك طوال الوقت</string>
+    <string name="prayer_times">مواقيت الصلاة</string>
+    <string name="Cancel">اغلاق</string>
+    <string name="open_location_settings">فتح السماح للحصول على الموقع</string>
+    <string name="gps_network_not_enabled">فتح خدمة ال GPS</string>
+    <string name="location_permission_title">عنوان الحصول على الموقع</string>
+    <string name="location_permission_message">رسالة السماح للحصول على الموقع</string>
+    <string name="hello_world">Hello Round World!</string>
+    <string name="title_activity_qiblah">QiblahActivity</string>
+    <string name="app_name">مسلم ناو</string>
+    <string name="home">الرئيسية</string>
+    <string name="quran">القران</string>
+    <string name="azkar">الاذكار</string>
+    <string name="am">ص</string>
+    <string name="pm">م</string>
+    <string name="fajr">الفجر</string>
+    <string name="sunrise">الشروق</string>
+    <string name="duhr">الظهر</string>
+    <string name="asr">العصر</string>
+    <string name="maghrib">المغرب</string>
+    <string name="isha">العشاء</string>
+    <string name="comma">"، "</string>
+    <string name="remaining_time_for">\متبقي على صلاة \</string>
+
+</resources>

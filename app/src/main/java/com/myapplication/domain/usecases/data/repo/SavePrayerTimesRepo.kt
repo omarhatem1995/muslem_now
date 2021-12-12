@@ -5,5 +5,5 @@ import com.myapplication.data.entities.model.AlAdahanResponseModel
 import com.myapplication.data.entities.model.PrayerTimeModel
 
 interface SavePrayerTimesRepo {
-    suspend fun SaveAladahanTime(alAdahan: List<PrayerTimeModel>)
+    suspend fun SaveAladahanTime(alAdahan: PrayerTimeModel)
 }

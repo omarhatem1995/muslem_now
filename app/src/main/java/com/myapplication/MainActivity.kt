@@ -32,6 +32,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.myapplication.domain.core.Constants
 import com.myapplication.domain.core.LastKnowLocation
 import com.myapplication.ui.azkar.AzkarFragment
+import com.myapplication.ui.fragments.more.MoreFragment
 import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
@@ -39,7 +40,6 @@ class MainActivity : AppCompatActivity() {
     var firstFragment = HomeFragment()
     var secondFragment = MoreFragment()
     var azkarFragment = AzkarFragment()
-    var moreFragment = MoreFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +57,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.home -> replaceFragment(firstFragment)
                 R.id.quran -> replaceFragment(secondFragment)
                 R.id.azkar -> replaceFragment(azkarFragment)
-                R.id.more -> replaceFragment(moreFragment)
             }
             true
         }

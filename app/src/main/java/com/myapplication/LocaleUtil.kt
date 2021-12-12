@@ -5,7 +5,18 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
 import android.os.LocaleList
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.os.ConfigurationCompat
+import com.myapplication.data.entities.model.PrayerTimeModel
+import org.joda.time.DateTime
+import org.joda.time.DateTimeZone
+import org.joda.time.chrono.IslamicChronology
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class LocaleUtil {
@@ -63,6 +74,124 @@ class LocaleUtil {
                     config.setLocale(locale)
                 }
             }
+        }
+
+        fun hijriMonthName(dtISO: DateTime): String {
+            val SAUDI_ARABIA = DateTimeZone.forID("Asia/Riyadh")
+            return when (dtISO.withChronology(IslamicChronology.getInstance(SAUDI_ARABIA)).monthOfYear) {
+                1 -> "مُحرّم"
+                2 -> "صفر"
+                3 -> "ربيع الأول"
+                4 -> "ربيع الثاني"
+                5 -> "جُمادى الأولى"
+                6 -> "جُمادى الآخرة"
+                7 -> "رجب"
+                8 -> "شعبان"
+                9 -> "رمضان"
+                10 -> "شوال"
+                11 -> "ذو القعدة"
+                12 -> " ذو الحجة"
+                else -> "."
+            }
+        }
+
+        fun getTimeAMandPM(input: String, context: Context): String {
+            var hours = input.substring(0, 2)
+            var minutes = input.substring(2, 5)
+            var hoursInt = hours.toInt()
+
+            return if (hoursInt < 12) {
+                hours = String.format("%02d", hoursInt)
+                "$hours$minutes " + context.getString(R.string.am)
+            } else {
+                hoursInt -= 12
+                if (hoursInt == 0)
+                    hoursInt = 1
+                hours = String.format("%02d", hoursInt)
+                "$hours$minutes " + context.getString(R.string.pm)
+            }
+        }
+        fun getNameOfPrayer(context:Context,id:Int) : String{
+            return when (id) {
+                0 -> context.getString(R.string.fajr)
+                1 -> context.getString(R.string.sunrise)
+                2 -> context.getString(R.string.duhr)
+                3 -> context.getString(R.string.asr)
+                4 -> context.getString(R.string.maghrib)
+                else -> context.getString(R.string.isha)
+            }
+        }
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun nextPrayer(prayerList: MutableList<PrayerTimeModel>, currentTime: String) : Int{
+            val timeNow  = currentTime
+            val localTime : LocalTime  = LocalTime.parse(timeNow);
+            val currentMillis  = localTime.toSecondOfDay() * 1000;
+            Log.d("currnetDate" , currentMillis.toString() + " , "+ timeNow)
+
+            for(i in 0..prayerList.size -1 ){
+                val time  = prayerList[i].time
+                val localTime : LocalTime  = LocalTime.parse(time)
+                val prayerMillis  = localTime.toSecondOfDay() * 1000
+                Log.d("currnetDate" , prayerMillis.toString() + " , "+ time)
+                if(prayerMillis > currentMillis){
+                    Log.d("nextPrayer Is" , ""+ prayerList[i].prayerId)
+                    return prayerList[i].prayerId
+                }
+            }
+            return 300
+        }
+
+        fun remainingTimeForNextPrayer(currentTime: String,nextPrayer: String):String{
+            val dateFormat = SimpleDateFormat("hmmaa")
+            val dateFormat2 = SimpleDateFormat("hh:mm")
+            val dateForNextPrayerFormat = SimpleDateFormat("HH:mm dd-MM-yyyy")
+            try {
+                val date: Date = dateForNextPrayerFormat.parse(currentTime)
+                val out: String = dateForNextPrayerFormat.format(date)
+                val dateNextPrayer: Date = dateForNextPrayerFormat.parse(nextPrayer)
+                val out2: String = dateForNextPrayerFormat.format(dateNextPrayer)
+                Log.e("Time", out)
+                val diff: Long =dateNextPrayer.time- date.time
+                val seconds = diff / 1000
+                val minutes = seconds / 60
+                val hours = minutes / 60
+                val days = hours / 24
+
+                val secondsInMilli: Long = 1000
+                val minutesInMilli = secondsInMilli * 60
+                val hoursInMilli = minutesInMilli * 60
+                val daysInMilli = hoursInMilli * 24
+
+                var different: Long = dateNextPrayer.time - date.time
+
+                val elapsedDays: Long = different / daysInMilli
+                different = different % daysInMilli
+
+                val elapsedHours: Long = different / hoursInMilli
+                different = different % hoursInMilli
+
+                val elapsedMinutes: Long = different / minutesInMilli
+                different = different % minutesInMilli
+
+                val elapsedSeconds: Long = different / secondsInMilli
+
+                Log.d("differenceIs" , " : "+ elapsedDays + " ," +
+                        elapsedHours + " , " + elapsedMinutes + " , " + elapsedSeconds)
+
+                Log.d("currentandnext " , " : " + out + " > " + out2)
+                Log.d("nextPrayerHours" , " is "+hours + ":" + minutes)
+                var returnFormatForHours = String.format("%02d",elapsedHours)
+                var returnFormatForMinutes = String.format("%02d",elapsedMinutes)
+                if (returnFormatForHours.length > 2) returnFormatForHours = returnFormatForHours.substring(0,2)
+                if (returnFormatForMinutes.length > 2) returnFormatForMinutes = returnFormatForMinutes.substring(0,2)
+                Log.d("nextPrayerHours" , " is "+returnFormatForHours + ":" + returnFormatForMinutes)
+                return returnFormatForHours+":"+returnFormatForMinutes
+            } catch (e: ParseException) {
+                Log.d("nextPrayerHours" , " error "+ e.message)
+
+            }
+            return "0"
         }
     }
 }

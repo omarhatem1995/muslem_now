@@ -17,6 +17,6 @@ interface AlAdahanUseCases {
         method:String,month:String,year:String): ApiResponse<AlAdahanResponseModel, Error>
     }
     interface SaveAdahanTiming{
-        suspend fun invoke(adahanList : List<PrayerTimeModel>)
+        suspend fun invoke(adahanList : PrayerTimeModel)
     }
 }

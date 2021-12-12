@@ -7,8 +7,14 @@
         <entry key="..\:/Projects/muslem_now/app/src/main/res/drawable/bottom_navigation_selector.xml" value="0.1" />
         <entry key="..\:/Projects/muslem_now/app/src/main/res/drawable/ic_azkar_el_sabah_wel_masaa.xml" value="0.1" />
         <entry key="..\:/Projects/muslem_now/app/src/main/res/drawable/ic_background.xml" value="0.1" />
+        <entry key="..\:/Projects/muslem_now/app/src/main/res/drawable/ic_home.xml" value="0.1234375" />
         <entry key="..\:/Projects/muslem_now/app/src/main/res/drawable/ic_image_qiblah.xml" value="0.11822916666666666" />
+        <entry key="..\:/Projects/muslem_now/app/src/main/res/drawable/ic_rectangle_more.xml" value="0.15" />
+        <entry key="..\:/Projects/muslem_now/app/src/main/res/drawable/ic_rosary.xml" value="0.15" />
+        <entry key="..\:/Projects/muslem_now/app/src/main/res/drawable/ic_side_menu_nav_icon.xml" value="0.1015625" />
+        <entry key="..\:/Projects/muslem_now/app/src/main/res/drawable/ic_volume_high.xml" value="0.12135416666666667" />
         <entry key="..\:/Projects/muslem_now/app/src/main/res/drawable/view_background_rounded.xml" value="0.16354166666666667" />
+        <entry key="..\:/Projects/muslem_now/app/src/main/res/drawable/view_background_rounded_more.xml" value="0.15" />
         <entry key="..\:/Projects/muslem_now/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Projects/muslem_now/app/src/main/res/layout/activity_qiblah.xml" value="0.125" />
         <entry key="..\:/Projects/muslem_now/app/src/main/res/layout/activity_splash.xml" value="0.11639492753623189" />
@@ -16,9 +22,12 @@
         <entry key="..\:/Projects/muslem_now/app/src/main/res/layout/azkar_item.xml" value="0.11639492753623189" />
         <entry key="..\:/Projects/muslem_now/app/src/main/res/layout/azkar_list_item.xml" value="0.1" />
         <entry key="..\:/Projects/muslem_now/app/src/main/res/layout/fragment_azkar.xml" value="0.1" />
-        <entry key="..\:/Projects/muslem_now/app/src/main/res/layout/fragment_home.xml" value="0.2" />
+        <entry key="..\:/Projects/muslem_now/app/src/main/res/layout/fragment_home.xml" value="0.16997792494481237" />
+        <entry key="..\:/Projects/muslem_now/app/src/main/res/layout/fragment_more.xml" value="0.22" />
         <entry key="..\:/Projects/muslem_now/app/src/main/res/layout/prayer_item.xml" value="0.14739583333333334" />
         <entry key="..\:/Projects/muslem_now/app/src/main/res/menu/bottom_nav_menu.xml" value="0.14739583333333334" />
+        <entry key="..\:/Projects/muslem_now/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.15" />
+        <entry key="..\:/Projects/muslem_now/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.15" />
       </map>
     </option>
   </component>

@@ -28,14 +28,22 @@ class HomeViewModel : ViewModel() {
         val db = AlAdahanDatabase.getDataBase(applicationContext)
 
         val savePrayerDao = db.alAdahanDao()
-        viewModelScope.launch(Dispatchers.IO){
+        Log.d("prayerTimesList", " al "+ prayerTimesList.size)
 
-            val alAdahan = savePrayerDao.addPrayerTimes(prayerTimesList)
-            Log.d("PrayerTimes","alAdahan : "+ alAdahan)
-           /* val getAlAdahan : LiveData<List<PrayerTimeModel>> = savePrayerDao.getCurrentPrayerTimes()
+        viewModelScope.launch(Dispatchers.IO){
+        for(x in prayerTimesList) {
+            Log.d("prayerTimesList", " al "+ x.prayerId + " , "+ x.name + " Adahan " + x.date + " x : " + x.time)
+
+            val alAdahan = savePrayerDao.addPrayerTimes(x)
+                Log.d(
+                    "PrayerTimes", "alAdahan : " + prayerTimesList.size + " " +
+                            prayerTimesList.get(prayerTimesList.size - 2).date
+                )
+                /* val getAlAdahan : LiveData<List<PrayerTimeModel>> = savePrayerDao.getCurrentPrayerTimes()
             Log.d("getPrayerTimes","data " +  getAlAdahan.value)*/
         }
 
+        }
 
     }
     fun getPrayerTimes(applicationContext: Context) : LiveData<List<PrayerTimeModel>>{
@@ -47,6 +55,20 @@ class HomeViewModel : ViewModel() {
             Log.d("PrayerTimes","alAdahan : "+ alAdahan)*/
 
             val getAlAdahan : LiveData<List<PrayerTimeModel>> = savePrayerDao.getCurrentPrayerTimes()
+            Log.d("getPrayerTimes","data " +  getAlAdahan.value)
+
+        return getAlAdahan
+
+    }
+    fun getPrayerTimesForSpecificDate(date:String,applicationContext: Context) : LiveData<List<PrayerTimeModel>>{
+        val db = AlAdahanDatabase.getDataBase(applicationContext)
+
+        val savePrayerDao = db.alAdahanDao()
+
+            /*val alAdahan = savePrayerDao.addPrayerTimes(prayerTimesList)
+            Log.d("PrayerTimes","alAdahan : "+ alAdahan)*/
+
+            val getAlAdahan : LiveData<List<PrayerTimeModel>> = savePrayerDao.getSpecificDayPrayerTimes(date)
             Log.d("getPrayerTimes","data " +  getAlAdahan.value)
 
         return getAlAdahan

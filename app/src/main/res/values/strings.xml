@@ -1,17 +1,32 @@
 <resources>
-    <string name="app_name">Muslem Now</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_qiblah">QiblahActivity</string>
+    <string name="hello_blank_fragment">Hello</string>
+    <string name="title_activity_qiblah">Hello</string>
     <string name="location_permission_message">Location permission is needed to show direction</string>
     <string name="location_permission_title">Permission Required!</string>
     <string name="hello_world">Hello Square World!</string>
     <string name="gps_network_not_enabled">GPS network not enabled</string>
-    <string name="open_location_settings">Open Location Settings</string>
     <string name="Cancel">Cancel</string>
     <string name="prayer_times">Prayer Times</string>
-    <string name="location_permission_msg">من فضلك أسمح للتطبيق بالحصول على موقعك طوال الوقت</string>
-    <string name="app_location_permission">الأذن للتطبيق بالحصول على موقعك</string>
+    <string name="location_permission_msg">Required permission not granted, exiting</string>
+    <string name="app_location_permission">Application location permission</string>
     <string name="Required_permission_not_granted_exiting">Required permission not granted, exiting</string>
+    <string name="qiblahs_direction_to_your_position">Qiblah\'s direction to your position</string>
+    <string name="elevation_degree">Elevation degree</string>
+    <string name="open_location_settings">Open location settings</string>
+    <string name="app_name">Muslem Now</string>
+    <string name="home">Home</string>
+    <string name="quran">Quran</string>
+    <string name="azkar">Azkar</string>
+    <string name="am">AM</string>
+    <string name="pm">PM</string>
+    <string name="fajr">Fajr</string>
+    <string name="sunrise">Sunrise</string>
+    <string name="duhr">Duhr</string>
+    <string name="asr">Asr</string>
+    <string name="maghrib">Maghrib</string>
+    <string name="isha">Isha</string>
+    <string name="comma">\", \"</string>
+    <string name="remaining_time_for">\"Remaining Time For \"</string>
 
 </resources>

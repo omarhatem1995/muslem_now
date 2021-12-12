@@ -94,10 +94,10 @@ data class AlAdahanResponseModel (
 
     data class Params (
         @SerializedName("Fajr")
-        val fajr: Long,
+        val fajr: Double,
 
         @SerializedName("Isha")
-        val isha: Long
+        val isha: Double
     )
 
     data class Timings (
