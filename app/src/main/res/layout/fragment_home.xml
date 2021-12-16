@@ -13,13 +13,13 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbars="none">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/ic_background_pattern_all_screens"
-            android:padding="@dimen/box_inset_layout_padding"
             tools:context=".QiblahActivity">
 
             <ImageView
@@ -118,7 +118,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/tajawalbold"
-                    android:text="01:30"
+                    android:text=""
                     android:textColor="@color/textColorGreen"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"

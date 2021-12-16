@@ -7,10 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.myapplication.R
 import com.myapplication.data.entities.model.AlAzkarListModel
+import android.os.Bundle
+
+
+
 
 class AzkarAdapter(mContext: Context, dataItem: List<AlAzkarListModel>) : RecyclerView.Adapter<AzkarAdapter.AzkarViewHolder>() {
 
@@ -26,11 +31,14 @@ class AzkarAdapter(mContext: Context, dataItem: List<AlAzkarListModel>) : Recycl
 
     override fun onBindViewHolder(holder: AzkarViewHolder, position: Int) {
         val zekrItem = mData!![position]
+        Log.d("languageList" , " view Holder" + zekrItem)
 
+        holder.textAzkar.text = zekrItem.category
         holder.imageAzkar.setBackgroundResource(zekrItem.image)
 
         holder.imageAzkar.setOnClickListener {
             val intent = Intent(mContext, AzkarActivity::class.java)
+            intent.putExtra("category" , zekrItem.category)
             mContext?.startActivity(intent)
         }
     }
@@ -42,9 +50,11 @@ class AzkarAdapter(mContext: Context, dataItem: List<AlAzkarListModel>) : Recycl
 
     class AzkarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var imageAzkar: ImageView
+        var textAzkar: TextView
 
         init {
-            imageAzkar = itemView.findViewById(R.id.azkar_image_item)
+            imageAzkar = itemView.findViewById(R.id.zekrImageView)
+            textAzkar = itemView.findViewById(R.id.zekrTextView)
             Log.d("languageList" , " view Holder")
 
         }

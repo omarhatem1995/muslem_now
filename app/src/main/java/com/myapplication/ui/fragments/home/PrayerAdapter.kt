@@ -17,9 +17,10 @@ import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import com.myapplication.LocaleUtil.Companion.getNameOfPrayer
 import com.myapplication.LocaleUtil.Companion.getTimeAMandPM
+import com.myapplication.LocaleUtil.Companion.setDrawable
 
 
-class PrayerAdapter(mContext: Context, dataItem: List<PrayerTimeModel?>? , nextPrayerIs : Int) :
+class PrayerAdapter(mContext: Context, dataItem: List<PrayerTimeModel?>?, nextPrayerIs: Int) :
     RecyclerView.Adapter<PrayerAdapter.PrayerViewHolder>() {
 
     var mContext: Context = mContext
@@ -36,14 +37,18 @@ class PrayerAdapter(mContext: Context, dataItem: List<PrayerTimeModel?>? , nextP
         val prayerItem = mData!![position]
 
         if (prayerItem != null) {
-            holder.imagePrayer.setBackgroundResource(prayerItem.image)
-            if(prayerItem.imageStatus == 1)
-            holder.imageStatus.setBackgroundResource(R.drawable.ic_volume_high)
+            if (prayerItem.imageStatus == 1)
+                holder.imageStatus.setBackgroundResource(R.drawable.ic_volume_high)
             else
                 holder.imageStatus.setBackgroundColor(R.drawable.ic_volume_mute)
 
+            Log.d("prayerItem", prayerItem.image.toString())
+
+
+            holder.imagePrayer.setBackgroundResource(setDrawable(prayerItem.prayerId))
+
             if (prayerItem.prayerId == 3) {
-                holder.imagePrayer.setBackgroundResource(prayerItem.image)
+                holder.imagePrayer.setBackgroundResource(R.drawable.ic_elasr)
                 holder.imagePrayer.setColorFilter(Color.BLACK)
                 val unwrappedDrawable: Drawable = holder.imagePrayer.getBackground()
                 val wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable)
@@ -52,10 +57,20 @@ class PrayerAdapter(mContext: Context, dataItem: List<PrayerTimeModel?>? , nextP
                     ContextCompat.getColor(mContext, R.color.textColorGreen2)
                 )
             }
-            Log.d("nextPrayerIs22" , " = " + prayerItem.date + " , " + prayerItem.name)
-            if(prayerItem?.prayerId == nextPrayerIs){
-                holder.namePrayer.setTextColor(ContextCompat.getColor(mContext,R.color.textSelectedPrayerColor))
-                holder.timePrayer.setTextColor(ContextCompat.getColor(mContext,R.color.textSelectedPrayerColor))
+            Log.d("nextPrayerIs22", " = " + prayerItem.date + " , " + prayerItem.name)
+            if (prayerItem?.prayerId == nextPrayerIs) {
+                holder.namePrayer.setTextColor(
+                    ContextCompat.getColor(
+                        mContext,
+                        R.color.textSelectedPrayerColor
+                    )
+                )
+                holder.timePrayer.setTextColor(
+                    ContextCompat.getColor(
+                        mContext,
+                        R.color.textSelectedPrayerColor
+                    )
+                )
                 val unwrappedDrawable: Drawable = holder.imagePrayer.getBackground()
                 val unwrappedDrawable2: Drawable = holder.imageStatus.getBackground()
                 val wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable)
@@ -68,7 +83,7 @@ class PrayerAdapter(mContext: Context, dataItem: List<PrayerTimeModel?>? , nextP
                     wrappedDrawable2,
                     ContextCompat.getColor(mContext, R.color.textSelectedPrayerColor)
                 )
-            }else {
+            } else {
                 val unwrappedDrawable: Drawable = holder.imagePrayer.getBackground()
                 val unwrappedDrawable2: Drawable = holder.imageStatus.getBackground()
                 val wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable)
@@ -87,10 +102,10 @@ class PrayerAdapter(mContext: Context, dataItem: List<PrayerTimeModel?>? , nextP
         holder.imageStatus.setOnClickListener {
             if (prayerItem!!.imageStatus == 1) {
                 holder.imageStatus.setBackgroundResource(R.drawable.ic_volume_mute)
-            }else {
+            } else {
                 holder.imageStatus.setBackgroundResource(R.drawable.ic_volume_high)
             }
-            }
+        }
 
         if (prayerItem?.time != null)
             holder.timePrayer.text = getTimeAMandPM(prayerItem?.time, mContext)
@@ -117,4 +132,5 @@ class PrayerAdapter(mContext: Context, dataItem: List<PrayerTimeModel?>? , nextP
             timePrayer = itemView.findViewById(R.id.prayer_time)
         }
     }
+
 }

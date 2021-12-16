@@ -9,6 +9,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentSender.SendIntentException
 import android.content.pm.PackageManager
+import android.graphics.RectF
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
@@ -29,6 +30,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.shape.CornerFamily
+import com.google.android.material.shape.CornerSize
+import com.google.android.material.shape.MaterialShapeDrawable
 import com.myapplication.domain.core.Constants
 import com.myapplication.domain.core.LastKnowLocation
 import com.myapplication.ui.azkar.AzkarFragment
@@ -46,7 +50,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         replaceFragment(firstFragment)
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
-
+        val radius = resources.getDimension(R.dimen.cornerSize)
+        val shapeDrawable : MaterialShapeDrawable = bottomNavigationView.background as MaterialShapeDrawable
+        shapeDrawable.shapeAppearanceModel = shapeDrawable.shapeAppearanceModel
+            .toBuilder()
+            .setBottomLeftCorner(CornerFamily.ROUNDED,0f)
+            .setBottomRightCorner(CornerFamily.ROUNDED, 0f)
+            .setTopRightCorner(CornerFamily.ROUNDED, 90f)
+            .setTopLeftCorner(CornerFamily.ROUNDED, 90f)
+            .build()
         mLocationRequest = LocationRequest.create()
             .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
             .setInterval((1000 * 2).toLong())

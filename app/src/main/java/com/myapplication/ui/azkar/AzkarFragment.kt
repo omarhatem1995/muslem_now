@@ -1,7 +1,6 @@
 package com.myapplication.ui.azkar
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.myapplication.R
 import com.myapplication.data.entities.model.AlAzkarListModel
-import java.io.IOException
-import java.io.InputStream
 
 /**
  * A simple [Fragment] subclass.
@@ -22,7 +19,7 @@ import java.io.InputStream
 
 class AzkarFragment : Fragment() {
 
-    lateinit var gridLayoutManager: LinearLayoutManager
+    lateinit var layoutManager: LinearLayoutManager
     lateinit var recyclerViewAzkar : RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +34,7 @@ class AzkarFragment : Fragment() {
         var view : View = inflater.inflate(R.layout.fragment_azkar, container, false)
         recyclerViewAzkar = view.findViewById<RecyclerView>(R.id.azkar_recyclerview)
 
-        gridLayoutManager  = GridLayoutManager(requireContext(),2)
+        layoutManager  = LinearLayoutManager(requireContext())
 
         val supplierNames1: MutableList<AlAzkarListModel> = ArrayList()
         var azkarElSabah = AlAzkarListModel("أذكار الصباح", R.drawable.ic_image_qiblah)
@@ -63,7 +60,7 @@ class AzkarFragment : Fragment() {
         supplierNames1.add(9,doaaElRaf3MnElRokoo3)
         supplierNames1.add(10,doaaElSogoud)
         recyclerViewAzkar.adapter = AzkarAdapter(requireContext(),supplierNames1)
-        recyclerViewAzkar.layoutManager =gridLayoutManager
+        recyclerViewAzkar.layoutManager =layoutManager
 
         return view
     }

@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="settings_viewmodel"
+            type="com.myapplication.ui.settings.SettingsViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="20dp"
+        android:background="@drawable/ic_background_pattern_all_screens"
+        tools:context=".ui.settings.SettingsActivity">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/logoImageView"
+                    android:layout_width="136dp"
+                    android:layout_height="112dp"
+                    android:layout_marginTop="60dp"
+                    android:background="@drawable/muslem_now_logo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/labelSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="32dp"
+                    android:fontFamily="@font/tajawalmedium"
+                    android:maxLines="2"
+                    android:text="@string/you_can_specify_your_settings_or_skip_and_add_it_later_on"
+                    android:textSize="14sp"
+                    app:layout_constraintTop_toBottomOf="@id/logoImageView" />
+
+                <ImageView
+                    android:id="@+id/languageSettingsImageView"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/globalsettings"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/labelSettings" />
+
+                <TextView
+                    android:id="@+id/languageSettingsTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:fontFamily="@font/tajawalmedium"
+                    android:text="@string/language_settings"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@id/languageSettingsImageView"
+                    app:layout_constraintStart_toEndOf="@id/languageSettingsImageView"
+                    app:layout_constraintTop_toTopOf="@id/languageSettingsImageView" />
+
+                <Spinner
+                    android:id="@+id/spinner1"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/view_background_white_rounded"
+                    android:drawableEnd="@drawable/down_arrow"
+                    android:dropDownVerticalOffset="40dp"
+                    android:elevation="2dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/languageSettingsImageView" />
+
+
+                <ImageView
+                    android:id="@+id/azanSettingsImageView"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/azan_settings"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/spinner1" />
+
+                <TextView
+                    android:id="@+id/azanSettingsTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:fontFamily="@font/tajawalmedium"
+                    android:text="@string/azan_settings"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@id/azanSettingsImageView"
+                    app:layout_constraintStart_toEndOf="@id/azanSettingsImageView"
+                    app:layout_constraintTop_toTopOf="@id/azanSettingsImageView" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintAzanSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/view_background_white_rounded"
+                    android:elevation="2dp"
+                    android:paddingBottom="10dp"
+                    app:layout_constraintTop_toBottomOf="@id/azanSettingsTextView">
+
+                    <TextView
+                        android:id="@+id/azanTypeTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/tajawalmedium"
+                        android:text="@string/azan_type"
+                        android:textColor="@color/textColorGrey2"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/fullAzanImageView"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/marked"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/azanTypeTextView" />
+
+                    <TextView
+                        android:id="@+id/fullAzanTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:fontFamily="@font/tajawalmedium"
+                        android:text="@string/full_azan"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="@id/fullAzanImageView"
+                        app:layout_constraintStart_toEndOf="@id/fullAzanImageView"
+                        app:layout_constraintTop_toTopOf="@id/fullAzanImageView" />
+
+                    <ImageView
+                        android:id="@+id/takbiratAzanImageView"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_marginStart="32dp"
+                        android:background="@drawable/eclipse"
+                        app:layout_constraintStart_toEndOf="@id/fullAzanTextView"
+                        app:layout_constraintTop_toTopOf="@id/fullAzanImageView" />
+
+                    <TextView
+                        android:id="@+id/takbiratAzanTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:fontFamily="@font/tajawalmedium"
+                        android:text="@string/takbirat_only"
+                        android:textColor="@color/textColorGrey2"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="@id/takbiratAzanImageView"
+                        app:layout_constraintStart_toEndOf="@id/takbiratAzanImageView"
+                        app:layout_constraintTop_toTopOf="@id/takbiratAzanImageView" />
+
+                    <View
+                        android:id="@+id/viewSeparator"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@android:color/darker_gray"
+                        app:layout_constraintTop_toBottomOf="@id/fullAzanImageView" />
+
+                    <TextView
+                        android:id="@+id/chooseMoazen"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:text="@string/choose_moazen"
+                        android:textColor="@color/textColorGrey2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/viewSeparator" />
+
+                    <Spinner
+                        android:id="@+id/spinnerMoazen"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/view_background_white_rounded"
+                        android:drawableEnd="@drawable/down_arrow"
+                        android:dropDownVerticalOffset="40dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/chooseMoazen" />
+
+                    <View
+                        android:id="@+id/viewSeparator2"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:background="@android:color/darker_gray"
+                        app:layout_constraintTop_toBottomOf="@id/spinnerMoazen" />
+
+                    <TextView
+                        android:id="@+id/azkarAfterAzan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/azkar_after_azan"
+                        android:textColor="@color/textColorGrey"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/viewSeparator2" />
+
+                    <Switch
+                        android:id="@+id/user_or_project_owner_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginEnd="30dp"
+                        android:layout_weight="0.1"
+                        android:thumb="@drawable/thumb1"
+                        android:track="@drawable/track1"
+                        app:layout_constraintBottom_toBottomOf="@id/azkarAfterAzan"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/azkarAfterAzan" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintAzkarSabahAndMasaa"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/view_background_white_rounded"
+                    android:elevation="2dp"
+                    android:paddingBottom="10dp"
+                    app:layout_constraintTop_toBottomOf="@id/constraintAzanSettings">
+
+                    <TextView
+                        android:id="@+id/azkarSabahAndMasaa"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/tajawalmedium"
+                        android:text="@string/azkar_sabah_and_masaa"
+                        android:textColor="@color/textColorGrey"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/azkarSabahAndMasaaTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/you_can_choose_form_settings_in_the_application"
+                        app:layout_constraintStart_toStartOf="@id/azkarSabahAndMasaa"
+                        app:layout_constraintTop_toBottomOf="@id/azkarSabahAndMasaa" />
+
+                    <Switch
+                        android:id="@+id/azkarSabahAndMasaaSwitch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginEnd="30dp"
+                        android:layout_weight="0.1"
+                        android:thumb="@drawable/thumb1"
+                        android:track="@drawable/track1"
+                        app:layout_constraintBottom_toBottomOf="@id/azkarSabahAndMasaa"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/azkarSabahAndMasaa" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/skipNow"
+                    android:layout_width="222dp"
+                    android:layout_height="48dp"
+                    android:text="@string/skip_now"
+                    android:textSize="14sp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/tajawalmedium"
+                    android:background="@drawable/view_background_buttons_orange_rounded"
+                    android:layout_marginTop="48dp"
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/constraintAzkarSabahAndMasaa" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

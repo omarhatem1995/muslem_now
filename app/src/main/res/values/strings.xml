@@ -28,5 +28,29 @@
     <string name="isha">Isha</string>
     <string name="comma">\", \"</string>
     <string name="remaining_time_for">\"Remaining Time For \"</string>
+    <string name="you_can_specify_your_settings_or_skip_and_add_it_later_on">You can specify your settings or skip and add it later on</string>
+    <string name="language_settings">Language Settings</string>
+    <string name="arabic">Arabic</string>
+    <string name="english">English</string>
+    <string name="azan_settings">Azan Settings</string>
+    <string name="full_azan">Full Azan</string>
+    <string name="takbirat_only">Takbirat Only</string>
+    <string name="azan_type">Azan Type</string>
+    <string name="choose_moazen">Choose Moazen</string>
+    <string name="you_can_choose_form_settings_in_the_application">You can choose form settings in the application</string>
+    <string name="azkar_after_azan">Azkar After Azan</string>
+    <string name="azkar_sabah_and_masaa">Azkar Sabah And Masaa</string>
+    <string name="skip_now">Skip Now</string>
+    <string name="meshary">Meshary</string>
+    <string name="daily_azkar">Daily Azkar</string>
+    <string name="reset_counter">Reset Counter</string>
+
+    <array name="travelreasons">
+        <item name = " asdasd"/>
+        <item name = " asdasd"/>
+        <item name = " asdasd"/>
+        <item name = " asdasd"/>
+        <item name = " asdasd"/>
+    </array>
 
 </resources>

@@ -1,24 +1,23 @@
 package com.myapplication.ui.fragments.home
 
+import android.app.Application
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.el_mared.data.entities.base.ApiResponse
 import com.myapplication.data.entities.model.PrayerTimeModel
 import com.myapplication.data.gateways.dao.aladahangateway.AlAdahanDatabase
 import com.myapplication.data.gateways.remote.aladahangateway.AlAdahanGateway
 import com.myapplication.data.gateways.remote.aladahangateway.AlAdahanGatewayProvider
 import com.myapplication.data.repositories.AlAdahanRepositoryImpl
+import com.myapplication.data.repositories.SharedPreferencesRepository
 import com.myapplication.domain.usecases.ui.AlAdahanUseCases
 import com.myapplication.framework.AlAdahanUseCaseImpl
 import com.myapplication.ui.entities.AlAdahanViewState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel (application: Application):AndroidViewModel(application) {
     val viewStateAlAdahan: MutableLiveData<AlAdahanViewState> = MutableLiveData()
     val alAdahanUseCase = createAlAdahanUseCase()
 
@@ -74,7 +73,15 @@ class HomeViewModel : ViewModel() {
         return getAlAdahan
 
     }
+    var preference = SharedPreferencesRepository(application)
 
+    fun getCityFromPreferences():String?{
+        return if(preference.getCity()!=null)
+            preference.getCity()!!
+        else
+            null
+
+    }
 
     fun getAlAdahanAPI(
         latitude: String, longitude: String, method: String, month: String,

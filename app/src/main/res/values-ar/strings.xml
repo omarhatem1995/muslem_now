@@ -28,5 +28,21 @@
     <string name="isha">العشاء</string>
     <string name="comma">"، "</string>
     <string name="remaining_time_for">\متبقي على صلاة \</string>
+    <string name="you_can_specify_your_settings_or_skip_and_add_it_later_on">يمكنك تخصيص اعدادات التطبيق او التخطي و التخصيص لاحقا من الاعدادات</string>
+    <string name="language_settings">اعدادات اللغة</string>
+    <string name="arabic">العربية</string>
+    <string name="english">الانجليزية</string>
+    <string name="azan_settings">اعدادات الاذان</string>
+    <string name="full_azan">اذان كامل</string>
+    <string name="takbirat_only">تكبيرات فقط</string>
+    <string name="azan_type">نوع الاذان</string>
+    <string name="choose_moazen">اختيار المؤذن</string>
+    <string name="you_can_choose_form_settings_in_the_application">يمكنك اختيار التوقيتات من الاعدادات من داخل التطبيق</string>
+    <string name="azkar_after_azan">اذكار بعد الاذان</string>
+    <string name="azkar_sabah_and_masaa">اذكار الصباح والمساء</string>
+    <string name="skip_now">تخطي الان</string>
+    <string name="meshary">مشاري بن راشد</string>
+    <string name="daily_azkar">الأذكار اليومية</string>
+    <string name="reset_counter">محو العداد</string>
 
 </resources>

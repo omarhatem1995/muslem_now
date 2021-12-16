@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import com.myapplication.LocaleUtil
 import com.myapplication.MainActivity
 import com.myapplication.R
+import com.myapplication.ui.settings.SettingsActivity
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -123,7 +124,7 @@ class SplashActivity : AppCompatActivity() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe {
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, SettingsActivity::class.java))
                 finish()
 
             }

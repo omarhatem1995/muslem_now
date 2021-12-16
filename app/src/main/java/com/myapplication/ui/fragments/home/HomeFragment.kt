@@ -1,7 +1,9 @@
 package com.myapplication
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageManager
 import android.hardware.*
 import android.location.Address
 import android.location.Location
@@ -11,13 +13,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
 import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProviders
 import com.myapplication.databinding.FragmentHomeBinding
 import com.myapplication.ui.fragments.home.HomeViewModel
 import kotlin.math.roundToInt
@@ -40,17 +40,25 @@ import org.joda.time.DateTimeZone
 import android.location.Geocoder
 import android.os.Build
 import android.os.CountDownTimer
+import android.os.Looper
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.viewModels
 import com.myapplication.LocaleUtil.Companion.getNameOfPrayer
 import com.myapplication.LocaleUtil.Companion.nextPrayer
 import com.myapplication.LocaleUtil.Companion.remainingTimeForNextPrayer
 import java.util.concurrent.TimeUnit
+import android.os.VibrationEffect
+
+import androidx.core.content.ContextCompat.getSystemService
+
+import android.os.Vibrator
+import androidx.core.content.ContextCompat
 
 
 class HomeFragment : Fragment(), AlAdahanUseCases.View {
 
     lateinit var binding: FragmentHomeBinding
-    private lateinit var vm: HomeViewModel
 
     companion object {
         const val TAG = "HomeFragmentLog"
@@ -65,30 +73,30 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
     var currentDegree: Float = 0f
     var currentNeedleDegree: Float = 0f
 
+    private lateinit var locationRequest: LocationRequest
+    private lateinit var locationCallback: LocationCallback
+
     lateinit var sensorManager: SensorManager
     lateinit var sensor: Sensor
     lateinit var userLocation: Location
     lateinit var tvHeading: TextView
     lateinit var needleAnimation: RotateAnimation
     lateinit var fusedLocationClient: FusedLocationProviderClient
-    lateinit var recyclerViewPrayer: RecyclerView
-    lateinit var prayerAdapter: PrayerAdapter
     lateinit var linearLayoutManager: LinearLayoutManager
     lateinit var currentTime: TextView
     lateinit var localTime: String
     var monthOfTheYear = "null"
     var currentYear = "null"
+    private val vm: HomeViewModel by viewModels()
+    val cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+1:00"))
+
+    lateinit var nextDay: String
+    lateinit var nextDayForCalculations: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        vm = activity?.run {
-            ViewModelProviders.of(this)[HomeViewModel::class.java]
-        } ?: throw Exception("Invalid Activity")
-        requireActivity().getWindow().setSoftInputMode(
-            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
-        )
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+
     }
 
     override fun onCreateView(
@@ -102,6 +110,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
             inflater,
             R.layout.fragment_home, container, false
         )
+        binding.homeViewmodel = vm
         tvHeading = view.findViewById<TextView>(R.id.tvHeading)
         currentTime = view.findViewById<TextView>(R.id.date_georgian)
 
@@ -114,37 +123,16 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
             .5f
         )
 
-        val homeViewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
-        binding.homeViewmodel = homeViewModel
         binding.lifecycleOwner = this
         userLocation = Location("User Location")
 
         initLocationListener()
         getDateAndTime()
 
-        vm.viewStateAlAdahan.observe(viewLifecycleOwner, { viewState ->
-            when (viewState) {
-                is AlAdahanViewState.Loading -> {
-                    renderLoading(viewState.show)
-                }
-                is AlAdahanViewState.NetworkFailure -> {
-                    renderNetworkFailure()
-                }
-                is AlAdahanViewState.Data -> {
-                    renderParentTimings(viewState.data)
-                }
-            }
-        })
-//        binding.dateGeorgian.text = localTime
-
         return binding.root
     }
-    val cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+1:00"))
 
-    lateinit var nextDay: String
-    lateinit var nextDayForCalculations: String
     private fun getDateAndTime() {
-        val SAUDI_ARABIA = DateTimeZone.forID("Asia/Riyadh")
         val georgianFullDateFormat: DateFormat = SimpleDateFormat("EEEE dd MMMM yyyy", Locale("ar"))
         val georgianDateFormatForInsertion: DateFormat =
             SimpleDateFormat("dd-MM-yyyy", Locale("en"))
@@ -154,30 +142,22 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
         val currentLocalTime = cal.time
         val monthOfTheyYearFormat: DateFormat = SimpleDateFormat("MM")
         val currentYearFormat: DateFormat = SimpleDateFormat("yyyy")
-        val sdf = SimpleDateFormat("EEEE")
 
         localTime = georgianDateFormatForInsertion.format(cal.time)
 
         val year = cal.get(Calendar.YEAR)
         val month = cal.get(Calendar.MONTH)
         val day = cal.get(Calendar.DAY_OF_MONTH)
-        val dayOfTheWeek = cal.get(Calendar.DAY_OF_WEEK)
 
         val nextDayCal = Calendar.getInstance(TimeZone.getTimeZone("GMT+1:00"))
         nextDayCal.add(Calendar.DAY_OF_MONTH, 1)
         nextDay = georgianDateFormatForInsertion.format(nextDayCal.time)
         nextDayForCalculations = georgianDateFormatForChecking.format(nextDayCal.time)
 
-        val dtISO = DateTime(year, month + 1, day, 23, 0, 0, 0)
-
         monthOfTheYear = monthOfTheyYearFormat.format(currentLocalTime)
         currentYear = currentYearFormat.format(currentLocalTime)
 
         binding.dateGeorgian.text = georgianFullDateFormat.format(cal.time).toString()
-
-        /*         binding.dateHijri.text = "" + dtISO
-                     .withChronology(IslamicChronology.getInstance(SAUDI_ARABIA)).dayOfMonth + " " + hijriMonthName(dtISO)+ " " + dtISO
-                     .withChronology(IslamicChronology.getInstance(SAUDI_ARABIA)).year*/
 
     }
 
@@ -273,23 +253,15 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
 //            supplierNames1.add(6, midnightAdahanModel)
             vm.savePrayerTimes(requireContext(), prayerList)
             if (localTime.equals(date)) {
-                Log.d("currentTime", " is " + localTime + " , " + date)
                 binding.dateHijri.text =
                     data[i].date.hijri.day + " " + data[i].date.hijri.month.ar +
                             " " + data[i].date.hijri.year
 
                 nextPrayerIs = nextPrayer(prayerList, currentHour)
-                Log.d("nextPrayerIs", " " + nextPrayerIs.toString())
                 for (i in 0..prayerList.size - 1) {
                     if (nextPrayerIs == prayerList[i].prayerId) {
-                        Log.d(
-                            "nextPrayerIs", " the If" + nextPrayerIs + " , " +
-                                    prayerList[i].prayerId + " , " + prayerList[i].name + " ," +
-                                    prayerList[i].time
-                        )
 
                         val nextPrayerTime = prayerList[i].time + " " + prayerList[i].date
-                        Log.d("nextPrayerTim" , nextPrayerTime)
                         val remainingTimeForNextPrayer =
                             remainingTimeForNextPrayer(currentDateForChecking, nextPrayerTime)
                         binding.remainingTimeForNextPrayer.text =
@@ -304,37 +276,17 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                         binding.prayerTimesList.adapter =
                             PrayerAdapter(requireContext(), prayerList, nextPrayerIs)
                     }
-/*
-                        vm.getPrayerTimes(requireContext())
-                            .observe(requireActivity(), androidx.lifecycle.Observer { prayer ->
-                                Log.d("uuu222sd", "sdsd" + prayer)
-                            })*/
                 }
                 if (!flagFoundPrayerId) {
-                    Log.d("nextPrayerIs", " the else" + flagFoundPrayerId)
                     vm.getPrayerTimesForSpecificDate(nextDay, requireContext())
                         .observe(requireActivity(), androidx.lifecycle.Observer { prayer ->
-                            Log.d("uuuiasd", " entered else sdsd " + prayer)
-
                             if (!prayer.isNullOrEmpty()) {
                                 binding.remainingTimeForNextPrayer.text =
                                     getString(R.string.remaining_time_for) + getNameOfPrayer(
                                         requireContext(),
                                         prayer[0].prayerId
                                     )
-
-                                Log.d(
-                                    "nextPrayerName", getNameOfPrayer(
-                                        requireContext(),
-                                        prayer[0].prayerId
-                                    )
-                                )
-
                                 val nextPrayerTime = prayer[0].time + " " + prayer[0].date
-                                Log.d(
-                                    "prayerList",
-                                    "" + nextPrayerIs + " , " + nextPrayerTime
-                                )
                                 val remainingTimeForNextPrayer =
                                     remainingTimeForNextPrayer(currentDateForChecking, nextPrayerTime)
                                 binding.remainingTimeForNextPrayerValue.text =
@@ -361,10 +313,8 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
         if (!remainingHours.equals(0)) {
             totalConvertedMinutes = remainingHours * 60
         }
-        Log.d("yourMinutes", " is " + time)
 
         if (time.length == 5) {
-            Log.d("yourMinutes", " is " + time)
             val yourMinutes = time.substring(3, 5).toLong()
 
             val timer = object : CountDownTimer(
@@ -389,7 +339,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                         )
                     )
                     binding.remainingTimeForNextPrayerValue.text = hms
-                    Log.d("countDown", " + " + hms) //set text
                 }
 
                 override fun onFinish() {
@@ -410,19 +359,23 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
         Log.d("renderData", "data")
     }
 
+    @SuppressLint("MissingPermission")
     private fun initLocationListener() {
         fusedLocationClient =
             activity?.let { LocationServices.getFusedLocationProviderClient(it) }!!
         fusedLocationClient?.lastLocation?.addOnSuccessListener {
             if (it == null) {
-                getLocationUpdates()
+                val getCity = vm.getCityFromPreferences()
+                if(getCity == null)
+                    getLocationUpdates()
+                Log.d("getLocationUpdates" , " is null "+it)
             } else {
-                Log.d(
-                    TAG,
-                    "User Location : Lat : ${it.latitude} Long : ${it.longitude}"
-                )
-                getCurrentCityFromLatLon(it.latitude.toString(), it.longitude.toString())
-                initQiblaDirection(it.latitude, it.longitude)
+
+                binding.deviceCurrentLocation.text = getAndSetCurrentCityFromLatLon(it.latitude.toString(),it.longitude.toString())
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    initQiblaDirection(it.latitude, it.longitude)
+                    initPrayerTimes(it.latitude,it.longitude)
+                }
             }
         }
         fusedLocationClient?.lastLocation?.addOnFailureListener {
@@ -432,10 +385,99 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
 
     }
 
-    private fun getCurrentCityFromLatLon(latitude: String, longitude: String) {
-        val geocoder: Geocoder
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun initPrayerTimes(latitude: Double, longitude: Double) {
+        linearLayoutManager = LinearLayoutManager(requireContext())
+        vm.getPrayerTimesForSpecificDate(localTime, requireContext())
+            .observe(requireActivity(), androidx.lifecycle.Observer { prayer ->
+                if(!prayer.isNullOrEmpty()){
+                    getPrayerTimesFromDatabase(prayer)
+                    binding.prayerTimesList.layoutManager = linearLayoutManager
+                    binding.prayerTimesList.isNestedScrollingEnabled = false
+
+                }else if(latitude != 0.0 && longitude != 0.0){
+                    vm.viewStateAlAdahan.observe(viewLifecycleOwner, { viewState ->
+                        when (viewState) {
+                            is AlAdahanViewState.Loading -> {
+                                renderLoading(viewState.show)
+                            }
+                            is AlAdahanViewState.NetworkFailure -> {
+                                renderNetworkFailure()
+                            }
+                            is AlAdahanViewState.Data -> {
+                                renderParentTimings(viewState.data)
+                            }
+                        }
+                    })
+                    fusedLocationClient.removeLocationUpdates(locationCallback);
+                        vm.getAlAdahanAPI(
+                            latitude.toString(),
+                            longitude.toString(),
+                            "5",
+                            monthOfTheYear,
+                            currentYear
+                        )
+                    }
+                initQiblaDirection(latitude,longitude)
+                binding.deviceCurrentLocation.text = getAndSetCurrentCityFromLatLon(latitude.toString(),longitude.toString())
+                Log.d("getElAdahan" , " is called")
+            })
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getPrayerTimesFromDatabase(prayer:List<PrayerTimeModel>){
+        binding.dateHijri.text =
+            prayer[0].hijriDate
+        val currentHourDateFormat: DateFormat = SimpleDateFormat("HH:mm")
+        val currentHour = currentHourDateFormat.format(cal.time)
+        val dateFormatForChecking: DateFormat = SimpleDateFormat("HH:mm dd-MM-yyyy")
+        val currentDateForChecking = dateFormatForChecking.format(cal.time)
+        nextPrayerIs = nextPrayer(prayer.toMutableList(), currentHour)
+        if(nextPrayerIs!=300) {
+
+            val nextPrayerTime =
+                prayer[nextPrayerIs].time + " " + prayer[nextPrayerIs].date
+            val remainingTimeForNextPrayer =
+                remainingTimeForNextPrayer(currentDateForChecking, nextPrayerTime)
+            binding.remainingTimeForNextPrayer.text =
+                getString(R.string.remaining_time_for) + getNameOfPrayer(
+                    requireContext(), nextPrayerIs
+                )
+            binding.remainingTimeForNextPrayerValue.text = remainingTimeForNextPrayer
+
+            counterForNextPrayer(remainingTimeForNextPrayer)
+
+            binding.prayerTimesList.adapter =
+                PrayerAdapter(requireContext(), prayer, nextPrayerIs)
+
+        }else{
+            vm.getPrayerTimesForSpecificDate(nextDay, requireContext())
+                .observe(requireActivity(), androidx.lifecycle.Observer { prayer ->
+                    if (!prayer.isNullOrEmpty()) {
+                        binding.remainingTimeForNextPrayer.text =
+                            getString(R.string.remaining_time_for) + getNameOfPrayer(
+                                requireContext(),
+                                prayer[0].prayerId
+                            )
+
+                        val nextPrayerTime = prayer[0].time + " " + prayer[0].date
+                        val remainingTimeForNextPrayer =
+                            remainingTimeForNextPrayer(currentDateForChecking, nextPrayerTime)
+                        binding.remainingTimeForNextPrayerValue.text =
+                            remainingTimeForNextPrayer
+                        counterForNextPrayer(remainingTimeForNextPrayer)
+
+                        binding.prayerTimesList.adapter =
+                            PrayerAdapter(requireContext(), prayer, nextPrayerIs)
+                    }
+                })
+        }
+    }
+
+    private fun getAndSetCurrentCityFromLatLon(latitude: String, longitude: String):String {
         val addresses: List<Address>
-        geocoder = Geocoder(requireContext(), Locale("ar"))
+        val geocoder = Geocoder(requireContext(), Locale("ar"))
 
         addresses = geocoder.getFromLocation(
             latitude.toDouble(),
@@ -451,128 +493,64 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
             if (addresses[0].locality != null)
                 city = addresses[0].getLocality()
             val country: String = addresses[0].getCountryName()
-            binding.deviceCurrentLocation.text = country + getString(R.string.comma) + city
-        }
-/*
+            val currentCity = "$country, $city"
+            vm.preference.setCity(currentCity)
 
-        val state: String = addresses[0].getAdminArea()
-*/
-/*
-        val postalCode: String = addresses[0].getPostalCode()
-        val knownName: String = addresses[0].getFeatureName()
-*/
+            return currentCity
+        }
+
+        return "Not Found"
 
     }
-
-    private lateinit var locationRequest: LocationRequest
-    private lateinit var locationCallback: LocationCallback
 
     private fun getLocationUpdates() {
 
         locationRequest = LocationRequest()
-        locationRequest.interval = 10000
+        locationRequest.interval = 20 * 1000
         locationRequest.fastestInterval = 10000
         locationRequest.smallestDisplacement = 170f // 170 m = 0.1 mile
         locationRequest.priority =
             LocationRequest.PRIORITY_HIGH_ACCURACY //set according to your app function
-        Log.d(TAG, " is not" + locationRequest)
+        fusedLocationClient.requestLocationUpdates(locationRequest,
+            locationCallback,
+            Looper.getMainLooper())
+
+        Log.d("asdasdasd" ,"is called" + fusedLocationClient.lastLocation.toString())
         locationCallback = object : LocationCallback() {
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onLocationResult(locationResult: LocationResult?) {
-                locationResult ?: return
+                if (locationResult != null) {
+                    if (locationResult.locations.isNotEmpty()) {
+                        val location =
+                            locationResult.lastLocation
+                        initPrayerTimes(location.latitude,location.longitude)
+                    }else {
 
-                if (locationResult.locations.isNotEmpty()) {
-                    // get latest location
-                    val location =
-                        locationResult.lastLocation
-                    // use your location object
-                    // get latitude , longitude and other info from this
+                        fusedLocationClient.requestLocationUpdates(locationRequest,
+                            locationCallback,
+                            Looper.getMainLooper())
+
+                        Log.d("asdasdasd" , fusedLocationClient.lastLocation.toString())
+
+                    }
+                }else {
+
+                    fusedLocationClient.requestLocationUpdates(locationRequest,
+                        locationCallback,
+                        Looper.getMainLooper())
+
+                    Log.d("asdasdasd" , fusedLocationClient.lastLocation.toString())
+
                 }
-
-
             }
         }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initQiblaDirection(latitude: Double, longitude: Double) {
         userLocation.latitude = latitude
         userLocation.longitude = longitude
-
-        linearLayoutManager = LinearLayoutManager(requireContext())
-        vm.getPrayerTimesForSpecificDate(localTime, requireContext())
-            .observe(requireActivity(), androidx.lifecycle.Observer { prayer ->
-                if(!prayer.isNullOrEmpty()){
-                    Log.d("currentDay", prayer[0].date)
-                    binding.dateHijri.text =
-                        prayer[0].hijriDate
-                    val currentHourDateFormat: DateFormat = SimpleDateFormat("HH:mm")
-                    val currentHour = currentHourDateFormat.format(cal.time)
-                    val dateFormatForChecking: DateFormat = SimpleDateFormat("HH:mm dd-MM-yyyy")
-                    val currentDateForChecking = dateFormatForChecking.format(cal.time)
-                    nextPrayerIs = nextPrayer(prayer.toMutableList(), currentHour)
-                    if(nextPrayerIs!=300) {
-
-                        val nextPrayerTime =
-                            prayer[nextPrayerIs].time + " " + prayer[nextPrayerIs].date
-                        val remainingTimeForNextPrayer =
-                            remainingTimeForNextPrayer(currentDateForChecking, nextPrayerTime)
-                        binding.remainingTimeForNextPrayer.text =
-                            getString(R.string.remaining_time_for) + getNameOfPrayer(
-                                requireContext(), nextPrayerIs
-                            )
-                        binding.remainingTimeForNextPrayerValue.text = remainingTimeForNextPrayer
-
-                        counterForNextPrayer(remainingTimeForNextPrayer)
-
-                        binding.prayerTimesList.adapter =
-                            PrayerAdapter(requireContext(), prayer, nextPrayerIs)
-
-                    }else{
-                        vm.getPrayerTimesForSpecificDate(nextDay, requireContext())
-                            .observe(requireActivity(), androidx.lifecycle.Observer { prayer ->
-                                Log.d("uuuiasd", " entered else sdsd " + prayer)
-
-                                if (!prayer.isNullOrEmpty()) {
-                                    binding.remainingTimeForNextPrayer.text =
-                                        getString(R.string.remaining_time_for) + getNameOfPrayer(
-                                            requireContext(),
-                                            prayer[0].prayerId
-                                        )
-
-                                    Log.d(
-                                        "nextPrayerName", getNameOfPrayer(
-                                            requireContext(),
-                                            prayer[0].prayerId
-                                        )
-                                    )
-
-                                    val nextPrayerTime = prayer[0].time + " " + prayer[0].date
-                                    Log.d(
-                                        "prayerList",
-                                        "" + nextPrayerIs + " , " + nextPrayerTime
-                                    )
-                                    val remainingTimeForNextPrayer =
-                                        remainingTimeForNextPrayer(currentDateForChecking, nextPrayerTime)
-                                    binding.remainingTimeForNextPrayerValue.text =
-                                        remainingTimeForNextPrayer
-                                    counterForNextPrayer(remainingTimeForNextPrayer)
-
-                                    binding.prayerTimesList.adapter =
-                                        PrayerAdapter(requireContext(), prayer, nextPrayerIs)
-                                }
-                            })
-                    }
-                    binding.prayerTimesList.layoutManager = linearLayoutManager
-                    binding.prayerTimesList.isNestedScrollingEnabled = false
-
-                }else {
-                    vm.getAlAdahanAPI(
-                        userLocation.latitude.toString(), userLocation.longitude.toString(), "5",
-                        monthOfTheYear, currentYear
-                    )
-                }
-            })
-
         sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
         sensorManager.registerListener(object : SensorEventListener {
@@ -632,6 +610,18 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                 binding.ivQiblaDirection.startAnimation(needleAnimation)
                 currentNeedleDegree = direction
                 currentDegree = -degree
+
+                if(currentNeedleDegree <= 10 || currentNeedleDegree >= 350){
+                    context?.resources?.let { binding.ivQiblaDirection.setColorFilter(it?.getColor(R.color.logoOrangeColor)) };
+
+                }else {
+                    context?.resources?.getColor(R.color.backgroundGreen)?.let {
+                        binding.ivQiblaDirection.setColorFilter(
+                            it
+                        )
+                    }
+
+                }
 
             }
         }, sensor, SensorManager.SENSOR_DELAY_GAME)

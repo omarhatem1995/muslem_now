@@ -4,16 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundGrey"
     tools:context=".ui.azkar.AzkarActivity">
 
     <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_background_pattern_all_screens"
+        />
+    <ImageView
         android:id="@+id/azkar_list_background_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_mask_group"
-        android:background="@color/textColorGreen"
+        android:layout_height="120dp"
+        android:background="@color/transGreenBackground2"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/azkarCategory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="asdsasad"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:fontFamily="@font/tajawalmedium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/azkar_list_background_image"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/azkar_recyclerView_List"

@@ -193,5 +193,22 @@ class LocaleUtil {
             }
             return "0"
         }
+
+        fun setDrawable(id:Int) : Int{
+            if(id == 0)
+                return R.drawable.ic_elfajr
+            else if (id == 1)
+                return R.drawable.ic_sunrise
+            else if (id == 2)
+                return R.drawable.ic_eldhur
+            else if (id == 3)
+                return R.drawable.ic_elasr
+            else if (id == 4)
+                return R.drawable.ic_elmaghrib
+            else if (id == 5)
+                return R.drawable.ic_elisha
+
+            else return R.drawable.ic_elfajr
+        }
     }
 }

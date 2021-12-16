@@ -12,9 +12,12 @@
     <color name="backGroundColor">#F8FBFE</color>
     <color name="textColorGreen">#269877</color>
     <color name="textColorGreen2">#37B899</color>
+    <color name="textColorGrey2">#A4AAB5</color>
+    <color name="logoOrangeColor">#f7941d</color>
     <color name="textSelectedPrayerColor">#F5931E</color>
     <color name="transGreenBackground">#F037B899</color>
     <color name="backgroundGreen">#3CC59D</color>
+    <color name="transGreenBackground2">#D537B899</color>
     <color name="textColorGrey">#2C3135</color>
     <color name="defaultColor">#A4AAB5</color>
     <color name="yourSelectedColor">#29CF7F</color>
