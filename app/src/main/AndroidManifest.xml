@@ -15,8 +15,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MuslemNow"
         android:usesCleartextTraffic="true">
+        <receiver
+            android:name = ".MyNotificationPublisher" />
         <activity
             android:name=".ui.settings.SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.settings.SettingsInAppActivity"
             android:exported="false" />
         <activity
             android:name=".ui.azkar.AzkarActivity"

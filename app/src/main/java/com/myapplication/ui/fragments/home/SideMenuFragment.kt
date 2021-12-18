@@ -15,6 +15,7 @@ import com.myapplication.R
 import com.myapplication.databinding.FragmentHomeBinding
 import com.myapplication.databinding.FragmentSideMenuBinding
 import com.myapplication.ui.settings.SettingsActivity
+import com.myapplication.ui.settings.SettingsInAppActivity
 
 
 class SideMenuFragment : Fragment() {
@@ -31,7 +32,6 @@ class SideMenuFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        Log.d("sideMenu" , " is Openned")
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_side_menu, container, false
@@ -61,7 +61,7 @@ class SideMenuFragment : Fragment() {
         }
 
         binding.linearSettings.setOnClickListener {
-            val intent = Intent(context, SettingsActivity::class.java)
+            val intent = Intent(context, SettingsInAppActivity::class.java)
             context?.startActivity(intent)
         }
 

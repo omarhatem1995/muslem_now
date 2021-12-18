@@ -62,6 +62,15 @@ import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.tasks.Task
 import com.myapplication.ui.azkar.AzkarActivity
 import com.myapplication.ui.fragments.home.SideMenuFragment
+import android.app.AlarmManager
+import android.app.Notification
+
+import androidx.core.content.ContextCompat.getSystemService
+
+import android.os.SystemClock
+
+import android.app.PendingIntent
+import androidx.core.app.NotificationCompat
 
 
 class HomeFragment : Fragment(), AlAdahanUseCases.View {
@@ -96,6 +105,8 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
     var monthOfTheYear = "null"
     var currentYear = "null"
     private val vm: HomeViewModel by viewModels()
+    val NOTIFICATION_CHANNEL_ID = "10001"
+    private val default_notification_channel_id = "default"
     val cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+1:00"))
 
     lateinit var nextDay: String
@@ -139,6 +150,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
 
         var frameLayout : FrameLayout
 
+        getNotification( "10 second delay" )?.let { scheduleNotification(it, 10000 ) };
 
         binding.ivQiblaDirection.setOnClickListener {
             val intent = Intent(context, QiblahActivity::class.java)
@@ -186,6 +198,30 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
 
         binding.dateGeorgian.text = georgianFullDateFormat.format(cal.time).toString()
 
+    }
+    private fun scheduleNotification(notification: Notification, delay: Int) {
+        val notificationIntent = Intent(context, MyNotificationPublisher::class.java)
+        notificationIntent.putExtra(MyNotificationPublisher.NOTIFICATION_ID, 1)
+        notificationIntent.putExtra(MyNotificationPublisher.NOTIFICATION, notification)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            0,
+            notificationIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        val futureInMillis = SystemClock.elapsedRealtime() + delay
+        val alarmManager = (context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager?)!!
+        alarmManager[AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis] = pendingIntent
+    }
+    private fun getNotification(content: String): Notification? {
+        val builder: NotificationCompat.Builder? =
+            context?.let { NotificationCompat.Builder(it, default_notification_channel_id) }
+        builder?.setContentTitle("Scheduled Notification")
+        builder?.setContentText(content)
+        builder?.setSmallIcon(R.drawable.ic_side_menu_nav_icon)
+        builder?.setAutoCancel(true)
+        builder?.setChannelId(NOTIFICATION_CHANNEL_ID)
+        return builder?.build()
     }
 
     private fun getTimeOnlyForPrayer(input: String): String {
