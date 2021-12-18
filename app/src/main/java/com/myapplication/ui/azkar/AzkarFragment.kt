@@ -74,11 +74,9 @@ class AzkarFragment : Fragment() {
             val inputStream: InputStream? = context?.assets?.open("categories.json")
             json = inputStream?.bufferedReader().use { it?.readText() }
 
-            Log.d("jsonText", " : "+json)
             var jsonArray = JSONArray(json)
 
             var strings : MutableList<String> = ArrayList()
-            val supplierNames1: MutableList<AzkarModel> = ArrayList()
             for (i in 0..jsonArray.length()-1) {
                 var jsonObj = jsonArray.getString(i)
                 strings.add(jsonObj)

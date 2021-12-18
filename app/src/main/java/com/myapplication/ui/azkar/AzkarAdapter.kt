@@ -30,7 +30,6 @@ class AzkarAdapter(mContext: Context, dataItem: List<String>) : RecyclerView.Ada
 
     override fun onBindViewHolder(holder: AzkarViewHolder, position: Int) {
         val zekrItem = mData!![position]
-        Log.d("languageList" , " view Holder" + zekrItem)
 
         holder.textAzkar.text = zekrItem
 
