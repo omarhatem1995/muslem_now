@@ -17,15 +17,14 @@ import android.os.Bundle
 
 
 
-class AzkarAdapter(mContext: Context, dataItem: List<AlAzkarListModel>) : RecyclerView.Adapter<AzkarAdapter.AzkarViewHolder>() {
+class AzkarAdapter(mContext: Context, dataItem: List<String>) : RecyclerView.Adapter<AzkarAdapter.AzkarViewHolder>() {
 
     var mContext: Context? = mContext
-    var mData: List<AlAzkarListModel> = dataItem
+    var mData: List<String> = dataItem
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AzkarViewHolder {
         val v: View
         v = LayoutInflater.from(mContext).inflate(R.layout.azkar_item, parent, false)
-        Log.d("languageList" , " view Holder")
         return AzkarViewHolder(v)
     }
 
@@ -33,12 +32,11 @@ class AzkarAdapter(mContext: Context, dataItem: List<AlAzkarListModel>) : Recycl
         val zekrItem = mData!![position]
         Log.d("languageList" , " view Holder" + zekrItem)
 
-        holder.textAzkar.text = zekrItem.category
-        holder.imageAzkar.setBackgroundResource(zekrItem.image)
+        holder.textAzkar.text = zekrItem
 
         holder.imageAzkar.setOnClickListener {
             val intent = Intent(mContext, AzkarActivity::class.java)
-            intent.putExtra("category" , zekrItem.category)
+            intent.putExtra("category" , zekrItem)
             mContext?.startActivity(intent)
         }
     }
@@ -53,9 +51,8 @@ class AzkarAdapter(mContext: Context, dataItem: List<AlAzkarListModel>) : Recycl
         var textAzkar: TextView
 
         init {
-            imageAzkar = itemView.findViewById(R.id.zekrImageView)
+            imageAzkar = itemView.findViewById(R.id.zekrBackgroundImageView)
             textAzkar = itemView.findViewById(R.id.zekrTextView)
-            Log.d("languageList" , " view Holder")
 
         }
     }

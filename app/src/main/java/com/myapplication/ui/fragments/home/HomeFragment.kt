@@ -3,6 +3,8 @@ package com.myapplication
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.hardware.*
 import android.location.Address
@@ -53,7 +55,13 @@ import android.os.VibrationEffect
 import androidx.core.content.ContextCompat.getSystemService
 
 import android.os.Vibrator
+import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentContainer
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.tasks.Task
+import com.myapplication.ui.azkar.AzkarActivity
+import com.myapplication.ui.fragments.home.SideMenuFragment
 
 
 class HomeFragment : Fragment(), AlAdahanUseCases.View {
@@ -128,6 +136,25 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
 
         initLocationListener()
         getDateAndTime()
+
+        var frameLayout : FrameLayout
+
+
+        binding.ivQiblaDirection.setOnClickListener {
+            val intent = Intent(context, QiblahActivity::class.java)
+            context?.startActivity(intent)
+        }
+
+        binding.sideMenu.setOnClickListener {
+            Log.d("sideMenu" , " is clicked")
+            val sideMenuFragment = SideMenuFragment()
+            val transaction = this.parentFragmentManager.beginTransaction()
+            transaction.setCustomAnimations(R.anim.fragment_sidemenu_enter_animation,
+            R.anim.fragment_sidemenu_exit_animation,R.anim.fragment_sidemenu_enter_animation,
+            R.anim.fragment_sidemenu_exit_animation)
+            transaction.addToBackStack(null)
+            transaction.add(R.id.frameLayoutSideMenu,sideMenuFragment,"BLANK").commit()
+        }
 
         return binding.root
     }
@@ -504,7 +531,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
     }
 
     private fun getLocationUpdates() {
-
+        getUserLocation()
         locationRequest = LocationRequest()
         locationRequest.interval = 20 * 1000
         locationRequest.fastestInterval = 10000
@@ -625,5 +652,69 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
 
             }
         }, sensor, SensorManager.SENSOR_DELAY_GAME)
+    }
+
+
+    @SuppressLint("MissingPermission")
+    fun getUserLocation()
+    {
+
+            val locationRequest = LocationRequest.create().apply {
+                interval = 10000
+                fastestInterval = 5000
+                smallestDisplacement = 100f
+                priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+                Log.d("getuserlocation", " getuserlocation: entered1")
+            }
+
+            val builder = LocationSettingsRequest.Builder()
+            builder.addLocationRequest(locationRequest)
+            val client: SettingsClient = LocationServices.getSettingsClient(this.requireActivity())
+            val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
+            task.addOnSuccessListener {
+
+                val flag = it.locationSettingsStates?.isLocationUsable
+                if (flag == true)
+                {
+                    locationCallback = object : LocationCallback()
+                    {
+                        override fun onLocationResult(locationResult: LocationResult)
+                        {
+                            val location = locationResult.lastLocation
+                            location?.let {
+//                                getCountry(location)
+                                Log.e("onLocationResult", " onLocationResult: $location" )
+//                                Log.e(null, "onLocationResult: $countryName" )
+
+                            }
+
+                        }
+                    }
+                    fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback!!, Looper.getMainLooper())
+                }
+
+            }
+
+            task.addOnFailureListener { exception ->
+                if (exception is ResolvableApiException)
+                {
+                    // Location settings are not satisfied, but this can be fixed
+                    // by showing the user a dialog.
+                    Log.d(null, "setuserlocation: location failure")
+                    try
+                    {
+                        // Show the dialog by calling startResolutionForResult(),
+                        // and check the result in onActivityResult().
+                        exception.startResolutionForResult(this.requireActivity(), 0x1)
+                    } catch (sendEx: IntentSender.SendIntentException)
+                    {
+                        // Ignore the error.
+                    }
+                }
+            }
+
+
+
+
     }
 }

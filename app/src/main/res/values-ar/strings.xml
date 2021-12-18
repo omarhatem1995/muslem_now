@@ -44,5 +44,9 @@
     <string name="meshary">مشاري بن راشد</string>
     <string name="daily_azkar">الأذكار اليومية</string>
     <string name="reset_counter">محو العداد</string>
+    <string name="elhosary">الحصري</string>
+    <string name="qibla">القبلة</string>
+    <string name="settings">الاعدادات</string>
+    <string name="general_settings">الاعدادات العامة</string>
 
 </resources>

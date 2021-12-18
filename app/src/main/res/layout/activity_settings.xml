@@ -46,6 +46,7 @@
                     android:layout_marginEnd="32dp"
                     android:fontFamily="@font/tajawalmedium"
                     android:maxLines="2"
+                    android:gravity="center"
                     android:text="@string/you_can_specify_your_settings_or_skip_and_add_it_later_on"
                     android:textSize="14sp"
                     app:layout_constraintTop_toBottomOf="@id/logoImageView" />
@@ -140,7 +141,6 @@
                         android:layout_height="16dp"
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="16dp"
-                        android:background="@drawable/marked"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/azanTypeTextView" />
 
@@ -152,6 +152,7 @@
                         android:fontFamily="@font/tajawalmedium"
                         android:text="@string/full_azan"
                         android:textSize="14sp"
+                        android:textColor="@color/textColorGreen"
                         app:layout_constraintBottom_toBottomOf="@id/fullAzanImageView"
                         app:layout_constraintStart_toEndOf="@id/fullAzanImageView"
                         app:layout_constraintTop_toTopOf="@id/fullAzanImageView" />
@@ -161,7 +162,6 @@
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_marginStart="32dp"
-                        android:background="@drawable/eclipse"
                         app:layout_constraintStart_toEndOf="@id/fullAzanTextView"
                         app:layout_constraintTop_toTopOf="@id/fullAzanImageView" />
 
@@ -193,6 +193,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
                         android:text="@string/choose_moazen"
                         android:textColor="@color/textColorGrey2"
                         app:layout_constraintStart_toStartOf="parent"
@@ -203,7 +204,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="4dp"
                         android:layout_marginEnd="16dp"
                         android:background="@drawable/view_background_white_rounded"
                         android:drawableEnd="@drawable/down_arrow"

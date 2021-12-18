@@ -21,6 +21,13 @@
             android:layout_height="match_parent"
             android:background="@drawable/ic_background_pattern_all_screens"
             tools:context=".QiblahActivity">
+            <FrameLayout
+                android:id="@+id/frameLayoutSideMenu"
+                android:layout_width="match_parent"
+                android:layout_height="800dp"
+                android:elevation="8dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <ImageView
                 android:id="@+id/background"
@@ -222,6 +229,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/constraint_body">
 
+
+                <ImageView
+                    android:id="@+id/ivQiblaCompass"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:background="@drawable/compass"
+                    app:layout_constraintTop_toTopOf="@id/ivQiblaDirection"
+                    app:layout_constraintBottom_toBottomOf="@id/ivQiblaDirection"
+                    app:layout_constraintStart_toStartOf="@id/ivQiblaDirection"
+                    app:layout_constraintEnd_toEndOf="@id/ivQiblaDirection"/>
                 <ImageView
                     android:id="@+id/ivQiblaDirection"
                     android:layout_width="120dp"
@@ -273,6 +290,7 @@
                     app:layout_constraintStart_toStartOf="@id/tvHeading"
                     app:layout_constraintTop_toBottomOf="@id/tvHeading2" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>

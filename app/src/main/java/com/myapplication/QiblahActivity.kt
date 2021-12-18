@@ -13,11 +13,17 @@ import android.view.animation.Animation
 import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import com.google.android.gms.location.LocationServices
+import com.myapplication.databinding.ActivityQiblahBinding
+import com.myapplication.databinding.ActivitySettingsBinding
+import com.myapplication.ui.fragments.home.HomeViewModel
+import com.myapplication.ui.settings.SettingsViewModel
 import kotlin.math.roundToInt
 
 
@@ -32,19 +38,25 @@ class QiblahActivity : AppCompatActivity() {
         const val QIBLA_LONGITUDE = 39.8579
     }
 
+    lateinit var binding: ActivityQiblahBinding
+    private val qiblahViewModel: HomeViewModel by viewModels()
+
     var currentDegree: Float = 0f
     var currentNeedleDegree: Float = 0f
 
     lateinit var sensorManager: SensorManager
     lateinit var sensor: Sensor
     lateinit var userLocation: Location
-    lateinit var ivQiblaDirection : ImageView
+    lateinit var qiblahDirectionImageView: ImageView
     lateinit var needleAnimation: RotateAnimation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_qiblah)
-        ivQiblaDirection = findViewById<ImageView>(R.id.ivQiblaDirection)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_qiblah)
+        binding.homeViewmodel = qiblahViewModel
+
+        qiblahDirectionImageView = findViewById<ImageView>(R.id.qiblahDirectionImageView)
         needleAnimation = RotateAnimation(
             currentNeedleDegree,
             0f,
@@ -85,6 +97,7 @@ class QiblahActivity : AppCompatActivity() {
             initLocationListener()
         }
     }
+
     private fun initLocationListener() {
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         fusedLocationClient.lastLocation.addOnSuccessListener {
@@ -132,9 +145,9 @@ class QiblahActivity : AppCompatActivity() {
 
     private fun initQiblaDirection(latitude: Double, longitude: Double) {
         userLocation = Location("User Location")
+
         userLocation.latitude = latitude
         userLocation.longitude = longitude
-
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
         sensorManager.registerListener(object : SensorEventListener {
@@ -148,8 +161,8 @@ class QiblahActivity : AppCompatActivity() {
                 var head: Float = sensorEvent.values?.get(0)?.roundToInt()?.toFloat()!!
 
                 val destLocation = Location("Destination Location")
-                destLocation.latitude = QIBLA_LATITUDE
-                destLocation.longitude = QIBLA_LONGITUDE
+                destLocation.latitude = HomeFragment.QIBLA_LATITUDE
+                destLocation.longitude = HomeFragment.QIBLA_LONGITUDE
 
                 var bearTo = userLocation.bearingTo(destLocation)
 
@@ -172,9 +185,13 @@ class QiblahActivity : AppCompatActivity() {
                     direction += 360
                 }
 
-//                tvHeading.text = "Heading : $degree + degrees"
+                binding.tvQiblahDegrees.text = "Heading : $degree + degrees"
 
-                Log.d(TAG, "Needle Degree : $currentNeedleDegree, Direction : $direction")
+                Log.d(
+                    HomeFragment.TAG,
+                    "Needle Degree : $currentNeedleDegree, Direction : $direction"
+                )
+                binding.tvQiblahDegrees.text = currentNeedleDegree.toString()
 
                 needleAnimation = RotateAnimation(
                     currentNeedleDegree,
@@ -186,13 +203,26 @@ class QiblahActivity : AppCompatActivity() {
                 )
                 needleAnimation.fillAfter = true
                 needleAnimation.duration = 200
-                ivQiblaDirection.startAnimation(needleAnimation)
 
+                binding.qiblahDirectionImageView.startAnimation(needleAnimation)
                 currentNeedleDegree = direction
                 currentDegree = -degree
+
+                if (currentNeedleDegree <= 10 || currentNeedleDegree >= 350) {
+                    binding.qiblahDirectionImageView.setColorFilter(getColor(R.color.logoOrangeColor))
+                    binding.tvQiblahDegrees.setTextColor(getColor(R.color.logoOrangeColor))
+                } else {
+
+                    binding.qiblahDirectionImageView.setColorFilter(getColor(R.color.backgroundGreen))
+
+                    binding.tvQiblahDegrees.setTextColor(getColor(R.color.textColorQiblahDegrees))
+
+
+                }
 
             }
         }, sensor, SensorManager.SENSOR_DELAY_GAME)
     }
+
 
 }
