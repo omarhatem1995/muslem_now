@@ -21,9 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.location.LocationServices
 import com.myapplication.databinding.ActivityQiblahBinding
-import com.myapplication.databinding.ActivitySettingsBinding
 import com.myapplication.ui.fragments.home.HomeViewModel
-import com.myapplication.ui.settings.SettingsViewModel
 import kotlin.math.roundToInt
 
 

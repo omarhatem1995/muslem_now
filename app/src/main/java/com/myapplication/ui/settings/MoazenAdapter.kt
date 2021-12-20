@@ -6,10 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.ImageView
 import android.widget.TextView
 import com.myapplication.R
-import com.myapplication.data.entities.model.Languages
 import com.myapplication.data.entities.model.MoazenModel
 
 class MoazenAdapter(context: Context, moazen: ArrayList<MoazenModel>) : BaseAdapter() {

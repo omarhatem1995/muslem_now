@@ -1,12 +1,7 @@
 package com.myapplication.data.gateways.remote.aladahangateway
 
-import com.example.el_mared.data.core.NetworkResponseFactory.ApiResponseAdapterFactory
-import com.example.el_mared.data.core.ServiceCore
-import com.example.el_mared.data.entities.base.ApiResponse
-import com.myapplication.domain.core.Constants
+import com.myapplication.data.entities.base.ApiResponse
 import com.myapplication.data.entities.model.AlAdahanResponseModel
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
 import java.lang.Error

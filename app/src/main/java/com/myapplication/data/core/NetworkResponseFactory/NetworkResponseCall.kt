@@ -1,7 +1,7 @@
-package com.marvelchallenge.data.core.NetworkResponseFactory
+package com.myapplication.data.core.NetworkResponseFactory
 
 
-import com.example.el_mared.data.entities.base.ApiResponse
+import com.myapplication.data.entities.base.ApiResponse
 import okhttp3.Request
 import okhttp3.ResponseBody
 import okio.Timeout

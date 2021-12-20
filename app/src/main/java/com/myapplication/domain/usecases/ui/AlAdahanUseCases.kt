@@ -1,6 +1,6 @@
 package com.myapplication.domain.usecases.ui
 
-import com.example.el_mared.data.entities.base.ApiResponse
+import com.myapplication.data.entities.base.ApiResponse
 import com.myapplication.data.entities.model.AlAdahanResponseModel
 import com.myapplication.data.entities.model.Datum
 import com.myapplication.data.entities.model.PrayerTimeModel

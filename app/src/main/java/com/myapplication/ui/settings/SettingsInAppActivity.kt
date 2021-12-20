@@ -1,24 +1,18 @@
 package com.myapplication.ui.settings
 
-import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import com.myapplication.MainActivity
 import com.myapplication.R
 import com.myapplication.data.entities.model.Languages
 import com.myapplication.data.entities.model.MoazenModel
 import com.myapplication.databinding.ActivityInappSettingsBinding
-import com.myapplication.databinding.ActivitySettingsBinding
-import com.myapplication.ui.fragments.home.SideMenuFragment
 
 
 class SettingsInAppActivity : AppCompatActivity() {

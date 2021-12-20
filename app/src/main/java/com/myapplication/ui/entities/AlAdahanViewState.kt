@@ -1,6 +1,5 @@
 package com.myapplication.ui.entities
 
-import com.myapplication.data.entities.model.AlAdahanResponseModel
 import com.myapplication.data.entities.model.Datum
 
 sealed class AlAdahanViewState {

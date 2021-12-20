@@ -9,8 +9,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.myapplication.R
 import com.myapplication.databinding.FragmentAzkarSettingsBinding
-import com.myapplication.databinding.FragmentSideMenuBinding
-import com.myapplication.ui.fragments.home.HomeViewModel
 
 class AzkarSettingsFragment : Fragment() {
     lateinit var binding: FragmentAzkarSettingsBinding

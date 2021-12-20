@@ -1,25 +1,17 @@
 package com.myapplication.ui.azkar
 
-import android.R.attr
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.myapplication.R
-import com.myapplication.data.entities.model.AlAzkarListModel
 import org.json.JSONArray
 import java.io.IOException
 import java.io.InputStream
-import android.graphics.Bitmap
-
-import android.R.attr.bitmap
 import android.widget.TextView
 import com.myapplication.data.entities.model.AzkarModel
-import java.io.File
-import java.io.FileOutputStream
 
 
 class AzkarActivity : AppCompatActivity() {

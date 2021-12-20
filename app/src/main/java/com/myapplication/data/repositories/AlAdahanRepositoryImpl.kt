@@ -1,7 +1,6 @@
 package com.myapplication.data.repositories
 
-import android.util.Log
-import com.example.el_mared.data.entities.base.ApiResponse
+import com.myapplication.data.entities.base.ApiResponse
 import com.myapplication.data.entities.model.AlAdahanResponseModel
 import com.myapplication.data.gateways.remote.aladahangateway.AlAdahanGateway
 import com.myapplication.domain.usecases.data.repo.AlAdahanRepo

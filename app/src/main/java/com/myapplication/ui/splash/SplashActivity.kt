@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.myapplication.LocaleUtil
-import com.myapplication.MainActivity
 import com.myapplication.R
 import com.myapplication.ui.settings.SettingsActivity
 import io.reactivex.Observable

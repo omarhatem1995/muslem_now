@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.myapplication.R
-import com.myapplication.data.entities.model.AlAzkarListModel
 import com.myapplication.data.entities.model.AzkarModel
 
 class AzkarListAdapter(mContext: Context, dataItem: List<AzkarModel>) : RecyclerView.Adapter<AzkarListAdapter.AzkarViewHolder>() {

@@ -1,6 +1,6 @@
-package com.example.el_mared.data.core.NetworkResponseFactory
-import com.example.el_mared.data.entities.base.ApiResponse
-import com.marvelchallenge.data.core.NetworkResponseFactory.ApiResponseCallAdapter
+package com.myapplication.data.core.NetworkResponseFactory
+import com.myapplication.data.entities.base.ApiResponse
+import com.myapplication.data.core.NetworkResponseFactory.ApiResponseCallAdapter
 import retrofit2.Call
 import retrofit2.CallAdapter
 import retrofit2.Response

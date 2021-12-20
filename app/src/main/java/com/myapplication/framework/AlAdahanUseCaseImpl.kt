@@ -1,6 +1,6 @@
 package com.myapplication.framework
 
-import com.example.el_mared.data.entities.base.ApiResponse
+import com.myapplication.data.entities.base.ApiResponse
 import com.myapplication.data.entities.model.AlAdahanResponseModel
 import com.myapplication.domain.usecases.data.repo.AlAdahanRepo
 import com.myapplication.domain.usecases.ui.AlAdahanUseCases

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.el_mared.data.entities.base;
+package com.myapplication.data.entities.base;
 
 import retrofit2.Response
 import java.io.IOException

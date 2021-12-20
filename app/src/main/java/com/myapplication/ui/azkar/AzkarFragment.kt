@@ -6,12 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.myapplication.R
-import com.myapplication.data.entities.model.AlAzkarListModel
-import com.myapplication.data.entities.model.AzkarModel
 import org.json.JSONArray
 import java.io.IOException
 import java.io.InputStream

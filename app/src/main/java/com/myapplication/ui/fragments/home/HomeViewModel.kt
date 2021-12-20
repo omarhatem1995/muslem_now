@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.*
-import com.example.el_mared.data.entities.base.ApiResponse
+import com.myapplication.data.entities.base.ApiResponse
 import com.myapplication.data.entities.model.PrayerTimeModel
 import com.myapplication.data.gateways.dao.aladahangateway.AlAdahanDatabase
 import com.myapplication.data.gateways.remote.aladahangateway.AlAdahanGateway

@@ -1,4 +1,4 @@
-package com.example.el_mared.data.core
+package com.myapplication
 
 import android.util.Log
 import okhttp3.OkHttpClient
