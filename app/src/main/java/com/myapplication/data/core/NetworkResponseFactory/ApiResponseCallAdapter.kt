@@ -16,7 +16,7 @@
 
 package com.myapplication.data.core.NetworkResponseFactory;
 
-import com.example.el_mared.data.entities.base.ApiResponse
+import com.myapplication.data.entities.base.ApiResponse
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.CallAdapter
