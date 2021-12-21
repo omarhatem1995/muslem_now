@@ -1,4 +1,4 @@
-package com.myapplication
+package com.myapplication.data.core
 
 import android.util.Log
 import okhttp3.OkHttpClient

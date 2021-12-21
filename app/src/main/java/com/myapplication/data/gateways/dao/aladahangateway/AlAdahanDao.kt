@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy.IGNORE
 import androidx.room.Query
 import com.myapplication.data.entities.model.Datum
 import com.myapplication.data.entities.model.PrayerTimeModel
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AlAdahanDao {
@@ -18,5 +19,5 @@ interface AlAdahanDao {
     fun getCurrentPrayerTimes(): LiveData<List<PrayerTimeModel>>
 
     @Query("SELECT * FROM Prayer_Time WHERE date = :date")
-    fun getSpecificDayPrayerTimes(date:String): LiveData<List<PrayerTimeModel>>
+    fun getSpecificDayPrayerTimes(date:String): Flow<List<PrayerTimeModel>>
 }

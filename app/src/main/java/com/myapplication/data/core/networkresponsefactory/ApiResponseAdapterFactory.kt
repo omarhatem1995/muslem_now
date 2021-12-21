@@ -1,9 +1,7 @@
-package com.myapplication.data.core.NetworkResponseFactory
+package com.myapplication.data.core.networkresponsefactory
 import com.myapplication.data.entities.base.ApiResponse
-import com.myapplication.data.core.NetworkResponseFactory.ApiResponseCallAdapter
 import retrofit2.Call
 import retrofit2.CallAdapter
-import retrofit2.Response
 import retrofit2.Retrofit
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
