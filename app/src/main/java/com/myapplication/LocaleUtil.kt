@@ -7,11 +7,15 @@ import android.os.Build
 import android.os.LocaleList
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.ConfigurationCompat
 import com.myapplication.data.entities.model.PrayerTimeModel
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 import org.joda.time.chrono.IslamicChronology
+import org.json.JSONObject
+import java.io.*
+import java.lang.StringBuilder
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -210,5 +214,67 @@ class LocaleUtil {
 
             else return R.drawable.ic_elfajr
         }
+
+        fun writeToFile(data: String, context: Context) {
+            try {
+                Log.d("writeToJson", " is called")
+                val outputStreamWriter =
+                    OutputStreamWriter(context.openFileOutput("savedAzkar.json", AppCompatActivity.MODE_APPEND))
+                outputStreamWriter.write(data)
+                outputStreamWriter.append("\n");
+                outputStreamWriter.close()
+            } catch (e: IOException) {
+                Log.e("Exception", "File write failed: $e")
+            }
+            Log.d("writeToJson", " is saved")
+
+        }
+        fun fileExists(context: Context, filename: String?): Boolean {
+            val file = context.getFileStreamPath(filename)
+            return if (file == null || !file.exists()) {
+                Log.d("filesasdlkasd", " doesnt exists")
+                false
+            } else {
+                Log.d("filesasdlkasd", " exists")
+                true
+            }
+        }
+        fun checkIfIdExistsAndReplace(context: Context,id:Int , counter : Int) : Boolean{
+            var ret = false
+            if(fileExists(context,"savedAzkar.json")) {
+
+                try {
+                    val inputStream: InputStream = context.openFileInput("savedAzkar.json")
+                    if (inputStream != null) {
+                        val inputStreamReader = InputStreamReader(inputStream)
+                        val bufferedReader = BufferedReader(inputStreamReader)
+                        var receiveString: String? = ""
+                        val stringBuilder = StringBuilder()
+                        while (bufferedReader.readLine().also { receiveString = it } != null) {
+                            stringBuilder.append("\n").append(receiveString)
+                            Log.d("foundLoasdkasd", "found: " + receiveString)
+                            val obj = JSONObject(receiveString)
+                            if (id == obj.getString("id").toInt()) {
+                               obj.put("counter",counter)
+                                ret = true
+                            } else {
+                                ret = false
+                            }
+                            Log.d("foundLoasdkasd", "found: " + obj.getString("id"))
+                            Log.d("foundLoasdkasd", "found: " + obj.getString("counter"))
+                        }
+
+                        inputStream.close()
+//                ret = stringBuilder.toString()
+                    }
+                } catch (e: FileNotFoundException) {
+                    Log.e("login activity", "File not found: " + e.toString())
+                } catch (e: IOException) {
+                    Log.e("login activity", "Can not read file: $e")
+                }
+            }
+            return ret
+        }
+
     }
 }

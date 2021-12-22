@@ -63,6 +63,7 @@ import com.google.android.gms.tasks.Task
 import com.myapplication.ui.azkar.AzkarActivity
 import com.myapplication.ui.fragments.home.SideMenuFragment
 import android.app.AlarmManager
+import android.app.Dialog
 import android.app.Notification
 
 import androidx.core.content.ContextCompat.getSystemService
@@ -71,6 +72,7 @@ import android.os.SystemClock
 
 import android.app.PendingIntent
 import androidx.core.app.NotificationCompat
+import com.myapplication.ui.ViewUtils
 
 
 class HomeFragment : Fragment(), AlAdahanUseCases.View {
@@ -108,8 +110,9 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
     val NOTIFICATION_CHANNEL_ID = "10001"
     private val default_notification_channel_id = "default"
     val cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+1:00"))
-
     lateinit var nextDay: String
+    lateinit var progressDialog :Dialog
+
     lateinit var nextDayForCalculations: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -148,8 +151,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
         initLocationListener()
         getDateAndTime()
 
-        var frameLayout : FrameLayout
-
         getNotification( "10 second delay" )?.let { scheduleNotification(it, 10000 ) };
 
         binding.ivQiblaDirection.setOnClickListener {
@@ -167,7 +168,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
             transaction.addToBackStack(null)
             transaction.add(R.id.frameLayoutSideMenu,sideMenuFragment,"BLANK").commit()
         }
-
+        progressDialog = context?.let { Dialog(it) }!!
         return binding.root
     }
 
@@ -355,7 +356,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                                 binding.remainingTimeForNextPrayerValue.text =
                                     remainingTimeForNextPrayer
                                 counterForNextPrayer(remainingTimeForNextPrayer)
-
+                                Log.d("remainingTime" , remainingTimeForNextPrayer)
                                 binding.prayerTimesList.adapter =
                                     PrayerAdapter(requireContext(), prayerList, nextPrayerIs)
                             }
@@ -373,6 +374,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
     fun counterForNextPrayer(time: String) {
         val remainingHours = time.substring(0, 2).toLong()
         var totalConvertedMinutes = 0L
+        Log.d("counterForNext", " " + time)
         if (!remainingHours.equals(0)) {
             totalConvertedMinutes = remainingHours * 60
         }
@@ -415,7 +417,15 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
     }
 
     override fun renderLoading(show: Boolean) {
-        Log.d("renderData", "data" + show)
+        if(show) {
+            progressDialog.show()
+            ViewUtils.showProgressDialog(
+                progressDialog!!
+            )
+        }
+        else
+            progressDialog.dismiss()
+        Log.d("renderData", "data $show" )
     }
 
     override fun renderNetworkFailure() {
@@ -435,6 +445,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
             } else {
 
                 binding.deviceCurrentLocation.text = getAndSetCurrentCityFromLatLon(it.latitude.toString(),it.longitude.toString())
+                Log.d("getLocationUpdatesOOP" , " isl "+getAndSetCurrentCityFromLatLon(it.latitude.toString(),it.longitude.toString()))
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     initQiblaDirection(it.latitude, it.longitude)
                     initPrayerTimes(it.latitude,it.longitude)
@@ -447,13 +458,13 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
         }
 
     }
-
+    var apiCall = false
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initPrayerTimes(latitude: Double, longitude: Double) {
         linearLayoutManager = LinearLayoutManager(requireContext())
         vm.getPrayerTimesForSpecificDate(localTime, requireContext())
             .observe(requireActivity(), androidx.lifecycle.Observer { prayer ->
-                if(!prayer.isNullOrEmpty()){
+                if(!prayer.isNullOrEmpty() && !apiCall){
                     getPrayerTimesFromDatabase(prayer)
                     binding.prayerTimesList.layoutManager = linearLayoutManager
                     binding.prayerTimesList.isNestedScrollingEnabled = false
@@ -469,10 +480,12 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                             }
                             is AlAdahanViewState.Data -> {
                                 renderParentTimings(viewState.data)
+                                apiCall = true
+                                renderLoading(false)
                             }
                         }
                     })
-                    fusedLocationClient.removeLocationUpdates(locationCallback);
+//                    fusedLocationClient.removeLocationUpdates(locationCallback);
                         vm.getAlAdahanAPI(
                             latitude.toString(),
                             longitude.toString(),
@@ -483,7 +496,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                     }
                 initQiblaDirection(latitude,longitude)
                 binding.deviceCurrentLocation.text = getAndSetCurrentCityFromLatLon(latitude.toString(),longitude.toString())
-                Log.d("getElAdahan" , " is called")
             })
 
     }
@@ -510,6 +522,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
             binding.remainingTimeForNextPrayerValue.text = remainingTimeForNextPrayer
 
             counterForNextPrayer(remainingTimeForNextPrayer)
+            Log.d("remainingTime 2" , remainingTimeForNextPrayer)
 
             binding.prayerTimesList.adapter =
                 PrayerAdapter(requireContext(), prayer, nextPrayerIs)
@@ -530,7 +543,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                         binding.remainingTimeForNextPrayerValue.text =
                             remainingTimeForNextPrayer
                         counterForNextPrayer(remainingTimeForNextPrayer)
-
+                        Log.d("remainingTime 3" , remainingTimeForNextPrayer)
                         binding.prayerTimesList.adapter =
                             PrayerAdapter(requireContext(), prayer, nextPrayerIs)
                     }
@@ -575,11 +588,11 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
         locationRequest.smallestDisplacement = 170f // 170 m = 0.1 mile
         locationRequest.priority =
             LocationRequest.PRIORITY_HIGH_ACCURACY //set according to your app function
-        fusedLocationClient.requestLocationUpdates(locationRequest,
+  /*      fusedLocationClient.requestLocationUpdates(locationRequest,
             locationCallback,
-            Looper.getMainLooper())
+            Looper.getMainLooper())*/
 
-        Log.d("asdasdasd" ,"is called" + fusedLocationClient.lastLocation.toString())
+//        Log.d("asdasdasd" ,"is called" + fusedLocationClient.lastLocation.toString())
         locationCallback = object : LocationCallback() {
             @SuppressLint("MissingPermission")
             @RequiresApi(Build.VERSION_CODES.O)
@@ -589,7 +602,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                     if (locationResult.locations.isNotEmpty()) {
                         val location =
                             locationResult.lastLocation
-                        initPrayerTimes(location.latitude,location.longitude)
+//                        initPrayerTimes(location.latitude,location.longitude)
                     }else {
 
                         fusedLocationClient.requestLocationUpdates(locationRequest,
