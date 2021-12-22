@@ -472,7 +472,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                             }
                         }
                     })
-                    fusedLocationClient.removeLocationUpdates(locationCallback);
+//                    fusedLocationClient.removeLocationUpdates(locationCallback);
                         vm.getAlAdahanAPI(
                             latitude.toString(),
                             longitude.toString(),
@@ -574,11 +574,11 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
         locationRequest.smallestDisplacement = 170f // 170 m = 0.1 mile
         locationRequest.priority =
             LocationRequest.PRIORITY_HIGH_ACCURACY //set according to your app function
-        fusedLocationClient.requestLocationUpdates(locationRequest,
+  /*      fusedLocationClient.requestLocationUpdates(locationRequest,
             locationCallback,
-            Looper.getMainLooper())
+            Looper.getMainLooper())*/
 
-        Log.d("asdasdasd" ,"is called" + fusedLocationClient.lastLocation.toString())
+//        Log.d("asdasdasd" ,"is called" + fusedLocationClient.lastLocation.toString())
         locationCallback = object : LocationCallback() {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onLocationResult(locationResult: LocationResult?) {

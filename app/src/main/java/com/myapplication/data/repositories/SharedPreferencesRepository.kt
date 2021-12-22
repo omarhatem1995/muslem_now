@@ -14,4 +14,8 @@ class SharedPreferencesRepository(application: Application) {
 
     fun getCity() = preference.getString("city", null)
 
+    fun setDate(date:String?) = preference.edit()
+        .putString("date", date).apply()
+
+    fun getDate() = preference.getString("date", null)
 }

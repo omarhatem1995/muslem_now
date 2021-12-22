@@ -1,82 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="24dp"
-    android:layout_marginEnd="24dp"
-    android:layout_marginTop="24dp"
-    android:layout_marginBottom="8dp"
-    android:elevation="8dp"
-    android:padding="20dp"
-    android:background="@drawable/view_background_white_rounded">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/azkar_name"
-        android:layout_width="wrap_content"
+    <data>
+        <variable
+            name="azkar_list"
+            type="com.myapplication.ui.azkar.AzkarViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:fontFamily="@font/tajawalmedium"
-        android:textSize="16sp"
-        android:layout_margin="16dp"
-        android:text="asldkaxsalkdasdlksad"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="8dp"
+        android:elevation="8dp"
+        android:padding="20dp"
+        android:background="@drawable/view_background_white_rounded">
 
-    <TextView
-        android:id="@+id/azkarDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/tajawalmedium"
-        android:textSize="12sp"
-        android:textColor="@color/textColorGrey"
-        android:text="asldkaxsalkdasdlksad"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/azkar_name"/>
+        <TextView
+            android:id="@+id/azkar_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:fontFamily="@font/tajawalmedium"
+            android:textSize="16sp"
+            android:layout_margin="16dp"
+            android:text="asldkaxsalkdasdlksad"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    <ImageView
-        android:id="@+id/azkarCircle"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:background="@drawable/azkar_circle"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/azkarDescription"/>
+        <TextView
+            android:id="@+id/azkarDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/tajawalmedium"
+            android:textSize="12sp"
+            android:textColor="@color/textColorGrey"
+            android:text="asldkaxsalkdasdlksad"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/azkar_name" />
 
-    <TextView
-        android:id="@+id/azkarCount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:text="5"
-        app:layout_constraintStart_toStartOf="@id/azkarCircle"
-        app:layout_constraintEnd_toEndOf="@id/azkarCircle"
-        app:layout_constraintTop_toTopOf="@id/azkarCircle"
-        app:layout_constraintBottom_toBottomOf="@id/azkarCircle"/>
+        <ImageView
+            android:id="@+id/azkarCircle"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/azkar_circle"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/azkarDescription" />
 
-    <ImageView
-        android:id="@+id/azkarReloadImageView"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
-        android:background="@drawable/reload_zekr_counter"
-        app:layout_constraintTop_toTopOf="@id/azkarCount"
-        app:layout_constraintBottom_toBottomOf="@id/azkarCount"
-        app:layout_constraintStart_toStartOf="@id/azkarDescription"/>
+        <TextView
+            android:id="@+id/azkarCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="5"
+            app:layout_constraintStart_toStartOf="@id/azkarCircle"
+            app:layout_constraintEnd_toEndOf="@id/azkarCircle"
+            app:layout_constraintTop_toTopOf="@id/azkarCircle"
+            app:layout_constraintBottom_toBottomOf="@id/azkarCircle" />
 
-    <TextView
-        android:id="@+id/azkarReloadTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/reset_counter"
-        android:fontFamily="@font/tajawalmedium"
-        android:textSize="14sp"
-        android:textColor="@color/textColorGrey"
-        android:layout_marginStart="8dp"
-        app:layout_constraintStart_toEndOf="@id/azkarReloadImageView"
-        app:layout_constraintTop_toTopOf="@id/azkarReloadImageView"/>
+        <ImageView
+            android:id="@+id/azkarReloadImageView"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:background="@drawable/reload_zekr_counter"
+            app:layout_constraintTop_toTopOf="@id/azkarCount"
+            app:layout_constraintBottom_toBottomOf="@id/azkarCount"
+            app:layout_constraintStart_toStartOf="@id/azkarDescription" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/azkarReloadTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reset_counter"
+            android:fontFamily="@font/tajawalmedium"
+            android:textSize="14sp"
+            android:textColor="@color/textColorGrey"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toEndOf="@id/azkarReloadImageView"
+            app:layout_constraintTop_toTopOf="@id/azkarReloadImageView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

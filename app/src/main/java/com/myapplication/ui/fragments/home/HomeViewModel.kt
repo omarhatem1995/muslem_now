@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.myapplication.data.entities.base.ApiResponse
 import com.myapplication.data.entities.model.PrayerTimeModel
-import com.myapplication.data.gateways.dao.aladahangateway.AlAdahanDatabase
+import com.myapplication.data.gateways.dao.MuslemNowDataBase
 import com.myapplication.data.gateways.remote.aladahangateway.AlAdahanGateway
 import com.myapplication.data.gateways.remote.aladahangateway.AlAdahanGatewayProvider
 import com.myapplication.data.repositories.AlAdahanRepositoryImpl
@@ -24,7 +24,7 @@ class HomeViewModel (application: Application):AndroidViewModel(application) {
 
 
     fun savePrayerTimes(applicationContext: Context,prayerTimesList: List<PrayerTimeModel>){
-        val db = AlAdahanDatabase.getDataBase(applicationContext)
+        val db = MuslemNowDataBase.getDataBase(applicationContext)
 
         val savePrayerDao = db.alAdahanDao()
         Log.d("prayerTimesList", " al "+ prayerTimesList.size)
@@ -46,7 +46,7 @@ class HomeViewModel (application: Application):AndroidViewModel(application) {
 
     }
     fun getPrayerTimes(applicationContext: Context) : LiveData<List<PrayerTimeModel>>{
-        val db = AlAdahanDatabase.getDataBase(applicationContext)
+        val db = MuslemNowDataBase.getDataBase(applicationContext)
 
         val savePrayerDao = db.alAdahanDao()
 
@@ -60,7 +60,7 @@ class HomeViewModel (application: Application):AndroidViewModel(application) {
 
     }
     fun getPrayerTimesForSpecificDate(date:String,applicationContext: Context) : LiveData<List<PrayerTimeModel>>{
-        val db = AlAdahanDatabase.getDataBase(applicationContext)
+        val db = MuslemNowDataBase.getDataBase(applicationContext)
 
         val savePrayerDao = db.alAdahanDao()
 
