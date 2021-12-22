@@ -49,13 +49,13 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
         val c: Date = Calendar.getInstance().time
         println("Current time => $c")
 
-        val df = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val df = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
         Log.e(null, "getCurrentDate: ${df.format(c)} ")
        // df.calendar.timeInMillis
         val formattedDate: String = df.format(c)
         val dao = AlAdahanDatabase.getDataBase(applicationContext).alAdahanDao()
         val alarmManager: AlarmManager = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        var hasPermission: Boolean? = null
+        var hasPermission: Boolean? = true
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             hasPermission = alarmManager.canScheduleExactAlarms()
         }
@@ -91,9 +91,14 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
                     val bundle: Bundle = Bundle()
                     bundle.putParcelable("prayerTime",prayerTime)
                     intent.putExtra("prayerObject",bundle)
+
                     val alarmPendingIntent:PendingIntent = PendingIntent.getBroadcast(applicationContext, 777, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
                     val alarmInfo = AlarmManager.AlarmClockInfo(calendar.timeInMillis,alarmPendingIntent)
-                    alarmManager.setAlarmClock(alarmInfo,goOffPendingIntent)
+                    if (hasPermission == true)
+                    {
+                        alarmManager.setAlarmClock(alarmInfo,goOffPendingIntent)
+                    }
+
                 }
             }
         }

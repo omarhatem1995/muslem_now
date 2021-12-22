@@ -1,19 +1,23 @@
 package com.myapplication.data.core.workmanager
 
+
 import android.app.Application
-import android.icu.util.TimeUnit
-import android.os.Build
-import android.os.Build.VERSION_CODES.M
-import androidx.work.*
-import android.app.NotificationManager
-
 import android.app.NotificationChannel
-
-
+import android.app.NotificationManager
+import android.content.ContentResolver
+import android.media.AudioAttributes
+import android.net.Uri
+import android.os.Build
+import androidx.work.*
+import com.myapplication.R
 
 
 class MuslemApp: Application() {
-    val CHANNEL_1_ID = "Azan channel"
+
+    companion object{
+        val CHANNEL_1_ID = "Azan channel"
+    }
+
 
     override fun onCreate() {
         createNotificationChannels()
@@ -48,6 +52,12 @@ class MuslemApp: Application() {
 
 
     private fun createNotificationChannels() {
+
+        val attributes = AudioAttributes.Builder()
+            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+            .build()
+        val sound: Uri =
+            Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + this.packageName + "/" + R.raw.azan)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel1 = NotificationChannel(
                 CHANNEL_1_ID,
@@ -55,6 +65,7 @@ class MuslemApp: Application() {
                 NotificationManager.IMPORTANCE_HIGH
             )
             channel1.description = "This is Azan Notification Channel"
+            channel1.setSound(sound, attributes)
             val manager = getSystemService(
                 NotificationManager::class.java
             )

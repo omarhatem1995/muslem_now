@@ -12,7 +12,11 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.os.Build
 import android.provider.AlarmClock
+import androidx.work.ExistingWorkPolicy
+import androidx.work.WorkManager
 import com.myapplication.data.core.workmanager.AlarmService
+import com.myapplication.data.core.workmanager.NotificationWorker
+import com.myapplication.data.entities.model.PrayerTimeModel
 import com.myapplication.domain.core.Constants
 
 
@@ -21,13 +25,21 @@ class MyNotificationPublisher : BroadcastReceiver() {
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        if (intent.action == "Trigger")
-        {
-            val serviceIntent = Intent(context,AlarmService::class.java)
-            serviceIntent.putExtra("PrayerItem",intent.getBundleExtra("prayerObject"))
-            AlarmService.enqueueWork(context,serviceIntent)
-        }else if (intent.action == "Off")
-        {
+        if (intent.action == "Trigger") {
+            val workManager = WorkManager.getInstance(context)
+            val intentData = intent.getBundleExtra("prayerObject")?.get("prayerTime")
+            var name: String = ""
+            if (intentData is PrayerTimeModel) {
+                name = intentData.name
+            }
+
+            val WorkRequest = NotificationWorker.buildWorkRequest(name)
+            workManager.enqueueUniqueWork(
+                NotificationWorker.UNIQUE_WORK_NAME,
+                ExistingWorkPolicy.KEEP,
+                WorkRequest
+            )
+        } else if (intent.action == "Off") {
 
         }
 //        val notification: Notification = intent.getParcelableExtra(NOTIFICATION)!!
@@ -45,9 +57,10 @@ class MyNotificationPublisher : BroadcastReceiver() {
 //        assert(notificationManager != null)
 //        notificationManager.notify(id, notification)
 //    }
-//
-//    companion object {
-//        var NOTIFICATION_ID = "notification-id"
-//        var NOTIFICATION = "notification"
-   }
+    }
+
+    companion object {
+        var NOTIFICATION_ID = "notification-id"
+        var NOTIFICATION = "notification"
+    }
 }
