@@ -5,12 +5,15 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.os.Bundle
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.app.BundleCompat
 import androidx.core.content.ContextCompat.getSystemService
 
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.myapplication.MyNotificationPublisher
 import com.myapplication.data.entities.model.PrayerTimeModel
 import com.myapplication.data.gateways.dao.aladahangateway.AlAdahanDatabase
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -52,14 +55,21 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
         val formattedDate: String = df.format(c)
         val dao = AlAdahanDatabase.getDataBase(applicationContext).alAdahanDao()
         val alarmManager: AlarmManager = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val hasPermission: Boolean = alarmManager.canScheduleExactAlarms()
-        val intent = Intent(applicationContext, MyAlarm::class.java)
+        var hasPermission: Boolean? = null
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            hasPermission = alarmManager.canScheduleExactAlarms()
+        }
+
+        val intent = Intent(applicationContext, MyNotificationPublisher::class.java)
         intent.action = "Trigger"
-        val intent2 = Intent(applicationContext, AlarmService::class.java)
-        intent2.action = "off"
+        val intent2 = Intent(applicationContext, MyNotificationPublisher::class.java)
+        intent2.action = "Off"
         //setting up a pending intent
-        val goOffPendingIntent = PendingIntent.getBroadcast(applicationContext, 999, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-        val alarmPendingIntent = PendingIntent.getForegroundService(applicationContext, 777, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        val goOffPendingIntent = PendingIntent.getBroadcast(applicationContext, 999, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        //var alarmPendingIntent:PendingIntent = PendingIntent.getService(applicationContext, 777, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            alarmPendingIntent = PendingIntent.getForegroundService(applicationContext, 777, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+//        }
 
 
         GlobalScope.launch {
@@ -78,6 +88,10 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
                         0
                     )
 
+                    val bundle: Bundle = Bundle()
+                    bundle.putParcelable("prayerTime",prayerTime)
+                    intent.putExtra("prayerObject",bundle)
+                    val alarmPendingIntent:PendingIntent = PendingIntent.getBroadcast(applicationContext, 777, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
                     val alarmInfo = AlarmManager.AlarmClockInfo(calendar.timeInMillis,alarmPendingIntent)
                     alarmManager.setAlarmClock(alarmInfo,goOffPendingIntent)
                 }
