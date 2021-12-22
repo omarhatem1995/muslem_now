@@ -23,6 +23,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.work.WorkInfo
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.SupportMapFragment
@@ -33,10 +36,13 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.CornerSize
 import com.google.android.material.shape.MaterialShapeDrawable
+import com.myapplication.data.core.workmanager.MuslemApp
 import com.myapplication.domain.core.Constants
 import com.myapplication.domain.core.LastKnowLocation
+import com.myapplication.ui.MainViewModel
 import com.myapplication.ui.azkar.AzkarFragment
 import com.myapplication.ui.fragments.more.MoreFragment
+import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
@@ -44,6 +50,16 @@ class MainActivity : AppCompatActivity() {
     var firstFragment = HomeFragment()
     var secondFragment = MoreFragment()
     var azkarFragment = AzkarFragment()
+
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(
+            this,
+            MainViewModel.Factory(this.application as MuslemApp)
+        )[MainViewModel::class.java]
+
+    }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,6 +88,24 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+
+viewModel.workState.observe(this) {
+
+    if (it.isNotEmpty()) {
+        if (it.last().state == WorkInfo.State.FAILED || it.last().state == WorkInfo.State.BLOCKED) {
+            lifecycleScope.launch {
+                viewModel.setSalahAlarm()
+            }
+        }
+    } else{
+        lifecycleScope.launch {
+            viewModel.setSalahAlarm()
+        }
+    }
+
+
+
+}
 
     }
 
@@ -181,11 +215,13 @@ class MainActivity : AppCompatActivity() {
                                     COARSE_LOCATION
                                 ) == PackageManager.PERMISSION_GRANTED
                             ) {
-                                fusedLocationProviderClient!!.requestLocationUpdates(
-                                    mLocationRequest,
-                                    mLocationCallback,
-                                    Looper.myLooper()
-                                ) // permission already checked before starting service
+                                mLocationRequest?.let {
+                                    fusedLocationProviderClient!!.requestLocationUpdates(
+                                        it,
+                                        mLocationCallback,
+                                        Looper.myLooper()!!
+                                    )
+                                } // permission already checked before starting service
                                 mLocationPermissionGranted = true
                                 enableGPS()
                             } else locationPermissionDeined()
@@ -234,11 +270,13 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("MissingPermission")
     private fun locationPermissionGranted() {
         if (fusedLocationProviderClient != null) {
-            fusedLocationProviderClient.requestLocationUpdates(
-                mLocationRequest,
-                mLocationCallback,
-                Looper.myLooper()
-            )
+            mLocationRequest?.let {
+                fusedLocationProviderClient.requestLocationUpdates(
+                    it,
+                    mLocationCallback,
+                    Looper.myLooper()!!
+                )
+            }
         } // permission already checked before starting service
         mLocationPermissionGranted = true
         enableGPS()

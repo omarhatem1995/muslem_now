@@ -67,7 +67,7 @@ class HomeViewModel (application: Application):AndroidViewModel(application) {
             /*val alAdahan = savePrayerDao.addPrayerTimes(prayerTimesList)
             Log.d("PrayerTimes","alAdahan : "+ alAdahan)*/
 
-            val getAlAdahan : LiveData<List<PrayerTimeModel>> = savePrayerDao.getSpecificDayPrayerTimes(date)
+            val getAlAdahan : LiveData<List<PrayerTimeModel>> = savePrayerDao.getSpecificDayPrayerTimes(date).asLiveData(context = Dispatchers.IO)
             Log.d("getPrayerTimes","data " +  getAlAdahan.value)
 
         return getAlAdahan

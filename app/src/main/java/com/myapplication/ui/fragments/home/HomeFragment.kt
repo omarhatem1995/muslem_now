@@ -579,6 +579,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
 
     }
 
+    @SuppressLint("MissingPermission")
     private fun getLocationUpdates() {
         getUserLocation()
         locationRequest = LocationRequest()
@@ -593,9 +594,11 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
 
 //        Log.d("asdasdasd" ,"is called" + fusedLocationClient.lastLocation.toString())
         locationCallback = object : LocationCallback() {
+            @SuppressLint("MissingPermission")
             @RequiresApi(Build.VERSION_CODES.O)
-            override fun onLocationResult(locationResult: LocationResult?) {
-                if (locationResult != null) {
+            override fun onLocationResult(locationResult: LocationResult) {
+                super.onLocationResult(locationResult)
+                if (!locationResult.equals(null)) {
                     if (locationResult.locations.isNotEmpty()) {
                         val location =
                             locationResult.lastLocation
@@ -619,9 +622,13 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
 
                 }
             }
+            }
+
+
+
         }
 
-    }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initQiblaDirection(latitude: Double, longitude: Double) {

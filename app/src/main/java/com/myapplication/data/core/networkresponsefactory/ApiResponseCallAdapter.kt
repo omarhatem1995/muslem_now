@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.myapplication.data.core.NetworkResponseFactory;
+package com.myapplication.data.core.networkresponsefactory;
 
 import com.myapplication.data.entities.base.ApiResponse
 import okhttp3.ResponseBody
