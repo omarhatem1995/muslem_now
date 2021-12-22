@@ -63,6 +63,7 @@ import com.google.android.gms.tasks.Task
 import com.myapplication.ui.azkar.AzkarActivity
 import com.myapplication.ui.fragments.home.SideMenuFragment
 import android.app.AlarmManager
+import android.app.Dialog
 import android.app.Notification
 
 import androidx.core.content.ContextCompat.getSystemService
@@ -108,8 +109,9 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
     val NOTIFICATION_CHANNEL_ID = "10001"
     private val default_notification_channel_id = "default"
     val cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+1:00"))
-
     lateinit var nextDay: String
+//    var progressDialog = Dialog(this)
+
     lateinit var nextDayForCalculations: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -147,8 +149,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
 
         initLocationListener()
         getDateAndTime()
-
-        var frameLayout : FrameLayout
 
         getNotification( "10 second delay" )?.let { scheduleNotification(it, 10000 ) };
 
@@ -331,9 +331,9 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                             getString(R.string.remaining_time_for) + getNameOfPrayer(
                                 requireContext(), i
                             )
-                        binding.remainingTimeForNextPrayerValue.text = remainingTimeForNextPrayer
+//                        binding.remainingTimeForNextPrayerValue.text = remainingTimeForNextPrayer
 
-                        counterForNextPrayer(remainingTimeForNextPrayer)
+//                        counterForNextPrayer(remainingTimeForNextPrayer)
                         flagFoundPrayerId = true
 
                         binding.prayerTimesList.adapter =
@@ -355,7 +355,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                                 binding.remainingTimeForNextPrayerValue.text =
                                     remainingTimeForNextPrayer
                                 counterForNextPrayer(remainingTimeForNextPrayer)
-
+                                Log.d("remainingTime" , remainingTimeForNextPrayer)
                                 binding.prayerTimesList.adapter =
                                     PrayerAdapter(requireContext(), prayerList, nextPrayerIs)
                             }
@@ -373,6 +373,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
     fun counterForNextPrayer(time: String) {
         val remainingHours = time.substring(0, 2).toLong()
         var totalConvertedMinutes = 0L
+        Log.d("counterForNext", " " + time)
         if (!remainingHours.equals(0)) {
             totalConvertedMinutes = remainingHours * 60
         }
@@ -415,7 +416,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
     }
 
     override fun renderLoading(show: Boolean) {
-        Log.d("renderData", "data" + show)
+        Log.d("renderData", "data $show" )
     }
 
     override fun renderNetworkFailure() {
@@ -469,6 +470,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                             }
                             is AlAdahanViewState.Data -> {
                                 renderParentTimings(viewState.data)
+                                renderLoading(false)
                             }
                         }
                     })
@@ -483,7 +485,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                     }
                 initQiblaDirection(latitude,longitude)
                 binding.deviceCurrentLocation.text = getAndSetCurrentCityFromLatLon(latitude.toString(),longitude.toString())
-                Log.d("getElAdahan" , " is called")
             })
 
     }
@@ -510,6 +511,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
             binding.remainingTimeForNextPrayerValue.text = remainingTimeForNextPrayer
 
             counterForNextPrayer(remainingTimeForNextPrayer)
+            Log.d("remainingTime 2" , remainingTimeForNextPrayer)
 
             binding.prayerTimesList.adapter =
                 PrayerAdapter(requireContext(), prayer, nextPrayerIs)
@@ -524,13 +526,14 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                                 prayer[0].prayerId
                             )
 
-                        val nextPrayerTime = prayer[0].time + " " + prayer[0].date
-                        val remainingTimeForNextPrayer =
+//                        val nextPrayerTime = prayer[0].time + " " + prayer[0].date
+                        /*val remainingTimeForNextPrayer =
                             remainingTimeForNextPrayer(currentDateForChecking, nextPrayerTime)
                         binding.remainingTimeForNextPrayerValue.text =
                             remainingTimeForNextPrayer
                         counterForNextPrayer(remainingTimeForNextPrayer)
-
+                        Log.d("remainingTime 3" , remainingTimeForNextPrayer)
+*/
                         binding.prayerTimesList.adapter =
                             PrayerAdapter(requireContext(), prayer, nextPrayerIs)
                     }

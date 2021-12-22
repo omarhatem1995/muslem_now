@@ -117,11 +117,6 @@ class AzkarActivity : AppCompatActivity() {
                 for (i in 0..jsonArray.length() - 1) {
 
                     var jsonObj = jsonArray.getJSONObject(i)
-                    if (fileExists(this, "savedAzkar.json")) {
-                        val counter = readInput(jsonObj.getString("id").toInt())
-                        val id = jsonObj.getString("id")
-                        Log.d("asldkasdk", "$id asdas $counter")
-                    }
                     val zekrCount = jsonObj.getString("count")
                     var zekrCountInteger = 0
                     if (!zekrCount.equals(""))
@@ -140,16 +135,19 @@ class AzkarActivity : AppCompatActivity() {
                     if (jsonObj.getString("category").equals(name)) {
                         azkar.add(zekr)
                     }
-//                    recyclerViewAzkar.adapter = AzkarListAdapter(this, azkar, this)
-                    recyclerViewAzkar.adapter = AzkarListAdapter2 { type, data ->
+                    val adapter =  AzkarListAdapter2 { type, data ->
                         when (type) {
                             Constants.INCREASEADAPTER -> {
-                                    viewModel.update(data.userPressedCount, data.id,
-                                        updateAzkarModel
-                                    )
+                                        updateAzkarModel.add(data)
+                            }
+                            Constants.RESETADAPTER -> {
+                                updateAzkarModel.add(data)
+                                viewModel.update(2, 3, updateAzkarModel)
                             }
                         }
                     }
+                    adapter.submitList(azkar)
+                    binding.azkarRecyclerViewList.adapter = adapter
                 }
                 viewModel.saveAzkar(this, allAzkar)
             } catch (ex: IOException) {
@@ -162,7 +160,6 @@ class AzkarActivity : AppCompatActivity() {
                         val adapter = AzkarListAdapter2 { type, data ->
                             when (type) {
                                 Constants.INCREASEADAPTER -> {
-                                    flagPress = false
                                     updateAzkarModel.add(data)
                                 }
                                 Constants.RESETADAPTER -> {
