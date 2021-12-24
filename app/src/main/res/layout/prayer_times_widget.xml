@@ -1,0 +1,18 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="320dp"
+    android:layout_height="262dp"
+    android:background="@color/backgroundGreen">
+
+    <ImageView
+        android:id="@+id/prayer_times"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginStart="120dp"
+        android:background="@drawable/ic_clock"
+        android:backgroundTint="@color/white"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"/>
+
+</RelativeLayout>

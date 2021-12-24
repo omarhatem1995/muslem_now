@@ -304,7 +304,7 @@
                     android:textSize="14sp"
                     android:textColor="@color/white"
                     android:fontFamily="@font/tajawalmedium"
-                    android:background="@drawable/view_background_buttons_orange_rounded"
+                    android:background="@drawable/view_background_buttons_orange_gradient_rounded"
                     android:layout_marginTop="48dp"
                     android:layout_marginBottom="16dp"
                     app:layout_constraintEnd_toEndOf="parent"

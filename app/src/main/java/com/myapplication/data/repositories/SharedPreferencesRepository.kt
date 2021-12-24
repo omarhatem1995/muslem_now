@@ -18,4 +18,9 @@ class SharedPreferencesRepository(application: Application) {
         .putString("date", date).apply()
 
     fun getDate() = preference.getString("date", null)
+
+    fun setLat(lat:String?) = preference.edit()
+        .putString("latitude", lat).apply()
+
+    fun getLat() = preference.getString("latitude", null)
 }
