@@ -54,5 +54,6 @@
     <string name="after_fajr_with_an_hour">بعد الفجر بساعة</string>
     <string name="after_fajr_with_two_hours">بعد الفجر بساعتين</string>
     <string name="azkar_masaa">اذكار المساء</string>
+    <string name="qibla_according_to_your_location_in_degrees">القبلة بالنسبة لموقعك درجة اتجاه</string>
 
 </resources>

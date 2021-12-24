@@ -34,7 +34,7 @@ class MuslemApp: Application() {
         .setRequiresBatteryNotLow(false)
         .apply {
 
-            setRequiresDeviceIdle(true)
+            setRequiresDeviceIdle(false)
 
         }
         .setRequiresCharging(false)

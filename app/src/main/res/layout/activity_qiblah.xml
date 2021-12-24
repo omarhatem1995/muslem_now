@@ -103,7 +103,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="40dp"
-                            android:text="Qibla according to your location in degrees"
+                            android:text="@string/qibla_according_to_your_location_in_degrees"
                             app:layout_constraintTop_toBottomOf="@id/ivQiblaCompass"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"/>

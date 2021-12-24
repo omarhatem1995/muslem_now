@@ -15,7 +15,8 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.myapplication.MyNotificationPublisher
 import com.myapplication.data.entities.model.PrayerTimeModel
-import com.myapplication.data.gateways.dao.aladahangateway.AlAdahanDatabase
+import com.myapplication.data.gateways.dao.MuslemNowDataBase
+import com.myapplication.data.gateways.dao.aladahangateway.AlAdahanDao
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collect
@@ -53,7 +54,7 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
         Log.e(null, "getCurrentDate: ${df.format(c)} ")
        // df.calendar.timeInMillis
         val formattedDate: String = df.format(c)
-        val dao = AlAdahanDatabase.getDataBase(applicationContext).alAdahanDao()
+        val dao = MuslemNowDataBase.getDataBase(applicationContext).alAdahanDao()
         val alarmManager: AlarmManager = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         var hasPermission: Boolean? = true
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

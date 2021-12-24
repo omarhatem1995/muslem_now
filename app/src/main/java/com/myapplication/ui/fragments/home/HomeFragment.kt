@@ -634,6 +634,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
     private fun initQiblaDirection(latitude: Double, longitude: Double) {
         userLocation.latitude = latitude
         userLocation.longitude = longitude
+        Log.d("getLatitude" ," : " +  latitude + " , " +longitude)
         sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
         sensorManager.registerListener(object : SensorEventListener {

@@ -13,7 +13,7 @@ import androidx.work.WorkManager
 import com.myapplication.MyNotificationPublisher
 import com.myapplication.data.core.workmanager.ElSalahWorker
 import com.myapplication.data.core.workmanager.MuslemApp
-import com.myapplication.data.gateways.dao.aladahangateway.AlAdahanDatabase
+import com.myapplication.data.gateways.dao.MuslemNowDataBase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collect
@@ -41,7 +41,7 @@ class MainViewModel(app:MuslemApp): AndroidViewModel(app) {
             Log.e(null, "getCurrentDate: ${df.format(c)} ")
             // df.calendar.timeInMillis
             val formattedDate: String = df.format(c)
-            val dao = AlAdahanDatabase.getDataBase(getApplication()).alAdahanDao()
+            val dao = MuslemNowDataBase.getDataBase(getApplication()).alAdahanDao()
             val alarmManager: AlarmManager = getApplication<MuslemApp>().getSystemService(Context.ALARM_SERVICE) as AlarmManager
             var hasPermission: Boolean? = true
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

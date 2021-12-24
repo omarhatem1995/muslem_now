@@ -5,14 +5,14 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:allowBackup="true"
         android:name=".data.core.workmanager.MuslemApp"
+        android:allowBackup="true"
         android:icon="@drawable/muslem_now_logo"
         android:label="@string/app_name"
         android:roundIcon="@drawable/muslem_now_logo"
@@ -20,9 +20,34 @@
         android:theme="@style/Theme.MuslemNow"
         android:usesCleartextTraffic="true">
         <receiver
-            android:name = ".MyNotificationPublisher"
+            android:name=".widgets.QiblaWidget"
+            android:exported="true">
+            <intent-filter>
+                    <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                    <action android:name="com.android.FirstWidget.arrow_left"/>
+                    <action android:name="com.android.FirstWidget.arrow_right"/>
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/qibla_widget_info" />
+        </receiver>
+<!--        <receiver
+            android:name=".widgets.PrayerTimesWidget"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/prayer_times_widget_info" />
+        </receiver>-->
+        <receiver
+            android:name=".MyNotificationPublisher"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
+
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:exported="false" />
@@ -34,7 +59,8 @@
             android:exported="true" />
         <activity android:name=".QiblahActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".ui.splash.SplashActivity"
+        <activity
+            android:name=".ui.splash.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,9 +69,10 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".data.core.workmanager.AlarmService"
-            android:exported="true"
+        <service
+            android:name=".data.core.workmanager.AlarmService"
             android:enabled="true"
+            android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
     </application>
 
