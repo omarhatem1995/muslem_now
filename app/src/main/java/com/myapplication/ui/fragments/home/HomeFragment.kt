@@ -1,11 +1,9 @@
-package com.myapplication
+package com.myapplication.ui.fragments.home
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
-import android.content.pm.PackageManager
 import android.hardware.*
 import android.location.Address
 import android.location.Location
@@ -21,57 +19,43 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.myapplication.databinding.FragmentHomeBinding
-import com.myapplication.ui.fragments.home.HomeViewModel
 import kotlin.math.roundToInt
 
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.*
 import com.myapplication.data.entities.model.Datum
 import com.myapplication.data.entities.model.PrayerTimeModel
 import com.myapplication.domain.usecases.ui.AlAdahanUseCases
 import com.myapplication.ui.entities.AlAdahanViewState
-import com.myapplication.ui.fragments.home.PrayerAdapter
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 
 import java.util.*
 import kotlin.collections.ArrayList
-import org.joda.time.DateTime
-import org.joda.time.DateTimeZone
 import android.location.Geocoder
 import android.os.Build
 import android.os.CountDownTimer
 import android.os.Looper
 import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
 import com.myapplication.LocaleUtil.Companion.getNameOfPrayer
 import com.myapplication.LocaleUtil.Companion.nextPrayer
 import com.myapplication.LocaleUtil.Companion.remainingTimeForNextPrayer
 import java.util.concurrent.TimeUnit
-import android.os.VibrationEffect
 
-import androidx.core.content.ContextCompat.getSystemService
-
-import android.os.Vibrator
-import android.widget.FrameLayout
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentContainer
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.tasks.Task
-import com.myapplication.ui.azkar.AzkarActivity
-import com.myapplication.ui.fragments.home.SideMenuFragment
 import android.app.AlarmManager
 import android.app.Dialog
 import android.app.Notification
-
-import androidx.core.content.ContextCompat.getSystemService
 
 import android.os.SystemClock
 
 import android.app.PendingIntent
 import androidx.core.app.NotificationCompat
+import com.myapplication.MyNotificationPublisher
+import com.myapplication.QiblahActivity
+import com.myapplication.R
 import com.myapplication.ui.ViewUtils
 
 
@@ -162,9 +146,11 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
             Log.d("sideMenu" , " is clicked")
             val sideMenuFragment = SideMenuFragment()
             val transaction = this.parentFragmentManager.beginTransaction()
-            transaction.setCustomAnimations(R.anim.fragment_sidemenu_enter_animation,
-            R.anim.fragment_sidemenu_exit_animation,R.anim.fragment_sidemenu_enter_animation,
-            R.anim.fragment_sidemenu_exit_animation)
+            transaction.setCustomAnimations(
+                R.anim.fragment_sidemenu_enter_animation,
+                R.anim.fragment_sidemenu_exit_animation, R.anim.fragment_sidemenu_enter_animation,
+                R.anim.fragment_sidemenu_exit_animation
+            )
             transaction.addToBackStack(null)
             transaction.add(R.id.frameLayoutSideMenu,sideMenuFragment,"BLANK").commit()
         }
@@ -647,8 +633,8 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                 var head: Float = sensorEvent.values?.get(0)?.roundToInt()?.toFloat()!!
 
                 val destLocation = Location("Destination Location")
-                destLocation.latitude = HomeFragment.QIBLA_LATITUDE
-                destLocation.longitude = HomeFragment.QIBLA_LONGITUDE
+                destLocation.latitude = QIBLA_LATITUDE
+                destLocation.longitude = QIBLA_LONGITUDE
 
                 var bearTo = userLocation.bearingTo(destLocation)
 
@@ -674,7 +660,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                 tvHeading.text = "Heading : $degree + degrees"
 
                 Log.d(
-                    HomeFragment.TAG,
+                    TAG,
                     "Needle Degree : $currentNeedleDegree, Direction : $direction"
                 )
                 binding.qiblahDirection.text = currentNeedleDegree.toString()

@@ -8,32 +8,30 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.core.app.BundleCompat
-import androidx.core.content.ContextCompat.getSystemService
-
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.myapplication.MyNotificationPublisher
-import com.myapplication.data.entities.model.PrayerTimeModel
-import com.myapplication.data.gateways.dao.aladahangateway.AlAdahanDatabase
+import com.myapplication.data.gateways.dao.MuslemNowDataBase
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class ElSalahWorker(appContext: Context, params: WorkerParameters):
     CoroutineWorker(appContext, params) {
+    @RequiresApi(Build.VERSION_CODES.O)
     @DelicateCoroutinesApi
     override suspend fun doWork(): Result {
 
         return try {
             setSalahAlarm()
+            Log.e(null, "doWork: success", )
             Result.success()
         }catch (e:Exception)
         {
+            Log.e(null, "doWork: failed", )
             Result.retry()
 
         }
@@ -42,6 +40,7 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
 
 
 
+     @RequiresApi(Build.VERSION_CODES.O)
      @DelicateCoroutinesApi
     // @RequiresApi(Build.VERSION_CODES.S)
      fun setSalahAlarm()
@@ -53,7 +52,7 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
         Log.e(null, "getCurrentDate: ${df.format(c)} ")
        // df.calendar.timeInMillis
         val formattedDate: String = df.format(c)
-        val dao = AlAdahanDatabase.getDataBase(applicationContext).alAdahanDao()
+        val dao = MuslemNowDataBase.getDataBase(applicationContext).alAdahanDao()
         val alarmManager: AlarmManager = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         var hasPermission: Boolean? = true
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -61,11 +60,11 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
         }
 
         val intent = Intent(applicationContext, MyNotificationPublisher::class.java)
-        intent.action = "Trigger"
-        val intent2 = Intent(applicationContext, MyNotificationPublisher::class.java)
-        intent2.action = "Off"
+        intent.action = "Off"
+        val intent2 = Intent(applicationContext, AlarmService::class.java)
+        intent2.action = "Trigger"
         //setting up a pending intent
-        val goOffPendingIntent = PendingIntent.getBroadcast(applicationContext, 999, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+
         //var alarmPendingIntent:PendingIntent = PendingIntent.getService(applicationContext, 777, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //            alarmPendingIntent = PendingIntent.getForegroundService(applicationContext, 777, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
@@ -88,12 +87,14 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
                         0
                     )
 
+                    Log.e(null, "setSalahAlarm: ${calendar.time} ", )
                     val bundle: Bundle = Bundle()
                     bundle.putParcelable("prayerTime",prayerTime)
-                    intent.putExtra("prayerObject",bundle)
+                    intent2.putExtra("prayerObject",bundle)
 
-                    val alarmPendingIntent:PendingIntent = PendingIntent.getBroadcast(applicationContext, 777, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+                    val alarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(applicationContext, 777, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
                     val alarmInfo = AlarmManager.AlarmClockInfo(calendar.timeInMillis,alarmPendingIntent)
+                    val goOffPendingIntent = PendingIntent.getForegroundService(applicationContext, 999, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
                     if (hasPermission == true)
                     {
                         alarmManager.setAlarmClock(alarmInfo,goOffPendingIntent)

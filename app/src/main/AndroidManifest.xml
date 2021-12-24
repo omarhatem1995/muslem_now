@@ -22,7 +22,11 @@
         <receiver
             android:name = ".MyNotificationPublisher"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="false">
+            <intent-filter>
+                <action android:name="Trigger"/>
+            </intent-filter>
+        </receiver>
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:exported="false" />
@@ -44,9 +48,8 @@
         </activity>
 
         <service android:name=".data.core.workmanager.AlarmService"
-            android:exported="true"
             android:enabled="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
+            />
     </application>
 
 </manifest>

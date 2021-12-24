@@ -7,17 +7,16 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.myapplication.MyNotificationPublisher
-import com.myapplication.data.core.workmanager.ElSalahWorker
+import com.myapplication.data.core.workmanager.AlarmService
 import com.myapplication.data.core.workmanager.MuslemApp
-import com.myapplication.data.gateways.dao.aladahangateway.AlAdahanDatabase
+import com.myapplication.data.gateways.dao.MuslemNowDataBase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
@@ -26,22 +25,24 @@ class MainViewModel(app:MuslemApp): AndroidViewModel(app) {
 
     val workManager = WorkManager.getInstance(app)
 
-    val workState: LiveData<List<WorkInfo>> = workManager.getWorkInfosByTagLiveData("settingAlarm")
+    val workState: LiveData<List<WorkInfo>?> =  workManager.getWorkInfosByTagLiveData("settingAlarm")
 
 
 
+
+    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun setSalahAlarm()
     {
         withContext(Dispatchers.IO)
         {
             val c: Date = Calendar.getInstance().time
             println("Current time => $c")
-
+            Log.e(null, "setSalahAlarm: ", )
             val df = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
             Log.e(null, "getCurrentDate: ${df.format(c)} ")
             // df.calendar.timeInMillis
             val formattedDate: String = df.format(c)
-            val dao = AlAdahanDatabase.getDataBase(getApplication()).alAdahanDao()
+            val dao = MuslemNowDataBase.getDataBase(getApplication()).alAdahanDao()
             val alarmManager: AlarmManager = getApplication<MuslemApp>().getSystemService(Context.ALARM_SERVICE) as AlarmManager
             var hasPermission: Boolean? = true
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -49,11 +50,11 @@ class MainViewModel(app:MuslemApp): AndroidViewModel(app) {
             }
 
             val intent = Intent(getApplication(), MyNotificationPublisher::class.java)
-            intent.action = "Trigger"
-            val intent2 = Intent(getApplication(), MyNotificationPublisher::class.java)
-            intent2.action = "Off"
+            intent.action = "Off"
+            val intent2 = Intent(getApplication(), AlarmService::class.java)
+            intent2.action = "Trigger"
             //setting up a pending intent
-            val goOffPendingIntent = PendingIntent.getBroadcast(getApplication(), 999, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+
             //var alarmPendingIntent:PendingIntent = PendingIntent.getService(applicationContext, 777, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //            alarmPendingIntent = PendingIntent.getForegroundService(applicationContext, 777, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
@@ -77,12 +78,14 @@ class MainViewModel(app:MuslemApp): AndroidViewModel(app) {
 
                     val bundle: Bundle = Bundle()
                     bundle.putParcelable("prayerTime",prayerTime)
-                    intent.putExtra("prayerObject",bundle)
+                    intent2.putExtra("prayerObject",bundle)
 
                     val alarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(getApplication(), 777, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
                     val alarmInfo = AlarmManager.AlarmClockInfo(calendar.timeInMillis,alarmPendingIntent)
+                    val goOffPendingIntent = PendingIntent.getForegroundService(getApplication(), 999, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
                     if (hasPermission == true)
                     {
+                        Log.e(null, "setSalahAlarm: ${calendar.timeInMillis} ", )
                         alarmManager.setAlarmClock(alarmInfo,goOffPendingIntent)
                     }
 

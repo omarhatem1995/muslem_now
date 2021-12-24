@@ -2,14 +2,12 @@ package com.myapplication
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentSender.SendIntentException
 import android.content.pm.PackageManager
-import android.graphics.RectF
 import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
@@ -19,31 +17,25 @@ import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.work.WorkInfo
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.shape.CornerFamily
-import com.google.android.material.shape.CornerSize
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.myapplication.data.core.workmanager.MuslemApp
-import com.myapplication.domain.core.Constants
-import com.myapplication.domain.core.LastKnowLocation
 import com.myapplication.ui.MainViewModel
 import com.myapplication.ui.azkar.AzkarFragment
+import com.myapplication.ui.fragments.home.HomeFragment
 import com.myapplication.ui.fragments.more.MoreFragment
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
     lateinit var bottomNavigationView: BottomNavigationView
@@ -61,6 +53,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -89,23 +82,28 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-viewModel.workState.observe(this) {
-
-    if (it.isNotEmpty()) {
-        if (it.last().state == WorkInfo.State.FAILED || it.last().state == WorkInfo.State.BLOCKED) {
-            lifecycleScope.launch {
-                viewModel.setSalahAlarm()
-            }
-        }
-    } else{
         lifecycleScope.launch {
             viewModel.setSalahAlarm()
         }
-    }
-
-
-
-}
+//viewModel.workState.observe(this) {
+//
+//    if (it != null) {
+//        if (it.isNotEmpty()) {
+//            if (it.last().state == WorkInfo.State.FAILED || it.last().state == WorkInfo.State.BLOCKED) {
+//                lifecycleScope.launch {
+//                    viewModel.setSalahAlarm()
+//                }
+//            }
+//        }
+//        }else{
+//        lifecycleScope.launch {
+//            viewModel.setSalahAlarm()
+//        }
+//    }
+//
+//
+//
+//}
 
     }
 

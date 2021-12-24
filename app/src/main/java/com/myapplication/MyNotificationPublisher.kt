@@ -12,6 +12,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.os.Build
 import android.provider.AlarmClock
+import android.util.Log
 import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkManager
 import com.myapplication.data.core.workmanager.AlarmService
@@ -24,8 +25,24 @@ class MyNotificationPublisher : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
+        Log.e(null, "onReceive1: triggered ", )
+//        val workManager = WorkManager.getInstance(context)
+//        val intentData = intent.getBundleExtra("prayerObject")?.get("prayerTime")
+//        var name: String = ""
+//        if (intentData is PrayerTimeModel) {
+//            name = intentData.name
+//        }
+//
+//        val WorkRequest = NotificationWorker.buildWorkRequest(name)
+//        workManager.enqueueUniqueWork(
+//            NotificationWorker.UNIQUE_WORK_NAME,
+//            ExistingWorkPolicy.KEEP,
+//            WorkRequest
+//        )
+        Log.e(null, "onReceive1: triggered ", )
         if (intent.action == "Trigger") {
+
+            Log.e(null, "onReceive2: triggered ", )
             val workManager = WorkManager.getInstance(context)
             val intentData = intent.getBundleExtra("prayerObject")?.get("prayerTime")
             var name: String = ""
