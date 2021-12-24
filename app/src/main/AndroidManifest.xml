@@ -32,7 +32,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/qibla_widget_info" />
         </receiver>
-<!--        <receiver
+        <receiver
             android:name=".widgets.PrayerTimesWidget"
             android:exported="true">
             <intent-filter>
@@ -42,7 +42,7 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/prayer_times_widget_info" />
-        </receiver>-->
+        </receiver>
         <receiver
             android:name=".MyNotificationPublisher"
             android:enabled="true"

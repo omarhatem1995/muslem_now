@@ -5,12 +5,8 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.location.Location
-import android.view.animation.RotateAnimation
-import android.widget.ImageView
 import android.widget.RemoteViews
-import android.content.ComponentName
 import android.util.Log
-import java.util.*
 import android.app.PendingIntent
 
 import android.content.Intent
@@ -20,16 +16,8 @@ import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.hardware.*
 import android.widget.Toast
-
-import android.net.Uri
-import android.view.View
-import android.view.animation.Animation
 import com.google.android.gms.location.LocationServices
-import com.myapplication.MainActivity
-import com.myapplication.QiblahActivity
 import com.myapplication.R
-import com.myapplication.data.core.workmanager.MuslemApp
-import com.myapplication.data.repositories.SharedPreferencesRepository
 import kotlin.math.roundToInt
 
 
@@ -114,7 +102,6 @@ open class QiblaWidget : AppWidgetProvider() {
             }
             appWidgetManager.updateAppWidget(currentWidgetId, views)
             Toast.makeText(context, context.getString(R.string.qibla_refreshed), Toast.LENGTH_SHORT).show()
-
         }
 
     }
