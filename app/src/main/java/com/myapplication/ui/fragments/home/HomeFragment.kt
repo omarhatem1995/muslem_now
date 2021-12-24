@@ -57,6 +57,8 @@ import com.myapplication.MyNotificationPublisher
 import com.myapplication.QiblahActivity
 import com.myapplication.R
 import com.myapplication.ui.ViewUtils
+import java.io.IOException
+import java.lang.reflect.InvocationTargetException
 
 
 class HomeFragment : Fragment(), AlAdahanUseCases.View {
@@ -95,7 +97,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
     private val default_notification_channel_id = "default"
     val cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+1:00"))
     lateinit var nextDay: String
-    lateinit var progressDialog :Dialog
+    lateinit var progressDialog: Dialog
 
     lateinit var nextDayForCalculations: String
 
@@ -135,7 +137,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
         initLocationListener()
         getDateAndTime()
 
-        getNotification( "10 second delay" )?.let { scheduleNotification(it, 10000 ) };
+        getNotification("10 second delay")?.let { scheduleNotification(it, 10000) };
 
         binding.ivQiblaDirection.setOnClickListener {
             val intent = Intent(context, QiblahActivity::class.java)
@@ -143,7 +145,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
         }
 
         binding.sideMenu.setOnClickListener {
-            Log.d("sideMenu" , " is clicked")
+            Log.d("sideMenu", " is clicked")
             val sideMenuFragment = SideMenuFragment()
             val transaction = this.parentFragmentManager.beginTransaction()
             transaction.setCustomAnimations(
@@ -152,7 +154,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                 R.anim.fragment_sidemenu_exit_animation
             )
             transaction.addToBackStack(null)
-            transaction.add(R.id.frameLayoutSideMenu,sideMenuFragment,"BLANK").commit()
+            transaction.add(R.id.frameLayoutSideMenu, sideMenuFragment, "BLANK").commit()
         }
         progressDialog = context?.let { Dialog(it) }!!
         return binding.root
@@ -186,6 +188,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
         binding.dateGeorgian.text = georgianFullDateFormat.format(cal.time).toString()
 
     }
+
     private fun scheduleNotification(notification: Notification, delay: Int) {
         val notificationIntent = Intent(context, MyNotificationPublisher::class.java)
         notificationIntent.putExtra(MyNotificationPublisher.NOTIFICATION_ID, 1)
@@ -200,6 +203,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
         val alarmManager = (context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager?)!!
         alarmManager[AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis] = pendingIntent
     }
+
     private fun getNotification(content: String): Notification? {
         val builder: NotificationCompat.Builder? =
             context?.let { NotificationCompat.Builder(it, default_notification_channel_id) }
@@ -275,7 +279,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
 
             var ishaAdahanModel = PrayerTimeModel(
                 5, R.drawable.ic_elisha,
-                "Isha", getTimeOnlyForPrayer(data.get(i).timings.isha), 1, date ,
+                "Isha", getTimeOnlyForPrayer(data.get(i).timings.isha), 1, date,
                 hijriDate
             )
 /*
@@ -338,11 +342,14 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                                     )
                                 val nextPrayerTime = prayer[0].time + " " + prayer[0].date
                                 val remainingTimeForNextPrayer =
-                                    remainingTimeForNextPrayer(currentDateForChecking, nextPrayerTime)
+                                    remainingTimeForNextPrayer(
+                                        currentDateForChecking,
+                                        nextPrayerTime
+                                    )
                                 binding.remainingTimeForNextPrayerValue.text =
                                     remainingTimeForNextPrayer
                                 counterForNextPrayer(remainingTimeForNextPrayer)
-                                Log.d("remainingTime" , remainingTimeForNextPrayer)
+                                Log.d("remainingTime", remainingTimeForNextPrayer)
                                 binding.prayerTimesList.adapter =
                                     PrayerAdapter(requireContext(), prayerList, nextPrayerIs)
                             }
@@ -403,15 +410,14 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
     }
 
     override fun renderLoading(show: Boolean) {
-        if(show) {
+        if (show) {
             progressDialog.show()
             ViewUtils.showProgressDialog(
                 progressDialog!!
             )
-        }
-        else
+        } else
             progressDialog.dismiss()
-        Log.d("renderData", "data $show" )
+        Log.d("renderData", "data $show")
     }
 
     override fun renderNetworkFailure() {
@@ -420,42 +426,55 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
 
     @SuppressLint("MissingPermission")
     private fun initLocationListener() {
-        fusedLocationClient =
-            activity?.let { LocationServices.getFusedLocationProviderClient(it) }!!
-        fusedLocationClient?.lastLocation?.addOnSuccessListener {
-            if (it == null) {
-                val getCity = vm.getCityFromPreferences()
-                if(getCity == null)
-                    getLocationUpdates()
-                Log.d("getLocationUpdates" , " is null "+it)
-            } else {
+        if (!fusedLocationClient.lastLocation.equals(null)) {
 
-                binding.deviceCurrentLocation.text = getAndSetCurrentCityFromLatLon(it.latitude.toString(),it.longitude.toString())
-                Log.d("getLocationUpdatesOOP" , " isl "+getAndSetCurrentCityFromLatLon(it.latitude.toString(),it.longitude.toString()))
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    initQiblaDirection(it.latitude, it.longitude)
-                    initPrayerTimes(it.latitude,it.longitude)
+            fusedLocationClient =
+                activity?.let { LocationServices.getFusedLocationProviderClient(it) }!!
+            fusedLocationClient?.lastLocation?.addOnSuccessListener {
+                if (it == null) {
+                    val getCity = vm.getCityFromPreferences()
+                    if (getCity == null)
+                        getLocationUpdates()
+                    Log.d("getLocationUpdates", " is null " + it)
+                } else {
+
+                    binding.deviceCurrentLocation.text = getAndSetCurrentCityFromLatLon(
+                        it.latitude.toString(),
+                        it.longitude.toString()
+                    )
+                    Log.d(
+                        "getLocationUpdatesOOP",
+                        " isl " + getAndSetCurrentCityFromLatLon(
+                            it.latitude.toString(),
+                            it.longitude.toString()
+                        )
+                    )
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        initQiblaDirection(it.latitude, it.longitude)
+                        initPrayerTimes(it.latitude, it.longitude)
+                    }
                 }
             }
+            fusedLocationClient?.lastLocation?.addOnFailureListener {
+                Toast.makeText(requireContext(), "Err: " + it.localizedMessage, Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
-        fusedLocationClient?.lastLocation?.addOnFailureListener {
-            Toast.makeText(requireContext(), "Err: " + it.localizedMessage, Toast.LENGTH_SHORT)
-                .show()
-        }
-
     }
+
     var apiCall = false
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initPrayerTimes(latitude: Double, longitude: Double) {
         linearLayoutManager = LinearLayoutManager(requireContext())
         vm.getPrayerTimesForSpecificDate(localTime, requireContext())
             .observe(requireActivity(), androidx.lifecycle.Observer { prayer ->
-                if(!prayer.isNullOrEmpty() && !apiCall){
+                if (!prayer.isNullOrEmpty() && !apiCall) {
                     getPrayerTimesFromDatabase(prayer)
                     binding.prayerTimesList.layoutManager = linearLayoutManager
                     binding.prayerTimesList.isNestedScrollingEnabled = false
 
-                }else if(latitude != 0.0 && longitude != 0.0){
+                } else if (latitude != 0.0 && longitude != 0.0) {
                     vm.viewStateAlAdahan.observe(viewLifecycleOwner, { viewState ->
                         when (viewState) {
                             is AlAdahanViewState.Loading -> {
@@ -472,22 +491,23 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                         }
                     })
 //                    fusedLocationClient.removeLocationUpdates(locationCallback);
-                        vm.getAlAdahanAPI(
-                            latitude.toString(),
-                            longitude.toString(),
-                            "5",
-                            monthOfTheYear,
-                            currentYear
-                        )
-                    }
-                initQiblaDirection(latitude,longitude)
-                binding.deviceCurrentLocation.text = getAndSetCurrentCityFromLatLon(latitude.toString(),longitude.toString())
+                    vm.getAlAdahanAPI(
+                        latitude.toString(),
+                        longitude.toString(),
+                        "5",
+                        monthOfTheYear,
+                        currentYear
+                    )
+                }
+                initQiblaDirection(latitude, longitude)
+                binding.deviceCurrentLocation.text =
+                    getAndSetCurrentCityFromLatLon(latitude.toString(), longitude.toString())
             })
 
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun getPrayerTimesFromDatabase(prayer:List<PrayerTimeModel>){
+    private fun getPrayerTimesFromDatabase(prayer: List<PrayerTimeModel>) {
         binding.dateHijri.text =
             prayer[0].hijriDate
         val currentHourDateFormat: DateFormat = SimpleDateFormat("HH:mm")
@@ -495,7 +515,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
         val dateFormatForChecking: DateFormat = SimpleDateFormat("HH:mm dd-MM-yyyy")
         val currentDateForChecking = dateFormatForChecking.format(cal.time)
         nextPrayerIs = nextPrayer(prayer.toMutableList(), currentHour)
-        if(nextPrayerIs!=300) {
+        if (nextPrayerIs != 300) {
 
             val nextPrayerTime =
                 prayer[nextPrayerIs].time + " " + prayer[nextPrayerIs].date
@@ -508,12 +528,12 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
             binding.remainingTimeForNextPrayerValue.text = remainingTimeForNextPrayer
 
             counterForNextPrayer(remainingTimeForNextPrayer)
-            Log.d("remainingTime 2" , remainingTimeForNextPrayer)
+            Log.d("remainingTime 2", remainingTimeForNextPrayer)
 
             binding.prayerTimesList.adapter =
                 PrayerAdapter(requireContext(), prayer, nextPrayerIs)
 
-        }else{
+        } else {
             vm.getPrayerTimesForSpecificDate(nextDay, requireContext())
                 .observe(requireActivity(), androidx.lifecycle.Observer { prayer ->
                     if (!prayer.isNullOrEmpty()) {
@@ -529,7 +549,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                         binding.remainingTimeForNextPrayerValue.text =
                             remainingTimeForNextPrayer
                         counterForNextPrayer(remainingTimeForNextPrayer)
-                        Log.d("remainingTime 3" , remainingTimeForNextPrayer)
+                        Log.d("remainingTime 3", remainingTimeForNextPrayer)
                         binding.prayerTimesList.adapter =
                             PrayerAdapter(requireContext(), prayer, nextPrayerIs)
                     }
@@ -537,29 +557,38 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
         }
     }
 
-    private fun getAndSetCurrentCityFromLatLon(latitude: String, longitude: String):String {
+    private fun getAndSetCurrentCityFromLatLon(latitude: String, longitude: String): String {
         val addresses: List<Address>
         val geocoder = Geocoder(requireContext(), Locale("ar"))
+        try {
+            Log.d("currentLat", " $latitude , $longitude")
 
-        addresses = geocoder.getFromLocation(
-            latitude.toDouble(),
-            longitude.toDouble(),
-            1
-        ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+            addresses = geocoder.getFromLocation(
+                latitude.toDouble(),
+                longitude.toDouble(),
+                1
+            ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+            Log.d("currentLat", " $latitude , $addresses")
 
+            if (!addresses.isNullOrEmpty()) {
+                val address: String =
+                    addresses[0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                var city: String = " "
+                if (addresses[0].locality != null)
+                    city = addresses[0].getLocality()
+                val country: String = addresses[0].getCountryName()
+                val currentCity = "$country, $city"
+                vm.preference.setCity(currentCity)
 
-        if (!addresses.isNullOrEmpty()) {
-            val address: String =
-                addresses[0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-            var city: String = " "
-            if (addresses[0].locality != null)
-                city = addresses[0].getLocality()
-            val country: String = addresses[0].getCountryName()
-            val currentCity = "$country, $city"
-            vm.preference.setCity(currentCity)
-
-            return currentCity
+                return currentCity
+            }
+        } catch (ex: InvocationTargetException) {
+            Log.d("exceptionFound", "${ex.message}")
+        } catch (ex: IOException){
+            Log.d("exceptionFound", "${ex.message}")
         }
+
+
 
         return "Not Found"
 
@@ -574,9 +603,9 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
         locationRequest.smallestDisplacement = 170f // 170 m = 0.1 mile
         locationRequest.priority =
             LocationRequest.PRIORITY_HIGH_ACCURACY //set according to your app function
-  /*      fusedLocationClient.requestLocationUpdates(locationRequest,
-            locationCallback,
-            Looper.getMainLooper())*/
+        /*      fusedLocationClient.requestLocationUpdates(locationRequest,
+                  locationCallback,
+                  Looper.getMainLooper())*/
 
 //        Log.d("asdasdasd" ,"is called" + fusedLocationClient.lastLocation.toString())
         locationCallback = object : LocationCallback() {
@@ -589,38 +618,40 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                         val location =
                             locationResult.lastLocation
 //                        initPrayerTimes(location.latitude,location.longitude)
-                    }else {
+                    } else {
 
-                        fusedLocationClient.requestLocationUpdates(locationRequest,
+                        fusedLocationClient.requestLocationUpdates(
+                            locationRequest,
                             locationCallback,
-                            Looper.getMainLooper())
+                            Looper.getMainLooper()
+                        )
 
-                        Log.d("asdasdasd" , fusedLocationClient.lastLocation.toString())
+                        Log.d("asdasdasd", fusedLocationClient.lastLocation.toString())
 
                     }
-                }else {
+                } else {
 
-                    fusedLocationClient.requestLocationUpdates(locationRequest,
+                    fusedLocationClient.requestLocationUpdates(
+                        locationRequest,
                         locationCallback,
-                        Looper.getMainLooper())
+                        Looper.getMainLooper()
+                    )
 
-                    Log.d("asdasdasd" , fusedLocationClient.lastLocation.toString())
+                    Log.d("asdasdasd", fusedLocationClient.lastLocation.toString())
 
                 }
             }
-            }
-
-
-
         }
 
+
+    }
 
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initQiblaDirection(latitude: Double, longitude: Double) {
         userLocation.latitude = latitude
         userLocation.longitude = longitude
-        Log.d("getLatitude" ," : " +  latitude + " , " +longitude)
+        Log.d("getLatitude", " : " + latitude + " , " + longitude)
         sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
         sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
         sensorManager.registerListener(object : SensorEventListener {
@@ -681,10 +712,10 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                 currentNeedleDegree = direction
                 currentDegree = -degree
 
-                if(currentNeedleDegree <= 10 || currentNeedleDegree >= 350){
+                if (currentNeedleDegree <= 10 || currentNeedleDegree >= 350) {
                     context?.resources?.let { binding.ivQiblaDirection.setColorFilter(it?.getColor(R.color.logoOrangeColor)) };
 
-                }else {
+                } else {
                     context?.resources?.getColor(R.color.backgroundGreen)?.let {
                         binding.ivQiblaDirection.setColorFilter(
                             it
@@ -699,64 +730,59 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
 
 
     @SuppressLint("MissingPermission")
-    fun getUserLocation()
-    {
+    fun getUserLocation() {
 
-            val locationRequest = LocationRequest.create().apply {
-                interval = 10000
-                fastestInterval = 5000
-                smallestDisplacement = 100f
-                priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-                Log.d("getuserlocation", " getuserlocation: entered1")
-            }
+        val locationRequest = LocationRequest.create().apply {
+            interval = 10000
+            fastestInterval = 5000
+            smallestDisplacement = 100f
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            Log.d("getuserlocation", " getuserlocation: entered1")
+        }
 
-            val builder = LocationSettingsRequest.Builder()
-            builder.addLocationRequest(locationRequest)
-            val client: SettingsClient = LocationServices.getSettingsClient(this.requireActivity())
-            val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
-            task.addOnSuccessListener {
+        val builder = LocationSettingsRequest.Builder()
+        builder.addLocationRequest(locationRequest)
+        val client: SettingsClient = LocationServices.getSettingsClient(this.requireActivity())
+        val task: Task<LocationSettingsResponse> = client.checkLocationSettings(builder.build())
+        task.addOnSuccessListener {
 
-                val flag = it.locationSettingsStates?.isLocationUsable
-                if (flag == true)
-                {
-                    locationCallback = object : LocationCallback()
-                    {
-                        override fun onLocationResult(locationResult: LocationResult)
-                        {
-                            val location = locationResult.lastLocation
-                            location?.let {
+            val flag = it.locationSettingsStates?.isLocationUsable
+            if (flag == true) {
+                locationCallback = object : LocationCallback() {
+                    override fun onLocationResult(locationResult: LocationResult) {
+                        val location = locationResult.lastLocation
+                        location?.let {
 //                                getCountry(location)
-                                Log.e("onLocationResult", " onLocationResult: $location" )
+                            Log.e("onLocationResult", " onLocationResult: $location")
 //                                Log.e(null, "onLocationResult: $countryName" )
 
-                            }
-
                         }
-                    }
-                    fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback!!, Looper.getMainLooper())
-                }
 
-            }
-
-            task.addOnFailureListener { exception ->
-                if (exception is ResolvableApiException)
-                {
-                    // Location settings are not satisfied, but this can be fixed
-                    // by showing the user a dialog.
-                    Log.d(null, "setuserlocation: location failure")
-                    try
-                    {
-                        // Show the dialog by calling startResolutionForResult(),
-                        // and check the result in onActivityResult().
-                        exception.startResolutionForResult(this.requireActivity(), 0x1)
-                    } catch (sendEx: IntentSender.SendIntentException)
-                    {
-                        // Ignore the error.
                     }
                 }
+                fusedLocationClient.requestLocationUpdates(
+                    locationRequest,
+                    locationCallback!!,
+                    Looper.getMainLooper()
+                )
             }
 
+        }
 
+        task.addOnFailureListener { exception ->
+            if (exception is ResolvableApiException) {
+                // Location settings are not satisfied, but this can be fixed
+                // by showing the user a dialog.
+                Log.d(null, "setuserlocation: location failure")
+                try {
+                    // Show the dialog by calling startResolutionForResult(),
+                    // and check the result in onActivityResult().
+                    exception.startResolutionForResult(this.requireActivity(), 0x1)
+                } catch (sendEx: IntentSender.SendIntentException) {
+                    // Ignore the error.
+                }
+            }
+        }
 
 
     }

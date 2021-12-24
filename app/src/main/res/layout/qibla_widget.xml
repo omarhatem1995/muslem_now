@@ -28,6 +28,15 @@
         android:layout_alignTop="@id/ivQiblaCompass"
         android:layout_alignBottom="@id/ivQiblaCompass" />
 
+    <ImageView
+        android:id="@+id/qiblahRefresh"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/ic_refresh_icon"
+        android:layout_marginStart="40dp"
+        android:layout_alignTop="@id/ivQiblaCompass"
+        android:layout_alignStart="@id/qiblahDegree"/>
+
     <TextView
         android:id="@+id/qiblahDegree"
         android:layout_width="wrap_content"
