@@ -276,5 +276,28 @@ class LocaleUtil {
             return ret
         }
 
+
+        @RequiresApi(Build.VERSION_CODES.O)
+        fun prayerFilter(prayerList: MutableList<PrayerTimeModel>, currentTime: String) : MutableList<PrayerTimeModel>{
+
+            val finalList : MutableList<PrayerTimeModel> = mutableListOf()
+            val timeNow  = currentTime
+            val localTime : LocalTime = LocalTime.parse(timeNow);
+            val currentMillis  = localTime.toSecondOfDay() * 1000;
+            Log.d("currnetDate" , currentMillis.toString() + " , "+ timeNow)
+
+            for(i in 0..prayerList.size -1 ){
+                val time  = prayerList[i].time
+                val localTime : LocalTime = LocalTime.parse(time)
+                val prayerMillis  = localTime.toSecondOfDay() * 1000
+                Log.d("currnetDate" , prayerMillis.toString() + " , "+ time)
+                if(prayerMillis > currentMillis){
+                    Log.d("nextPrayer Is" , ""+ prayerList[i].prayerId)
+                    finalList.add(prayerList[i])
+                }
+            }
+            return finalList
+        }
+
     }
 }

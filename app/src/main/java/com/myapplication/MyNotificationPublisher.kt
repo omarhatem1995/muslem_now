@@ -25,7 +25,7 @@ class MyNotificationPublisher : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        Log.e(null, "onReceive1: triggered ", )
+        Log.e(null, "onReceive1: ${intent.action} ", )
 //        val workManager = WorkManager.getInstance(context)
 //        val intentData = intent.getBundleExtra("prayerObject")?.get("prayerTime")
 //        var name: String = ""
@@ -39,7 +39,7 @@ class MyNotificationPublisher : BroadcastReceiver() {
 //            ExistingWorkPolicy.KEEP,
 //            WorkRequest
 //        )
-        Log.e(null, "onReceive1: triggered ", )
+        Log.e(null, "onReceive1: ${intent.action} ", )
         if (intent.action == "Trigger") {
 
             Log.e(null, "onReceive2: triggered ", )
@@ -57,7 +57,7 @@ class MyNotificationPublisher : BroadcastReceiver() {
                 WorkRequest
             )
         } else if (intent.action == "Off") {
-
+            Log.e(null, "onReceive2: off ", )
         }
 //        val notification: Notification = intent.getParcelableExtra(NOTIFICATION)!!
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

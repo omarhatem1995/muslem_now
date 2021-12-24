@@ -30,7 +30,7 @@ class NotificationWorker(context: Context, params: WorkerParameters): CoroutineW
         try {
             val salahName: String? = inputData.getString(YOUR_PARAM)
             // code to be executed
-            setForeground(createForegroundInfo(salahName!!))
+            setForegroundAsync(createForegroundInfo(salahName!!))
             Log.e(null, "doWork: notification ", )
             return Result.success()
         } catch (throwable: Throwable) {
@@ -71,8 +71,9 @@ class NotificationWorker(context: Context, params: WorkerParameters): CoroutineW
             .setOngoing(false)
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setSound( Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.azan))
+            .setSound( Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.meshary))
             .setForegroundServiceBehavior(FOREGROUND_SERVICE_IMMEDIATE)
+            //.setContentIntent(intent)
 
         return builder.build()
     }
