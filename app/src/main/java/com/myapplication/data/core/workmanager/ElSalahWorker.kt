@@ -10,6 +10,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.myapplication.LocaleUtil.Companion.prayerFilter
 import com.myapplication.MyNotificationPublisher
 
 import com.myapplication.data.entities.model.PrayerTimeModel
@@ -21,6 +22,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.time.LocalTime
 import java.util.*
 
 class ElSalahWorker(appContext: Context, params: WorkerParameters):
@@ -53,9 +55,11 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
         println("Current time => $c")
 
         val df = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+        val currentHourDateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
         Log.e(null, "getCurrentDate: ${df.format(c)} ")
        // df.calendar.timeInMillis
         val formattedDate: String = df.format(c)
+        val formattedDate2:String = currentHourDateFormat.format(c)
         val dao = MuslemNowDataBase.getDataBase(applicationContext).alAdahanDao()
         val alarmManager: AlarmManager = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         var hasPermission: Boolean? = true
@@ -65,7 +69,7 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
 
         val intent = Intent(applicationContext, MyNotificationPublisher::class.java)
         intent.action = "Off"
-        val intent2 = Intent(applicationContext, AlarmService::class.java)
+        val intent2 = Intent(applicationContext, MyNotificationPublisher::class.java)
         intent2.action = "Trigger"
         //setting up a pending intent
 
@@ -80,8 +84,10 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
 
                val calendar:Calendar = Calendar.getInstance()
 
+                val finalList = prayerFilter(it.toMutableList(),formattedDate2)
 
-                it.map { prayerTime ->
+
+                finalList.map { prayerTime ->
                     calendar.set(
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),
@@ -96,12 +102,14 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
                     bundle.putParcelable("prayerTime",prayerTime)
                     intent2.putExtra("prayerObject",bundle)
 
-                    val alarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(applicationContext, 777, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-                    val alarmInfo = AlarmManager.AlarmClockInfo(calendar.timeInMillis,alarmPendingIntent)
-                    val goOffPendingIntent = PendingIntent.getForegroundService(applicationContext, 999, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+                    //FLAG_UPDATE_CURRENT
+                    val alarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(applicationContext, prayerTime.prayerId, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+
+                    val goOffPendingIntent = PendingIntent.getBroadcast(applicationContext, prayerTime.prayerId, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+                    val alarmInfo = AlarmManager.AlarmClockInfo(calendar.timeInMillis,alarmPendingIntent )
                     if (hasPermission == true)
                     {
-                        alarmManager.setAlarmClock(alarmInfo,goOffPendingIntent)
+                        alarmManager.setAlarmClock(alarmInfo, goOffPendingIntent)
                     }
 
                 }
@@ -141,6 +149,8 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
         return timeArray
 
     }
+
+
 
 
 }

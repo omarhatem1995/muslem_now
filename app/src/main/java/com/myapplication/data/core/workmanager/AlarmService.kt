@@ -34,21 +34,31 @@ class AlarmService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
-        Log.e("foregroundService", "onStartCommand: ", )
-        val intentData = intent?.getBundleExtra("prayerObject")?.get("prayerTime")
-        var name: String = ""
-        if (intentData is PrayerTimeModel) {
-            name = intentData.name
+        if (intent != null) {
+            Log.e("foregroundService", "onStartCommand:${intent.action} ", )
+        }
+        if (intent != null) {
+            if(intent.action == "Trigger" )
+            {
+                val intentData = intent?.getBundleExtra("prayerObject")?.get("prayerTime")
+                var name: String = ""
+                if (intentData is PrayerTimeModel) {
+                    name = intentData.name
+                }
+
+                startForeground(notificationId,createNotification(name))
+            }else{
+                stopSelf()
+            }
         }
 
-        startForeground(notificationId,createNotification(name))
 
         return START_STICKY
     }
 
 
 
-
+//
     private fun createNotification(title:String): Notification {
 
         val pendingIntent: PendingIntent =
@@ -75,7 +85,7 @@ class AlarmService : Service() {
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setSound( Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.azan))
+            .setSound( Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.meshary))
             .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
 
         return builder.build()

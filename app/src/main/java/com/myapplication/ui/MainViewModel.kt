@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
+import com.myapplication.LocaleUtil
 import com.myapplication.MyNotificationPublisher
 import com.myapplication.data.core.workmanager.AlarmService
 import com.myapplication.data.core.workmanager.MuslemApp
@@ -40,6 +41,8 @@ class MainViewModel(app:MuslemApp): AndroidViewModel(app) {
             Log.e(null, "setSalahAlarm: ", )
             val df = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
             Log.e(null, "getCurrentDate: ${df.format(c)} ")
+            val currentHourDateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+            val formattedDate2:String = currentHourDateFormat.format(c)
             // df.calendar.timeInMillis
             val formattedDate: String = df.format(c)
             val dao = MuslemNowDataBase.getDataBase(getApplication()).alAdahanDao()
@@ -51,7 +54,7 @@ class MainViewModel(app:MuslemApp): AndroidViewModel(app) {
 
             val intent = Intent(getApplication(), MyNotificationPublisher::class.java)
             intent.action = "Off"
-            val intent2 = Intent(getApplication(), AlarmService::class.java)
+            val intent2 = Intent(getApplication(), MyNotificationPublisher::class.java)
             intent2.action = "Trigger"
             //setting up a pending intent
 
@@ -64,9 +67,10 @@ class MainViewModel(app:MuslemApp): AndroidViewModel(app) {
             val prayerTimes = dao.getSpecificDayPrayerTimes(formattedDate).collect {
 
                 val calendar: Calendar = Calendar.getInstance()
+                val finalList = LocaleUtil.prayerFilter(it.toMutableList(), formattedDate2)
 
 
-                it.map { prayerTime ->
+                finalList.map { prayerTime ->
                     calendar.set(
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),
@@ -80,9 +84,10 @@ class MainViewModel(app:MuslemApp): AndroidViewModel(app) {
                     bundle.putParcelable("prayerTime",prayerTime)
                     intent2.putExtra("prayerObject",bundle)
 
-                    val alarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(getApplication(), 777, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+                    val alarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(getApplication(), prayerTime.prayerId, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_ONE_SHOT)
+
+                    val goOffPendingIntent = PendingIntent.getBroadcast(getApplication(), prayerTime.prayerId, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_ONE_SHOT)
                     val alarmInfo = AlarmManager.AlarmClockInfo(calendar.timeInMillis,alarmPendingIntent)
-                    val goOffPendingIntent = PendingIntent.getForegroundService(getApplication(), 999, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
                     if (hasPermission == true)
                     {
                         Log.e(null, "setSalahAlarm: ${calendar.timeInMillis} ", )
