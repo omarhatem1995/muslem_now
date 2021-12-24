@@ -25,7 +25,6 @@ import android.net.Uri
 import android.view.View
 import android.view.animation.Animation
 import com.google.android.gms.location.LocationServices
-import com.myapplication.HomeFragment
 import com.myapplication.MainActivity
 import com.myapplication.QiblahActivity
 import com.myapplication.R

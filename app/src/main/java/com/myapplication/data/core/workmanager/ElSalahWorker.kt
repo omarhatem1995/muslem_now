@@ -11,7 +11,6 @@ import androidx.annotation.RequiresApi
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.myapplication.MyNotificationPublisher
-import com.myapplication.data.gateways.dao.MuslemNowDataBase
 
 import com.myapplication.data.entities.model.PrayerTimeModel
 import com.myapplication.data.gateways.dao.MuslemNowDataBase
