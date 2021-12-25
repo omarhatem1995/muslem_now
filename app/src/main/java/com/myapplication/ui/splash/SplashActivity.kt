@@ -9,12 +9,18 @@ import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import com.myapplication.LocaleUtil
+import com.myapplication.MainActivity
 import com.myapplication.R
+import com.myapplication.databinding.ActivitySettingsBinding
+import com.myapplication.databinding.ActivitySplashBinding
 import com.myapplication.ui.settings.SettingsActivity
+import com.myapplication.ui.settings.SettingsViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -31,11 +37,16 @@ class SplashActivity : AppCompatActivity() {
         Manifest.permission.ACCESS_FINE_LOCATION,
         Manifest.permission.ACCESS_COARSE_LOCATION
     )
+    lateinit var binding: ActivitySplashBinding
+    private val splashViewModel: SettingsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         checkPermissions()
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_splash)
+        binding.splashViewModel = splashViewModel
 
         val connMgr = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         var mobileDataEnabled = false // Assume disabled
@@ -55,8 +66,6 @@ class SplashActivity : AppCompatActivity() {
                 }
             }
         }
-        Toast.makeText(this,"Wifi connected: $isWifiConn" +" , "+ "Mobile connected: $isMobileConn",Toast.LENGTH_LONG )
-            .show()
 
         val cmClass = Class.forName(connMgr.javaClass.name)
 
@@ -64,12 +73,10 @@ class SplashActivity : AppCompatActivity() {
         method.setAccessible(true); // Make the method callable
 
         mobileDataEnabled = method.invoke(connMgr) as Boolean
-        Log.d("mobileDataEnabled : " ,""+ mobileDataEnabled)
-        Toast.makeText(this,"Wifi connected: $isWifiConn" +" , "+ "Mobile connected: $isMobileConn",Toast.LENGTH_LONG )
-            .show()
+        Log.d("mobileDataEnabled : ", "" + mobileDataEnabled)
         Log.d(Companion.DEBUG_TAG, "Wifi connected: $isWifiConn")
         Log.d(Companion.DEBUG_TAG, "Mobile connected: $isMobileConn")
-        LocaleUtil.applyLocalizedContext(this,"ar")
+        LocaleUtil.applyLocalizedContext(this, "ar")
     }
 
     private fun checkPermissions() {
@@ -105,7 +112,9 @@ class SplashActivity : AppCompatActivity() {
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     // exit the app if one permission is not granted
                     Toast.makeText(
-                        this, getString(R.string.Required_permission_not_granted_exiting), Toast.LENGTH_LONG
+                        this,
+                        getString(R.string.Required_permission_not_granted_exiting),
+                        Toast.LENGTH_LONG
                     ).show()
                     finish()
                     return
@@ -123,7 +132,10 @@ class SplashActivity : AppCompatActivity() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe {
-                startActivity(Intent(this, SettingsActivity::class.java))
+                if (splashViewModel.preference.getSettings())
+                    startActivity(Intent(this, MainActivity::class.java))
+                else
+                    startActivity(Intent(this, SettingsActivity::class.java))
                 finish()
 
             }

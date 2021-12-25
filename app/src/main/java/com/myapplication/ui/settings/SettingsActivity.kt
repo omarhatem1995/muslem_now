@@ -34,6 +34,7 @@ class SettingsActivity : AppCompatActivity() {
         mediaPlayer = MediaPlayer()
         binding.skipNow.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
+            settingsViewModel.preference.setSettings(true)
             finish()
 
         }

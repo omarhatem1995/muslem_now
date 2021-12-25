@@ -23,4 +23,16 @@ class SharedPreferencesRepository(application: Application) {
         .putString("latitude", lat).apply()
 
     fun getLat() = preference.getString("latitude", null)
+
+    fun setLong(long:String?) = preference.edit()
+        .putString("longitude", long).apply()
+
+    fun getLong() = preference.getString("longitude", null)
+
+    fun setSettings(isSet:Boolean?) = isSet?.let {
+        preference.edit()
+        .putBoolean("isSet", it).apply()
+    }
+
+    fun getSettings() = preference.getBoolean("isSet", false)
 }

@@ -59,15 +59,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         replaceFragment(firstFragment)
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
-        val radius = resources.getDimension(R.dimen.cornerSize)
-        val shapeDrawable : MaterialShapeDrawable = bottomNavigationView.background as MaterialShapeDrawable
-        shapeDrawable.shapeAppearanceModel = shapeDrawable.shapeAppearanceModel
-            .toBuilder()
-            .setBottomLeftCorner(CornerFamily.ROUNDED,0f)
-            .setBottomRightCorner(CornerFamily.ROUNDED, 0f)
-            .setTopRightCorner(CornerFamily.ROUNDED, 90f)
-            .setTopLeftCorner(CornerFamily.ROUNDED, 90f)
-            .build()
+
         mLocationRequest = LocationRequest.create()
             .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
             .setInterval((1000 * 2).toLong())

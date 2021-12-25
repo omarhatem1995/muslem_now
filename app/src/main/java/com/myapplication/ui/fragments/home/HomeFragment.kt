@@ -121,7 +121,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
         binding.homeViewmodel = vm
         tvHeading = view.findViewById<TextView>(R.id.tvHeading)
         currentTime = view.findViewById<TextView>(R.id.date_georgian)
-
         needleAnimation = RotateAnimation(
             currentNeedleDegree,
             0f,
@@ -134,7 +133,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
         binding.lifecycleOwner = this
         userLocation = Location("User Location")
 
-        initLocationListener()
+        getUserLocation()
         getDateAndTime()
 
         getNotification("10 second delay")?.let { scheduleNotification(it, 10000) };
@@ -424,6 +423,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
         Log.d("renderData", "data")
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission")
     private fun initLocationListener() {
         if (!fusedLocationClient.lastLocation.equals(null)) {
@@ -434,21 +434,21 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                 if (it == null) {
                     val getCity = vm.getCityFromPreferences()
                     if (getCity == null)
-                        getLocationUpdates()
-                    Log.d("getLocationUpdates", " is null " + it)
+                        getUserLocation()
+                    else
+                        initPrayerTimes(it.latitude, it.longitude)
                 } else {
 
-                    binding.deviceCurrentLocation.text = getAndSetCurrentCityFromLatLon(
-                        it.latitude.toString(),
-                        it.longitude.toString()
-                    )
-                    Log.d(
-                        "getLocationUpdatesOOP",
-                        " isl " + getAndSetCurrentCityFromLatLon(
+                    if(getAndSetCurrentCityFromLatLon(it.latitude.toString(),it.longitude.toString())
+                            .equals("Not Found")){
+
+                        binding.deviceCurrentLocation.text = getString(R.string.couldnt_find_your_address)
+                    }else {
+                        binding.deviceCurrentLocation.text = getAndSetCurrentCityFromLatLon(
                             it.latitude.toString(),
                             it.longitude.toString()
                         )
-                    )
+                    }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         initQiblaDirection(it.latitude, it.longitude)
                         initPrayerTimes(it.latitude, it.longitude)
@@ -469,7 +469,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
         linearLayoutManager = LinearLayoutManager(requireContext())
         vm.getPrayerTimesForSpecificDate(localTime, requireContext())
             .observe(requireActivity(), androidx.lifecycle.Observer { prayer ->
-                if (!prayer.isNullOrEmpty() && !apiCall) {
+                if (!prayer.isNullOrEmpty() && !apiCall && context != null) {
                     getPrayerTimesFromDatabase(prayer)
                     binding.prayerTimesList.layoutManager = linearLayoutManager
                     binding.prayerTimesList.isNestedScrollingEnabled = false
@@ -498,10 +498,11 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                         monthOfTheYear,
                         currentYear
                     )
+
+                    initQiblaDirection(latitude, longitude)
+                    binding.deviceCurrentLocation.text =
+                        getAndSetCurrentCityFromLatLon(latitude.toString(), longitude.toString())
                 }
-                initQiblaDirection(latitude, longitude)
-                binding.deviceCurrentLocation.text =
-                    getAndSetCurrentCityFromLatLon(latitude.toString(), longitude.toString())
             })
 
     }
@@ -533,10 +534,10 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
             binding.prayerTimesList.adapter =
                 PrayerAdapter(requireContext(), prayer, nextPrayerIs)
 
-        } else if(context != null){
+        } else if (context != null) {
             vm.getPrayerTimesForSpecificDate(nextDay, requireContext())
                 .observe(requireActivity(), androidx.lifecycle.Observer { prayer ->
-                    if (!prayer.isNullOrEmpty() && context!=null) {
+                    if (!prayer.isNullOrEmpty() && context != null) {
                         binding.remainingTimeForNextPrayer.text =
                             getString(R.string.remaining_time_for) + getNameOfPrayer(
                                 requireContext(),
@@ -558,7 +559,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
     }
 
     private fun getAndSetCurrentCityFromLatLon(latitude: String, longitude: String): String {
-        if(context!=null) {
+        if (context != null) {
             val addresses: List<Address>
             val geocoder = Geocoder(requireContext(), Locale("ar"))
             try {
@@ -653,7 +654,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
         userLocation.latitude = latitude
         userLocation.longitude = longitude
         Log.d("getLatitude", " : " + latitude + " , " + longitude)
-        if(context != null) {
+        if (context != null) {
             sensorManager =
                 requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
             sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
@@ -738,6 +739,10 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        getUserLocation()
+    }
 
     @SuppressLint("MissingPermission")
     fun getUserLocation() {
@@ -762,10 +767,8 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                     override fun onLocationResult(locationResult: LocationResult) {
                         val location = locationResult.lastLocation
                         location?.let {
-//                                getCountry(location)
                             Log.e("onLocationResult", " onLocationResult: $location")
-//                                Log.e(null, "onLocationResult: $countryName" )
-
+                            initLocationListener()
                         }
 
                     }
@@ -775,6 +778,8 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                     locationCallback!!,
                     Looper.getMainLooper()
                 )
+            }else {
+                Log.e("flagLocation" , " is calse")
             }
 
         }
