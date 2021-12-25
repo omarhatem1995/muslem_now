@@ -1,10 +1,12 @@
 package com.myapplication.ui.azkar
 
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import com.myapplication.R
@@ -112,6 +114,16 @@ class AzkarListAdapter2 (
             binding.azkarCount.text = item.count.toString()
             counterPressed = 0
             onClick.invoke(Constants.RESETADAPTER,newItem)
+        }
+        binding.azkarShareImageView.setOnClickListener {
+            val sendIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, item.zekr)
+                type = "text/plain"
+            }
+
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            context.startActivity(shareIntent)
         }
     }
 }

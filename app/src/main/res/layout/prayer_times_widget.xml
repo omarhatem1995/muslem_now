@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/Widget.MuslemNow.AppWidget.Container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,7 +20,7 @@
         android:id="@+id/tvCalendarDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text="dddddd"
         android:textColor="@color/white"
         android:fontFamily="@font/tajawalmedium"
         android:layout_marginStart="40dp"
@@ -39,50 +40,21 @@
 
     <ImageView
         android:id="@+id/prayerTime"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:visibility="visible"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="20dp"
-        android:layout_alignStart="@id/ivCalendar"
-        android:layout_alignEnd="@id/ivCalendar"
-        android:layout_alignTop="@id/ivCalendar"
-        android:layout_alignBottom="@id/ivCalendar" />
-
-    <ImageView
-        android:id="@+id/qiblahRefresh"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:background="@drawable/ic_refresh_icon"
-        android:layout_marginStart="40dp"
-        android:layout_alignTop="@id/ivCalendar"
-        android:layout_alignStart="@id/qiblahDegree"/>
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:background="@drawable/ic_elfajr"
+        android:backgroundTint="@color/white"
+        android:layout_marginStart="95dp"
+        android:layout_toEndOf="@id/tvFajr"
+        android:layout_alignTop="@id/tvFajr"
+        android:layout_alignBottom="@id/tvFajr"/>
 
     <TextView
-        android:id="@+id/qiblahDegree"
+        android:id="@+id/tvFajrTime"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="20dp"
-        android:textColor="@color/white"
-        android:text="@string/qibla_according_to_your_location_in_degrees"
-        android:layout_toEndOf="@id/ivCalendar"
-        android:layout_alignTop="@id/ivCalendar"/>
-
-    <TextView
-        android:id="@+id/prayerTvPrayer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:text="asdasd"
-        android:gravity="center"
-        android:fontFamily="@font/tajawalbold"
-        android:layout_below="@id/qiblahDegree"
-        android:layout_alignStart="@id/qiblahDegree"
-        android:layout_alignEnd="@id/qiblahDegree"/>
+        android:layout_height="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_alignTop="@id/tvFajr"
+        android:layout_toEndOf="@id/prayerTime"/>
 
 </RelativeLayout>

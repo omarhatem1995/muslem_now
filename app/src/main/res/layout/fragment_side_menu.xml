@@ -45,7 +45,7 @@
                 android:id="@+id/generalSettings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/general_settings"
+                android:text="@string/muslem_now"
                 android:textSize="16sp"
                 android:textColor="@color/black"
                 android:fontFamily="@font/tajawalmedium"

@@ -19,6 +19,9 @@ import android.widget.Toast
 import com.google.android.gms.location.LocationServices
 import com.myapplication.R
 import kotlin.math.roundToInt
+import com.google.android.gms.location.LocationResult
+
+import com.google.android.gms.location.LocationCallback
 
 
 /**
@@ -29,10 +32,109 @@ open class QiblaWidget : AppWidgetProvider() {
         const val QIBLA_LATITUDE = 21.3891
         const val QIBLA_LONGITUDE = 39.8579
     }
-
+    var widgetCurrentId = 0
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
+        Log.d("laksdlsakdlasd" ,"getWidget ID $intent")
 
+        if (intent!!.action != null) {
+            val extras = intent!!.extras
+            if (extras != null) {
+                super.onReceive(context, intent)
+                val widgetId = extras.getInt(
+                    AppWidgetManager.EXTRA_APPWIDGET_ID,
+                    AppWidgetManager.INVALID_APPWIDGET_ID,
+                )
+                val intent = Intent(context, QiblaWidget::class.java)
+                intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+                Log.d("laksdlsakdlasd" ,"getWidget ID " +widgetId + " $widgetCurrentId")
+                val sharedPrefFile = "kotlinsharedpreference"
+
+                val sharedPreferences: SharedPreferences? = context?.getSharedPreferences(sharedPrefFile,
+                    Context.MODE_PRIVATE)
+                val views = RemoteViews(context?.packageName, R.layout.qibla_widget)
+                val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context!!)
+
+                val locationCallback = object : LocationCallback() {
+                    override fun onLocationResult(locationResult: LocationResult) {
+                        super.onLocationResult(locationResult)
+
+                        if (!fusedLocationClient.lastLocation.equals(null)) {
+                            fusedLocationClient.lastLocation.addOnSuccessListener {
+                            }
+                            fusedLocationClient.lastLocation.addOnFailureListener {
+                                Toast.makeText(context, it.localizedMessage, Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+
+                        } else {
+
+                        }
+                    }
+                }
+
+                val locationCallback2 = object : LocationCallback() {
+                    override fun onLocationResult(locationResult: LocationResult) {
+                        super.onLocationResult(locationResult)
+
+                        fusedLocationClient.lastLocation.addOnSuccessListener {
+                            val editor: SharedPreferences.Editor? = sharedPreferences?.edit()
+                            editor?.putString("latitude", it.latitude.toString())
+                            editor?.putString("longitude", it.longitude.toString())
+                            editor?.apply()
+                            editor?.commit()
+                        }
+                        fusedLocationClient.lastLocation.addOnFailureListener {
+                            Toast.makeText(context, it.localizedMessage, Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+
+                val latitude = sharedPreferences?.getString("latitude", "30.007702")
+                val longitude = sharedPreferences?.getString("longitude", "30.007702")
+
+                val stringFormat = String.format(
+                    "%.2f", initQiblaDirection(
+                        context,
+                        latitude.toString().toDouble(), longitude.toString().toDouble()
+                    )
+                )
+                views.setTextViewText(
+                    R.id.tvQiblahDegreesWidget,
+                    stringFormat
+                )
+                val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.image_qibla)
+                views.setImageViewBitmap(
+                    R.id.qiblahDirectionImageView, bitmap.rotated(
+                        initQiblaDirection(
+                            context, latitude.toString().toDouble(),
+                            longitude.toString().toDouble()
+                        )
+                    )
+                )
+                if (latitude.equals("30.007702") && longitude.equals("30.007702"))
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.please_open_your_gps),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                else
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.qibla_refreshed),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                // do something for the widget that has appWidgetId = widgetId
+                Log.d("laksdlsakdlasd", "getWidget ID " + widgetId.toString())
+                val appWidgetManager = AppWidgetManager.getInstance(context)
+                appWidgetManager.updateAppWidget(widgetId, views)
+
+
+            }
+
+        } else {
+            Log.d("laksdlsakdlasd" ,"getWidget ID " + "null")
+        }
     }
 
     override fun onUpdate(
@@ -40,79 +142,106 @@ open class QiblaWidget : AppWidgetProvider() {
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray
     ) {
-        val sharedPrefFile = "kotlinsharedpreference"
-
-        val sharedPreferences: SharedPreferences = context
-            .getSharedPreferences(sharedPrefFile,Context.MODE_PRIVATE)
-
         for (i in 0 until appWidgetIds.size) {
+            val sharedPrefFile = "kotlinsharedpreference"
+
+            val sharedPreferences: SharedPreferences = context
+                .getSharedPreferences(sharedPrefFile,Context.MODE_PRIVATE)
+
             val currentWidgetId = appWidgetIds[i]
+            widgetCurrentId = currentWidgetId
             val views = RemoteViews(context.packageName, R.layout.qibla_widget)
 
             val intentUpdate = Intent(Intent.ACTION_VIEW)
             intentUpdate.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intentUpdate.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
             val idArray = intArrayOf(currentWidgetId)
-            intentUpdate.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, idArray);
+            intentUpdate.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, currentWidgetId);
+            intentUpdate.putExtra("Random", Math.random() * 1000); // Add a random integer to stop the Intent being ignored.
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
             val pendingUpdate = PendingIntent.getBroadcast(
                 context, currentWidgetId, intentUpdate,
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
-            if (!fusedLocationClient.lastLocation.equals(null)) {
-                fusedLocationClient.lastLocation.addOnSuccessListener {
-                }
-                fusedLocationClient.lastLocation.addOnFailureListener {
-                    Toast.makeText(context, it.localizedMessage, Toast.LENGTH_SHORT).show()
-                }
+            val locationCallback = object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult) {
+                    super.onLocationResult(locationResult)
 
-            } else {
-                views.setOnClickPendingIntent(R.id.qiblahRefresh, pendingUpdate)
-                views.setTextViewText(
-                    R.id.tvQiblahDegreesWidget,
-                    "  "
-                )
-            }
+                    if (!fusedLocationClient.lastLocation.equals(null)) {
+                        fusedLocationClient.lastLocation.addOnSuccessListener {
+                        }
+                        fusedLocationClient.lastLocation.addOnFailureListener {
+                            Toast.makeText(context, it.localizedMessage, Toast.LENGTH_SHORT).show()
+                        }
+
+                    } else {
+                    }
+                }
+                }
 
             views.setOnClickPendingIntent(R.id.qiblahRefresh, pendingUpdate)
-            if (!fusedLocationClient.lastLocation.equals(null)) {
-                fusedLocationClient.lastLocation.addOnSuccessListener {
-                    val editor:SharedPreferences.Editor =  sharedPreferences.edit()
-                    editor.putString("latitude", it.latitude.toString())
-                    editor.putString("longitude", it.longitude.toString())
-                    editor.apply()
-                    editor.commit()
-                }
-                fusedLocationClient.lastLocation.addOnFailureListener {
-                    Toast.makeText(context, it.localizedMessage, Toast.LENGTH_SHORT).show()
-                }
-                val latitude = sharedPreferences.getString("latitude","30.007702")
-                val longitude = sharedPreferences.getString("longitude","30.007702")
+            val locationCallback2 = object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult) {
+                    super.onLocationResult(locationResult)
 
-                val stringFormat = String.format("%.2f", initQiblaDirection(context,
-                    latitude.toString().toDouble(), longitude.toString().toDouble()))
-                views.setTextViewText(
-                    R.id.tvQiblahDegreesWidget,
-                    stringFormat
-                )
-                val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.image_qibla)
-                views.setImageViewBitmap(R.id.qiblahDirectionImageView, bitmap.rotated(initQiblaDirection(context, latitude.toString().toDouble(),
-                    longitude.toString().toDouble())))
+                    fusedLocationClient.lastLocation.addOnSuccessListener {
+                        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+                        editor.putString("latitude", it.latitude.toString())
+                        editor.putString("longitude", it.longitude.toString())
+                        editor.apply()
+                        editor.commit()
+                    }
+                    fusedLocationClient.lastLocation.addOnFailureListener {
+                        Toast.makeText(context, it.localizedMessage, Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
-            appWidgetManager.updateAppWidget(currentWidgetId, views)
-            Toast.makeText(context, context.getString(R.string.qibla_refreshed), Toast.LENGTH_SHORT).show()
+
+            val latitude = sharedPreferences.getString("latitude", "30.007702")
+            val longitude = sharedPreferences.getString("longitude", "30.007702")
+
+            val stringFormat = String.format(
+                "%.2f", initQiblaDirection(
+                    context,
+                    latitude.toString().toDouble(), longitude.toString().toDouble()
+                )
+            )
+            views.setTextViewText(
+                R.id.tvQiblahDegreesWidget,
+                stringFormat
+            )
+            val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.image_qibla)
+            views.setImageViewBitmap(
+                R.id.qiblahDirectionImageView, bitmap.rotated(
+                    initQiblaDirection(
+                        context, latitude.toString().toDouble(),
+                        longitude.toString().toDouble()
+                    )
+                )
+            )
+            appWidgetManager.updateAppWidget(idArray, views)
+            if (latitude.equals("30.007702") && longitude.equals("30.007702"))
+                Toast.makeText(context, context.getString(R.string.please_open_your_gps), Toast.LENGTH_SHORT).show()
+            else
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.qibla_refreshed),
+                    Toast.LENGTH_SHORT
+                ).show()
         }
 
     }
 
 }
+
 fun Bitmap.rotated(angle: Float): Bitmap {
     val source = this
     val matrix = Matrix()
     matrix.postRotate(angle)
     return Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
 }
+
 var currentDegree: Float = 0f
 var currentNeedleDegree: Float = 0f
 
@@ -124,7 +253,7 @@ private fun initQiblaDirection(context: Context, latitude: Double, longitude: Do
     userLocation = Location("User Location")
     userLocation.latitude = latitude
     userLocation.longitude = longitude
-    Log.d("asdlaskdasd" , userLocation.latitude.toString())
+    Log.d("asdlaskdasd", userLocation.latitude.toString())
     sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
     sensorManager.registerListener(object : SensorEventListener {

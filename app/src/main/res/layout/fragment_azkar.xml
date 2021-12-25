@@ -54,9 +54,9 @@
         android:id="@+id/azkar_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        tools:listitem="@layout/azkar_item"
         android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/azkar_background_image"/>
+        app:layout_constraintTop_toBottomOf="@id/azkar_background_image"
+        tools:listitem="@layout/azkar_item" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -88,5 +88,15 @@
             app:layout_constraintStart_toEndOf="@id/azkarReloadImageView"
             app:layout_constraintTop_toTopOf="@id/azkarReloadImageView" />
 
+        <ImageView
+            android:id="@+id/azkarShareImageView"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/ic_baseline_share_24"
+            app:layout_constraintTop_toTopOf="@id/azkarCount"
+            app:layout_constraintBottom_toBottomOf="@id/azkarCount"
+            app:layout_constraintEnd_toEndOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

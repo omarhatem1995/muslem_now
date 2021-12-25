@@ -54,7 +54,7 @@ class MainViewModel(app:MuslemApp): AndroidViewModel(app) {
 
             val intent = Intent(getApplication(), MyNotificationPublisher::class.java)
             intent.action = "Off"
-            val intent2 = Intent(getApplication(), MyNotificationPublisher::class.java)
+            val intent2 = Intent(getApplication(), AlarmService::class.java)
             intent2.action = "Trigger"
             //setting up a pending intent
 
@@ -86,7 +86,7 @@ class MainViewModel(app:MuslemApp): AndroidViewModel(app) {
 
                     val alarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(getApplication(), prayerTime.prayerId, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_ONE_SHOT)
 
-                    val goOffPendingIntent = PendingIntent.getBroadcast(getApplication(), prayerTime.prayerId, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_ONE_SHOT)
+                    val goOffPendingIntent = PendingIntent.getForegroundService(getApplication(), prayerTime.prayerId, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_ONE_SHOT)
                     val alarmInfo = AlarmManager.AlarmClockInfo(calendar.timeInMillis,alarmPendingIntent)
                     if (hasPermission == true)
                     {

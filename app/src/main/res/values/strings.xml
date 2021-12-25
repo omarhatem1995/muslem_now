@@ -67,5 +67,7 @@
     <string name="app_widget_description">This is an app widget description</string>
     <string name="qibla_according_to_your_location_in_degrees">Qibla according to your location in degrees</string>
     <string name="qibla_refreshed">Qibla Refreshed</string>
+    <string name="muslem_now">Muslem Now</string>
+    <string name="please_open_your_gps">Please Open your GPS</string>
 
 </resources>

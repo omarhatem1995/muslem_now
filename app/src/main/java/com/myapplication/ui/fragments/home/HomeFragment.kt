@@ -533,10 +533,10 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
             binding.prayerTimesList.adapter =
                 PrayerAdapter(requireContext(), prayer, nextPrayerIs)
 
-        } else {
+        } else if(context != null){
             vm.getPrayerTimesForSpecificDate(nextDay, requireContext())
                 .observe(requireActivity(), androidx.lifecycle.Observer { prayer ->
-                    if (!prayer.isNullOrEmpty()) {
+                    if (!prayer.isNullOrEmpty() && context!=null) {
                         binding.remainingTimeForNextPrayer.text =
                             getString(R.string.remaining_time_for) + getNameOfPrayer(
                                 requireContext(),
@@ -558,37 +558,38 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
     }
 
     private fun getAndSetCurrentCityFromLatLon(latitude: String, longitude: String): String {
-        val addresses: List<Address>
-        val geocoder = Geocoder(requireContext(), Locale("ar"))
-        try {
-            Log.d("currentLat", " $latitude , $longitude")
+        if(context!=null) {
+            val addresses: List<Address>
+            val geocoder = Geocoder(requireContext(), Locale("ar"))
+            try {
+                Log.d("currentLat", " $latitude , $longitude")
 
-            addresses = geocoder.getFromLocation(
-                latitude.toDouble(),
-                longitude.toDouble(),
-                1
-            ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-            Log.d("currentLat", " $latitude , $addresses")
+                addresses = geocoder.getFromLocation(
+                    latitude.toDouble(),
+                    longitude.toDouble(),
+                    1
+                ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                Log.d("currentLat", " $latitude , $addresses")
 
-            if (!addresses.isNullOrEmpty()) {
-                val address: String =
-                    addresses[0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                var city: String = " "
-                if (addresses[0].locality != null)
-                    city = addresses[0].getLocality()
-                val country: String = addresses[0].getCountryName()
-                val currentCity = "$country, $city"
-                vm.preference.setCity(currentCity)
+                if (!addresses.isNullOrEmpty()) {
+                    val address: String =
+                        addresses[0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                    var city: String = " "
+                    if (addresses[0].locality != null)
+                        city = addresses[0].getLocality()
+                    val country: String = addresses[0].getCountryName()
+                    val currentCity = "$country, $city"
+                    vm.preference.setCity(currentCity)
 
-                return currentCity
+                    return currentCity
+                }
+            } catch (ex: InvocationTargetException) {
+                Log.d("exceptionFound", "${ex.message}")
+            } catch (ex: IOException) {
+                Log.d("exceptionFound", "${ex.message}")
             }
-        } catch (ex: InvocationTargetException) {
-            Log.d("exceptionFound", "${ex.message}")
-        } catch (ex: IOException){
-            Log.d("exceptionFound", "${ex.message}")
+
         }
-
-
 
         return "Not Found"
 
@@ -652,80 +653,89 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
         userLocation.latitude = latitude
         userLocation.longitude = longitude
         Log.d("getLatitude", " : " + latitude + " , " + longitude)
-        sensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
-        sensorManager.registerListener(object : SensorEventListener {
-            override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
+        if(context != null) {
+            sensorManager =
+                requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
+            sensorManager.registerListener(object : SensorEventListener {
+                override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
 
-            }
-
-            @SuppressLint("SetTextI18n")
-            override fun onSensorChanged(sensorEvent: SensorEvent?) {
-                val degree: Float = sensorEvent?.values?.get(0)?.roundToInt()?.toFloat()!!
-                var head: Float = sensorEvent.values?.get(0)?.roundToInt()?.toFloat()!!
-
-                val destLocation = Location("Destination Location")
-                destLocation.latitude = QIBLA_LATITUDE
-                destLocation.longitude = QIBLA_LONGITUDE
-
-                var bearTo = userLocation.bearingTo(destLocation)
-
-                val geoField = GeomagneticField(
-                    userLocation.latitude.toFloat(),
-                    userLocation.longitude.toFloat(),
-                    userLocation.altitude.toFloat(),
-                    System.currentTimeMillis()
-                )
-
-                head -= geoField.declination
-
-                if (bearTo < 0) {
-                    bearTo += 360
                 }
 
-                var direction = bearTo - head
+                @SuppressLint("SetTextI18n")
+                override fun onSensorChanged(sensorEvent: SensorEvent?) {
+                    val degree: Float = sensorEvent?.values?.get(0)?.roundToInt()?.toFloat()!!
+                    var head: Float = sensorEvent.values?.get(0)?.roundToInt()?.toFloat()!!
 
-                if (direction < 0) {
-                    direction += 360
-                }
+                    val destLocation = Location("Destination Location")
+                    destLocation.latitude = QIBLA_LATITUDE
+                    destLocation.longitude = QIBLA_LONGITUDE
 
-                tvHeading.text = "Heading : $degree + degrees"
+                    var bearTo = userLocation.bearingTo(destLocation)
 
-                Log.d(
-                    TAG,
-                    "Needle Degree : $currentNeedleDegree, Direction : $direction"
-                )
-                binding.qiblahDirection.text = currentNeedleDegree.toString()
+                    val geoField = GeomagneticField(
+                        userLocation.latitude.toFloat(),
+                        userLocation.longitude.toFloat(),
+                        userLocation.altitude.toFloat(),
+                        System.currentTimeMillis()
+                    )
 
-                needleAnimation = RotateAnimation(
-                    currentNeedleDegree,
-                    direction,
-                    Animation.RELATIVE_TO_SELF,
-                    .5f,
-                    Animation.RELATIVE_TO_SELF,
-                    .5f
-                )
-                needleAnimation.fillAfter = true
-                needleAnimation.duration = 200
+                    head -= geoField.declination
 
-                binding.ivQiblaDirection.startAnimation(needleAnimation)
-                currentNeedleDegree = direction
-                currentDegree = -degree
+                    if (bearTo < 0) {
+                        bearTo += 360
+                    }
 
-                if (currentNeedleDegree <= 10 || currentNeedleDegree >= 350) {
-                    context?.resources?.let { binding.ivQiblaDirection.setColorFilter(it?.getColor(R.color.logoOrangeColor)) };
+                    var direction = bearTo - head
 
-                } else {
-                    context?.resources?.getColor(R.color.backgroundGreen)?.let {
-                        binding.ivQiblaDirection.setColorFilter(
-                            it
-                        )
+                    if (direction < 0) {
+                        direction += 360
+                    }
+
+                    tvHeading.text = "Heading : $degree + degrees"
+
+                    Log.d(
+                        TAG,
+                        "Needle Degree : $currentNeedleDegree, Direction : $direction"
+                    )
+                    binding.qiblahDirection.text = currentNeedleDegree.toString()
+
+                    needleAnimation = RotateAnimation(
+                        currentNeedleDegree,
+                        direction,
+                        Animation.RELATIVE_TO_SELF,
+                        .5f,
+                        Animation.RELATIVE_TO_SELF,
+                        .5f
+                    )
+                    needleAnimation.fillAfter = true
+                    needleAnimation.duration = 200
+
+                    binding.ivQiblaDirection.startAnimation(needleAnimation)
+                    currentNeedleDegree = direction
+                    currentDegree = -degree
+
+                    if (currentNeedleDegree <= 10 || currentNeedleDegree >= 350) {
+                        context?.resources?.let {
+                            binding.ivQiblaDirection.setColorFilter(
+                                it?.getColor(
+                                    R.color.logoOrangeColor
+                                )
+                            )
+                        }
+
+                    } else {
+                        context?.resources?.getColor(R.color.backgroundGreen)?.let {
+                            binding.ivQiblaDirection.setColorFilter(
+                                it
+                            )
+                        }
+
                     }
 
                 }
-
-            }
-        }, sensor, SensorManager.SENSOR_DELAY_GAME)
+            }, sensor, SensorManager.SENSOR_DELAY_GAME)
+        }
     }
 
 

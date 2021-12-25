@@ -64,7 +64,7 @@ class MuslemApp: Application() {
             .setUsage(AudioAttributes.USAGE_NOTIFICATION)
             .build()
         val sound: Uri =
-            Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + this.packageName + "/" + R.raw.azan)
+            Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + this.packageName + "/" + R.raw.meshary)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel1 = NotificationChannel(
                 CHANNEL_1_ID,

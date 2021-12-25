@@ -56,5 +56,7 @@
     <string name="azkar_masaa">اذكار المساء</string>
     <string name="qibla_according_to_your_location_in_degrees">القبلة بالنسبة لموقعك درجة اتجاه</string>
     <string name="qibla_refreshed">تم تحديث القبلة</string>
+    <string name="muslem_now">Muslem Now</string>
+    <string name="please_open_your_gps">من قضلك قم بفتح اللوكيشن الخاص بالهاتف</string>
 
 </resources>
