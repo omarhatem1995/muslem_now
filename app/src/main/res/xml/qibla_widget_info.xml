@@ -5,7 +5,7 @@
     android:initialLayout="@layout/qibla_widget"
     android:minWidth="250dp"
     android:minHeight="110dp"
-    android:previewImage="@drawable/muslem_now_logo"
+    android:previewImage="@drawable/qiblah_widget"
     android:previewLayout="@layout/qibla_widget"
     android:resizeMode="horizontal|vertical"
     android:targetCellWidth="4"

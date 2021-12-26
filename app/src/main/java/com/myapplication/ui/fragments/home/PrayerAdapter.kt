@@ -42,9 +42,6 @@ class PrayerAdapter(mContext: Context, dataItem: List<PrayerTimeModel?>?, nextPr
             else
                 holder.imageStatus.setBackgroundColor(R.drawable.ic_volume_mute)
 
-            Log.d("prayerItem", prayerItem.image.toString())
-
-
             holder.imagePrayer.setBackgroundResource(setDrawable(prayerItem.prayerId))
 
             if (prayerItem.prayerId == 3) {
@@ -57,7 +54,6 @@ class PrayerAdapter(mContext: Context, dataItem: List<PrayerTimeModel?>?, nextPr
                     ContextCompat.getColor(mContext, R.color.textColorGreen2)
                 )
             }
-            Log.d("nextPrayerIs22", " = " + prayerItem.date + " , " + prayerItem.name)
             if (prayerItem?.prayerId == nextPrayerIs) {
                 holder.namePrayer.setTextColor(
                     ContextCompat.getColor(

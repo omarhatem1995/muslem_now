@@ -20,7 +20,7 @@
         android:id="@+id/tvCalendarDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="dddddd"
+        android:text="lasdlakds"
         android:textColor="@color/white"
         android:fontFamily="@font/tajawalmedium"
         android:layout_marginStart="40dp"
@@ -39,14 +39,14 @@
         android:layout_alignTop="@id/ivCalendar"/>
 
     <ImageView
-        android:id="@+id/prayerTime"
-        android:layout_width="13dp"
-        android:layout_height="13dp"
+        android:id="@+id/ivFajr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@drawable/ic_elfajr"
         android:backgroundTint="@color/white"
         android:layout_marginStart="95dp"
+        android:layout_marginBottom="4dp"
         android:layout_toEndOf="@id/tvFajr"
-        android:layout_alignTop="@id/tvFajr"
         android:layout_alignBottom="@id/tvFajr"/>
 
     <TextView
@@ -55,6 +55,151 @@
         android:layout_height="20dp"
         android:layout_marginStart="30dp"
         android:layout_alignTop="@id/tvFajr"
-        android:layout_toEndOf="@id/prayerTime"/>
+        android:layout_toEndOf="@id/ivFajr"/>
+
+    <TextView
+        android:id="@+id/tvSunRise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/tajawalmedium"
+        android:text="@string/sunrise"
+        android:textColor="@color/white"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_alignTop="@id/tvFajr"/>
+
+    <ImageView
+        android:id="@+id/ivSunRise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_sunrise"
+        android:backgroundTint="@color/white"
+        android:layout_marginBottom="4dp"
+        android:layout_alignStart="@id/ivFajr"
+        android:layout_alignBottom="@id/tvSunRise"/>
+
+    <TextView
+        android:id="@+id/tvSunRiseTime"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_alignTop="@id/tvSunRise"
+        android:layout_toEndOf="@id/ivSunRise"/>
+
+    <TextView
+        android:id="@+id/tvDuhr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/tajawalmedium"
+        android:text="@string/duhr"
+        android:textColor="@color/white"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_alignTop="@id/tvSunRise"/>
+
+    <ImageView
+        android:id="@+id/ivDuhr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_eldhur"
+        android:backgroundTint="@color/white"
+        android:layout_marginBottom="4dp"
+        android:layout_alignStart="@id/ivSunRise"
+        android:layout_alignBottom="@id/tvDuhr"/>
+
+    <TextView
+        android:id="@+id/tvDuhrTime"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_alignTop="@id/tvDuhr"
+        android:layout_toEndOf="@id/ivDuhr"/>
+
+    <TextView
+        android:id="@+id/tvAsr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/tajawalmedium"
+        android:text="@string/asr"
+        android:textColor="@color/white"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_alignTop="@id/tvDuhr"/>
+
+    <ImageView
+        android:id="@+id/ivAsr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_elasr"
+        android:backgroundTint="@color/white"
+        android:layout_marginBottom="4dp"
+        android:layout_alignStart="@id/ivDuhr"
+        android:layout_alignBottom="@id/tvAsr"/>
+
+    <TextView
+        android:id="@+id/tvAsrTime"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_alignTop="@id/tvAsr"
+        android:layout_toEndOf="@id/ivAsr"/>
+
+    <TextView
+        android:id="@+id/tvMaghrib"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/tajawalmedium"
+        android:text="@string/maghrib"
+        android:textColor="@color/white"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_alignTop="@id/tvAsr"/>
+
+    <ImageView
+        android:id="@+id/ivMaghrib"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_elmaghrib"
+        android:backgroundTint="@color/white"
+        android:layout_marginBottom="4dp"
+        android:layout_alignStart="@id/ivAsr"
+        android:layout_alignBottom="@id/tvMaghrib"/>
+
+    <TextView
+        android:id="@+id/tvMaghribTime"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_alignTop="@id/tvMaghrib"
+        android:layout_toEndOf="@id/ivMaghrib"/>
+
+    <TextView
+        android:id="@+id/tvIsha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/tajawalmedium"
+        android:text="@string/asr"
+        android:textColor="@color/white"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="20dp"
+        android:layout_alignTop="@id/tvMaghrib"/>
+
+    <ImageView
+        android:id="@+id/ivIsha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_elisha"
+        android:backgroundTint="@color/white"
+        android:layout_marginBottom="4dp"
+        android:layout_alignStart="@id/ivMaghrib"
+        android:layout_alignBottom="@id/tvIsha"/>
+
+    <TextView
+        android:id="@+id/tvIshaTime"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_alignTop="@id/tvIsha"
+        android:layout_toEndOf="@id/ivIsha"/>
 
 </RelativeLayout>
