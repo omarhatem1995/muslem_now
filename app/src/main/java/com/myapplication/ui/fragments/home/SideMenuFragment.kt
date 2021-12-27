@@ -35,13 +35,12 @@ class SideMenuFragment : Fragment() {
         binding.sidemenuViewModel = vm
         binding.lifecycleOwner = this
 
-        val locale = "ar"
-        if(locale.equals("ar")){
+        if(vm.preference.getLanguage().equals("ar")){
             binding.backFragmentButton.setImageResource(R.drawable.ic_baseline_arrow_forward_24)
             binding.arrowQibla.setImageResource(R.drawable.ic_baseline_arrow_back_ios_24)
             binding.arrowSettings.setImageResource(R.drawable.ic_baseline_arrow_back_ios_24)
 
-        }else {
+        }else if (vm.preference.getLanguage().equals("en")){
             binding.backFragmentButton.setImageResource(R.drawable.ic_baseline_arrow_back_24)
             binding.arrowQibla.setImageResource(R.drawable.ic_baseline_arrow_forward_ios_24)
             binding.arrowSettings.setImageResource(R.drawable.ic_baseline_arrow_forward_ios_24)

@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.myapplication.R
 import org.json.JSONArray
@@ -135,7 +134,7 @@ class AzkarActivity : AppCompatActivity() {
                     if (jsonObj.getString("category").equals(name)) {
                         azkar.add(zekr)
                     }
-                    val adapter =  AzkarListAdapter2 { type, data ->
+                    val adapter =  AzkarListAdapter { type, data ->
                         when (type) {
                             Constants.INCREASEADAPTER -> {
                                         updateAzkarModel.add(data)
@@ -157,7 +156,7 @@ class AzkarActivity : AppCompatActivity() {
             if (name != null) {
                 viewModel.getSpecificDayAzkar(name).observe(this, { it ->
                     if (!it.isNullOrEmpty()) {
-                        val adapter = AzkarListAdapter2 { type, data ->
+                        val adapter = AzkarListAdapter { type, data ->
                             when (type) {
                                 Constants.INCREASEADAPTER -> {
                                     updateAzkarModel.add(data)

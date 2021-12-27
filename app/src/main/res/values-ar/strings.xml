@@ -59,5 +59,10 @@
     <string name="muslem_now">Muslem Now</string>
     <string name="please_open_your_gps">من قضلك قم بفتح اللوكيشن الخاص بالهاتف</string>
     <string name="couldnt_find_your_address">لم نستطع الحصول على العنوان الخاص بك</string>
+    <string name="are_you_sure_you_want_to_change_language">" هل انت متأكد انك تريد ان تغير اللغة"</string>
+    <string name="this_action_will_require_restart_of_the_application">سيتم إعادة تشغيل التطبيق</string>
+    <string name="note">\"ملاحظة : \"</string>
+    <string name="yes">نعم</string>
+    <string name="cancel">الغاء</string>
 
 </resources>

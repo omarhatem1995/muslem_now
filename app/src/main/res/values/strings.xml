@@ -70,5 +70,10 @@
     <string name="muslem_now">Muslem Now</string>
     <string name="please_open_your_gps">Please Open your GPS</string>
     <string name="couldnt_find_your_address">Couldn\'t find your address</string>
+    <string name="are_you_sure_you_want_to_change_language">\"Are you sure you want to change language , \"</string>
+    <string name="this_action_will_require_restart_of_the_application">this action will require restart of the application</string>
+    <string name="note">\"Note : \"</string>
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

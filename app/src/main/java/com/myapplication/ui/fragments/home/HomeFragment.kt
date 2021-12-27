@@ -144,7 +144,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
         }
 
         binding.sideMenu.setOnClickListener {
-            Log.d("sideMenu", " is clicked")
             val sideMenuFragment = SideMenuFragment()
             val transaction = this.parentFragmentManager.beginTransaction()
             transaction.setCustomAnimations(
@@ -321,7 +320,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                             getString(R.string.remaining_time_for) + getNameOfPrayer(
                                 requireContext(), i
                             )
-                        binding.remainingTimeForNextPrayerValue.text = remainingTimeForNextPrayer
+//                        binding.remainingTimeForNextPrayerValue.text = remainingTimeForNextPrayer
 
                         counterForNextPrayer(remainingTimeForNextPrayer)
                         flagFoundPrayerId = true
@@ -345,8 +344,8 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                                         currentDateForChecking,
                                         nextPrayerTime
                                     )
-                                binding.remainingTimeForNextPrayerValue.text =
-                                    remainingTimeForNextPrayer
+                                /*binding.remainingTimeForNextPrayerValue.text =
+                                    remainingTimeForNextPrayer*/
                                 counterForNextPrayer(remainingTimeForNextPrayer)
                                 Log.d("remainingTime", remainingTimeForNextPrayer)
                                 binding.prayerTimesList.adapter =
@@ -459,7 +458,9 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                 Toast.makeText(requireContext(), "Err: " + it.localizedMessage, Toast.LENGTH_SHORT)
                     .show()
             }
+
         }
+
     }
 
     var apiCall = false
@@ -473,9 +474,18 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                     getPrayerTimesFromDatabase(prayer)
                     binding.prayerTimesList.layoutManager = linearLayoutManager
                     binding.prayerTimesList.isNestedScrollingEnabled = false
+                    renderLoading(false)
 
                 } else if (latitude != 0.0 && longitude != 0.0) {
-                    vm.viewStateAlAdahan.observe(viewLifecycleOwner, { viewState ->
+                    vm.getAlAdahanAPI(
+                        latitude.toString(),
+                        longitude.toString(),
+                        "5",
+                        monthOfTheYear,
+                        currentYear
+                    )
+
+                    vm.viewStateAlAdahan.observe(this, { viewState ->
                         when (viewState) {
                             is AlAdahanViewState.Loading -> {
                                 renderLoading(viewState.show)
@@ -491,13 +501,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                         }
                     })
 //                    fusedLocationClient.removeLocationUpdates(locationCallback);
-                    vm.getAlAdahanAPI(
-                        latitude.toString(),
-                        longitude.toString(),
-                        "5",
-                        monthOfTheYear,
-                        currentYear
-                    )
+
 
                     initQiblaDirection(latitude, longitude)
                     binding.deviceCurrentLocation.text =
@@ -526,7 +530,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                 getString(R.string.remaining_time_for) + getNameOfPrayer(
                     requireContext(), nextPrayerIs
                 )
-            binding.remainingTimeForNextPrayerValue.text = remainingTimeForNextPrayer
 
             counterForNextPrayer(remainingTimeForNextPrayer)
             Log.d("remainingTime 2", remainingTimeForNextPrayer)
@@ -547,8 +550,8 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                         val nextPrayerTime = prayer[0].time + " " + prayer[0].date
                         val remainingTimeForNextPrayer =
                             remainingTimeForNextPrayer(currentDateForChecking, nextPrayerTime)
-                        binding.remainingTimeForNextPrayerValue.text =
-                            remainingTimeForNextPrayer
+                      /*  binding.remainingTimeForNextPrayerValue.text =
+                            remainingTimeForNextPrayer*/
                         counterForNextPrayer(remainingTimeForNextPrayer)
                         Log.d("remainingTime 3", remainingTimeForNextPrayer)
                         binding.prayerTimesList.adapter =
@@ -742,6 +745,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
     override fun onResume() {
         super.onResume()
         getUserLocation()
+        renderLoading(true)
     }
 
     @SuppressLint("MissingPermission")

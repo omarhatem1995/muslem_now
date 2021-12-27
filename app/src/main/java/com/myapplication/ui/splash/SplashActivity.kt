@@ -76,7 +76,7 @@ class SplashActivity : AppCompatActivity() {
         Log.d("mobileDataEnabled : ", "" + mobileDataEnabled)
         Log.d(Companion.DEBUG_TAG, "Wifi connected: $isWifiConn")
         Log.d(Companion.DEBUG_TAG, "Mobile connected: $isMobileConn")
-        LocaleUtil.applyLocalizedContext(this, "ar")
+        splashViewModel.preference.getLanguage()?.let { LocaleUtil.applyLocalizedContext(this, it) }
     }
 
     private fun checkPermissions() {

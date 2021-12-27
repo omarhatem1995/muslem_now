@@ -2,6 +2,7 @@ package com.myapplication.ui.azkar
 
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +33,7 @@ class AzkarAdapter(mContext: Context, dataItem: List<String>) : RecyclerView.Ada
         holder.imageAzkar.setOnClickListener {
             val intent = Intent(mContext, AzkarActivity::class.java)
             intent.putExtra("category" , zekrItem)
+            intent.flags = FLAG_ACTIVITY_SINGLE_TOP
             mContext?.startActivity(intent)
         }
     }

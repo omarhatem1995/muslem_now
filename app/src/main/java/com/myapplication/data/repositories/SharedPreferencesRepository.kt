@@ -35,4 +35,10 @@ class SharedPreferencesRepository(application: Application) {
     }
 
     fun getSettings() = preference.getBoolean("isSet", false)
+
+    fun setLanguage(language:String?) = preference.edit()
+        .putString("language", language).apply()
+
+    fun getLanguage() = preference.getString("language", null)
+
 }
