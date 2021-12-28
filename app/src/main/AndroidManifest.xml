@@ -59,19 +59,25 @@
         </receiver>
         <activity
             android:name=".ui.settings.SettingsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode = "singleTop"/>
         <activity
             android:name=".ui.settings.SettingsInAppActivity"
             android:exported="false"
-            android:theme="@style/AppFullScreenTheme"/>
+            android:theme="@style/AppFullScreenTheme"
+            android:launchMode = "singleTop"/>
         <activity
             android:name=".ui.azkar.AzkarActivity"
-            android:exported="true" />
-        <activity android:name=".QiblahActivity" />
-        <activity android:name=".MainActivity" />
+            android:exported="true"
+            android:launchMode = "singleTop"/>
+        <activity android:name=".QiblahActivity"
+            android:launchMode = "singleTop"/>
+        <activity android:name=".MainActivity"
+            android:launchMode = "singleTop"/>
         <activity
             android:name=".ui.splash.SplashActivity"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode = "singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -64,7 +64,8 @@ class SideMenuFragment : Fragment() {
     }
 
     private fun sendBack() {
-        fragmentManager?.popBackStack()
-    }
+        if (requireFragmentManager().getBackStackEntryCount() > 0) {
+            requireFragmentManager().popBackStackImmediate()
+        }    }
 
 }

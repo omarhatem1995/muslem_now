@@ -53,6 +53,8 @@ import android.os.SystemClock
 
 import android.app.PendingIntent
 import androidx.core.app.NotificationCompat
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import com.myapplication.MyNotificationPublisher
 import com.myapplication.QiblahActivity
 import com.myapplication.R
@@ -145,7 +147,8 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
 
         binding.sideMenu.setOnClickListener {
             val sideMenuFragment = SideMenuFragment()
-            val transaction = this.parentFragmentManager.beginTransaction()
+            addFragmentOnlyOnce(parentFragmentManager,sideMenuFragment,"BLANK")
+           /* val transaction = this.parentFragmentManager.beginTransaction()
             transaction.setCustomAnimations(
                 R.anim.fragment_sidemenu_enter_animation,
                 R.anim.fragment_sidemenu_exit_animation, R.anim.fragment_sidemenu_enter_animation,
@@ -153,11 +156,31 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
             )
             transaction.addToBackStack(null)
             transaction.add(R.id.frameLayoutSideMenu, sideMenuFragment, "BLANK").commit()
+        */
         }
         progressDialog = context?.let { Dialog(it) }!!
         return binding.root
     }
+    fun addFragmentOnlyOnce(fragmentManager: FragmentManager, fragment: Fragment?, tag: String?) {
+        // Make sure the current transaction finishes first
+        fragmentManager.executePendingTransactions()
 
+        // If there is no fragment yet with this tag...
+        if (fragmentManager.findFragmentByTag(tag) == null) {
+            // Add it
+            val transaction: FragmentTransaction = fragmentManager.beginTransaction()
+            transaction.setCustomAnimations(
+                R.anim.fragment_sidemenu_enter_animation,
+                R.anim.fragment_sidemenu_exit_animation, R.anim.fragment_sidemenu_enter_animation,
+                R.anim.fragment_sidemenu_exit_animation
+            )
+            transaction.addToBackStack(null)
+            if (fragment != null) {
+                transaction.add(R.id.frameLayoutSideMenu,fragment, tag)
+            }
+            transaction.commit()
+        }
+    }
     private fun getDateAndTime() {
         val georgianFullDateFormat: DateFormat = SimpleDateFormat("EEEE dd MMMM yyyy", Locale("ar"))
         val georgianDateFormatForInsertion: DateFormat =
