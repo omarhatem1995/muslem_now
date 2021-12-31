@@ -16,6 +16,7 @@ import com.myapplication.MyNotificationPublisher
 import com.myapplication.data.core.workmanager.AlarmService
 import com.myapplication.data.core.workmanager.MuslemApp
 import com.myapplication.data.gateways.dao.MuslemNowDataBase
+import com.myapplication.data.repositories.SharedPreferencesRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.withContext
@@ -24,6 +25,7 @@ import java.util.*
 
 class MainViewModel(app:MuslemApp): AndroidViewModel(app) {
 
+    val preferences = SharedPreferencesRepository(app)
     val workManager = WorkManager.getInstance(app)
 
     val workState: LiveData<List<WorkInfo>?> =  workManager.getWorkInfosByTagLiveData("settingAlarm")
@@ -39,9 +41,9 @@ class MainViewModel(app:MuslemApp): AndroidViewModel(app) {
             val c: Date = Calendar.getInstance().time
             println("Current time => $c")
             Log.e(null, "setSalahAlarm: ", )
-            val df = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
+            val df = SimpleDateFormat("dd-MM-yyyy", Locale("en"))
             Log.e(null, "getCurrentDate: ${df.format(c)} ")
-            val currentHourDateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+            val currentHourDateFormat = SimpleDateFormat("HH:mm", Locale("en"))
             val formattedDate2:String = currentHourDateFormat.format(c)
             // df.calendar.timeInMillis
             val formattedDate: String = df.format(c)

@@ -58,6 +58,9 @@ class MyNotificationPublisher : BroadcastReceiver() {
             )
         } else if (intent.action == "Off") {
             Log.e(null, "onReceive2: off ", )
+        }else if(intent.action == "Azkar"){
+            Log.e("ThisiSOnCRecieve", "onReceive2: off ", )
+
         }
 //        val notification: Notification = intent.getParcelableExtra(NOTIFICATION)!!
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

@@ -51,6 +51,10 @@ class SplashActivity : AppCompatActivity() {
         val connMgr = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         var mobileDataEnabled = false // Assume disabled
 
+        if(!splashViewModel.preference.getFirstLaunch()){
+            splashViewModel.preference.setFirstLaunch(true)
+            splashViewModel.preference.setLanguage("en")
+        }
 
         var isWifiConn: Boolean = false
         var isMobileConn: Boolean = false

@@ -9,10 +9,8 @@ import android.os.CountDownTimer
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Button
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -20,10 +18,9 @@ import com.myapplication.R
 import com.myapplication.data.entities.model.Languages
 import com.myapplication.data.entities.model.MoazenModel
 import com.myapplication.databinding.ActivityInappSettingsBinding
-import com.myapplication.ui.CustomDialogClass
-import com.myapplication.MainActivity
 
 import android.content.Intent
+import com.myapplication.common.Constants
 import com.myapplication.ui.splash.SplashActivity
 
 
@@ -45,7 +42,7 @@ class SettingsInAppActivity : AppCompatActivity() {
         mediaPlayer = MediaPlayer()
         changeLanguageDialog = Dialog(this)
 
-        Log.d("opensSameActivity ", " is Opened")
+        Log.d("opensSameActivity ", " is Opened ${settingsViewModel.preference.getAzkarSabahTiming()}")
         binding.constraintAzkarSabahAndMasaa.setOnClickListener {
             val azkarSettingsFragment = AzkarSettingsFragment()
 
@@ -59,32 +56,44 @@ class SettingsInAppActivity : AppCompatActivity() {
             transaction.replace(R.id.frame_azkar_settings, azkarSettingsFragment, "BLANK").commit()
         }
 
-        binding.fullAzanImageView.setImageResource(R.drawable.marked)
-        binding.takbiratAzanImageView.setImageResource(R.drawable.eclipse)
-
+        if(settingsViewModel.preference.getAzanType().equals(Constants.FULL_AZAN)) {
+            binding.fullAzanImageView.setImageResource(R.drawable.marked)
+            binding.takbiratAzanImageView.setImageResource(R.drawable.eclipse)
+            binding.fullAzanTextView.setTextColor(resources.getColor(R.color.textColorGreen))
+            binding.takbiratAzanTextView.setTextColor(resources.getColor(R.color.textColorGrey2))
+        }else {
+            binding.fullAzanImageView.setImageResource(R.drawable.eclipse)
+            binding.takbiratAzanImageView.setImageResource(R.drawable.marked)
+            binding.takbiratAzanTextView.setTextColor(resources.getColor(R.color.textColorGreen))
+            binding.fullAzanTextView.setTextColor(resources.getColor(R.color.textColorGrey2))
+        }
         binding.fullAzanImageView.setOnClickListener {
             binding.fullAzanImageView.setImageResource(R.drawable.marked)
             binding.takbiratAzanImageView.setImageResource(R.drawable.eclipse)
             binding.fullAzanTextView.setTextColor(resources.getColor(R.color.textColorGreen))
             binding.takbiratAzanTextView.setTextColor(resources.getColor(R.color.textColorGrey2))
+            settingsViewModel.preference.setAzanType(Constants.FULL_AZAN)
         }
         binding.fullAzanTextView.setOnClickListener {
             binding.fullAzanImageView.setImageResource(R.drawable.marked)
             binding.takbiratAzanImageView.setImageResource(R.drawable.eclipse)
             binding.fullAzanTextView.setTextColor(resources.getColor(R.color.textColorGreen))
             binding.takbiratAzanTextView.setTextColor(resources.getColor(R.color.textColorGrey2))
+            settingsViewModel.preference.setAzanType(Constants.FULL_AZAN)
         }
         binding.takbiratAzanImageView.setOnClickListener {
             binding.fullAzanImageView.setImageResource(R.drawable.eclipse)
             binding.takbiratAzanImageView.setImageResource(R.drawable.marked)
             binding.fullAzanTextView.setTextColor(resources.getColor(R.color.textColorGrey2))
             binding.takbiratAzanTextView.setTextColor(resources.getColor(R.color.textColorGreen))
+            settingsViewModel.preference.setAzanType(Constants.TAKBIRAT_ONLY)
         }
         binding.takbiratAzanTextView.setOnClickListener {
             binding.fullAzanImageView.setImageResource(R.drawable.eclipse)
             binding.takbiratAzanImageView.setImageResource(R.drawable.marked)
             binding.fullAzanTextView.setTextColor(resources.getColor(R.color.textColorGrey2))
             binding.takbiratAzanTextView.setTextColor(resources.getColor(R.color.textColorGreen))
+            settingsViewModel.preference.setAzanType(Constants.TAKBIRAT_ONLY)
         }
 
     }
@@ -118,6 +127,8 @@ class SettingsInAppActivity : AppCompatActivity() {
                         if (mediaPlayer.isPlaying)
                             mediaPlayer.stop()
 
+                        settingsViewModel.preference.setMoazen(Constants.AZANMESHARY)
+
                         mediaPlayer = MediaPlayer.create(applicationContext, R.raw.meshary)
                         startMediaPlayerSample(mediaPlayer)
                         userSelect = false
@@ -128,6 +139,8 @@ class SettingsInAppActivity : AppCompatActivity() {
                     } else if (p2 == 1) {
                         if (mediaPlayer.isPlaying)
                             mediaPlayer.stop()
+
+                        settingsViewModel.preference.setMoazen(Constants.AZANELHOSARY)
 
                         mediaPlayer = MediaPlayer.create(applicationContext, R.raw.elhosary)
                         startMediaPlayerSample(mediaPlayer)
@@ -149,11 +162,11 @@ class SettingsInAppActivity : AppCompatActivity() {
         arrayLanguages.add(english)
 
         var languagesAdapter = LanguagesAdapter(this, arrayLanguages)
-        binding.spinner1.adapter = languagesAdapter
+        binding.languageSettings.adapter = languagesAdapter
 
         var languagesFlag = false
-        var selectedItem =0
-        binding.spinner1.onItemSelectedListener = object : AdapterView.OnItemClickListener,
+        var selectedItem :Int
+        binding.languageSettings.onItemSelectedListener = object : AdapterView.OnItemClickListener,
             AdapterView.OnItemSelectedListener {
             override fun onItemClick(
                 parent: AdapterView<*>?,
@@ -171,9 +184,9 @@ class SettingsInAppActivity : AppCompatActivity() {
             ) {
                 if (languagesFlag) {
                     if (id == 1L && !settingsViewModel.preference.getLanguage().equals("en")) {
-                        openChangeLanguageDialog("en")
+                        openChangeLanguageAndRestartDialog("en")
                     } else if (id == 0L && !settingsViewModel.preference.getLanguage().equals("ar")) {
-                        openChangeLanguageDialog("ar")
+                        openChangeLanguageAndRestartDialog("ar")
                     }
                 } else {
                     if(settingsViewModel.preference.getLanguage().equals("en"))
@@ -181,7 +194,7 @@ class SettingsInAppActivity : AppCompatActivity() {
                     else
                         selectedItem = 0
 
-                    binding.spinner1.setSelection(selectedItem)
+                    binding.languageSettings.setSelection(selectedItem)
                     languagesFlag = true
                 }
             }
@@ -193,7 +206,7 @@ class SettingsInAppActivity : AppCompatActivity() {
 
     }
 
-    private fun openChangeLanguageDialog(language:String) {
+    private fun openChangeLanguageAndRestartDialog(language:String) {
 
         val root: View = layoutInflater.inflate(R.layout.dialog_change_language, null)
         changeLanguageDialog.setContentView(root)

@@ -55,6 +55,7 @@ import android.app.PendingIntent
 import androidx.core.app.NotificationCompat
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.bumptech.glide.Glide
 import com.myapplication.MyNotificationPublisher
 import com.myapplication.QiblahActivity
 import com.myapplication.R
@@ -63,7 +64,7 @@ import java.io.IOException
 import java.lang.reflect.InvocationTargetException
 
 
-class HomeFragment : Fragment(), AlAdahanUseCases.View {
+class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener {
 
     lateinit var binding: FragmentHomeBinding
 
@@ -100,6 +101,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
     val cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+1:00"))
     lateinit var nextDay: String
     lateinit var progressDialog: Dialog
+    var arrayList: MutableList<Boolean> = ArrayList()
 
     lateinit var nextDayForCalculations: String
 
@@ -134,9 +136,19 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
 
         binding.lifecycleOwner = this
         userLocation = Location("User Location")
-
+        arrayList.add(0, vm.preference.getFajr())
+        arrayList.add(1, vm.preference.getDuhr())
+        arrayList.add(2, vm.preference.getSunRise())
+        arrayList.add(3, vm.preference.getAsr())
+        arrayList.add(4, vm.preference.getMaghrib())
+        arrayList.add(5, vm.preference.getIsha())
         getUserLocation()
         getDateAndTime()
+
+        Log.d(
+            "setAzkaray7aga", " " + vm.preference.getAzkarAfterAzan() + " , "
+                    + vm.preference.getAzkarSabah() + " , " + vm.preference.getAzkarMasaa()
+        )
 
         getNotification("10 second delay")?.let { scheduleNotification(it, 10000) };
 
@@ -147,20 +159,21 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
 
         binding.sideMenu.setOnClickListener {
             val sideMenuFragment = SideMenuFragment()
-            addFragmentOnlyOnce(parentFragmentManager,sideMenuFragment,"BLANK")
-           /* val transaction = this.parentFragmentManager.beginTransaction()
-            transaction.setCustomAnimations(
-                R.anim.fragment_sidemenu_enter_animation,
-                R.anim.fragment_sidemenu_exit_animation, R.anim.fragment_sidemenu_enter_animation,
-                R.anim.fragment_sidemenu_exit_animation
-            )
-            transaction.addToBackStack(null)
-            transaction.add(R.id.frameLayoutSideMenu, sideMenuFragment, "BLANK").commit()
-        */
+            addFragmentOnlyOnce(parentFragmentManager, sideMenuFragment, "BLANK")
+            /* val transaction = this.parentFragmentManager.beginTransaction()
+             transaction.setCustomAnimations(
+                 R.anim.fragment_sidemenu_enter_animation,
+                 R.anim.fragment_sidemenu_exit_animation, R.anim.fragment_sidemenu_enter_animation,
+                 R.anim.fragment_sidemenu_exit_animation
+             )
+             transaction.addToBackStack(null)
+             transaction.add(R.id.frameLayoutSideMenu, sideMenuFragment, "BLANK").commit()
+         */
         }
         progressDialog = context?.let { Dialog(it) }!!
         return binding.root
     }
+
     fun addFragmentOnlyOnce(fragmentManager: FragmentManager, fragment: Fragment?, tag: String?) {
         // Make sure the current transaction finishes first
         fragmentManager.executePendingTransactions()
@@ -176,11 +189,12 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
             )
             transaction.addToBackStack(null)
             if (fragment != null) {
-                transaction.add(R.id.frameLayoutSideMenu,fragment, tag)
+                transaction.add(R.id.frameLayoutSideMenu, fragment, tag)
             }
             transaction.commit()
         }
     }
+
     private fun getDateAndTime() {
         val georgianFullDateFormat: DateFormat = SimpleDateFormat("EEEE dd MMMM yyyy", Locale("ar"))
         val georgianDateFormatForInsertion: DateFormat =
@@ -340,7 +354,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                         val remainingTimeForNextPrayer =
                             remainingTimeForNextPrayer(currentDateForChecking, nextPrayerTime)
                         binding.remainingTimeForNextPrayer.text =
-                            getString(R.string.remaining_time_for) + getNameOfPrayer(
+                            getString(R.string.remaining_time_for) + " " + getNameOfPrayer(
                                 requireContext(), i
                             )
 //                        binding.remainingTimeForNextPrayerValue.text = remainingTimeForNextPrayer
@@ -348,8 +362,15 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                         counterForNextPrayer(remainingTimeForNextPrayer)
                         flagFoundPrayerId = true
 
+
                         binding.prayerTimesList.adapter =
-                            PrayerAdapter(requireContext(), prayerList, nextPrayerIs)
+                            PrayerAdapter(
+                                requireContext(),
+                                prayerList,
+                                nextPrayerIs,
+                                this,
+                                arrayList
+                            )
                     }
                 }
                 if (!flagFoundPrayerId) {
@@ -372,7 +393,13 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                                 counterForNextPrayer(remainingTimeForNextPrayer)
                                 Log.d("remainingTime", remainingTimeForNextPrayer)
                                 binding.prayerTimesList.adapter =
-                                    PrayerAdapter(requireContext(), prayerList, nextPrayerIs)
+                                    PrayerAdapter(
+                                        requireContext(),
+                                        prayerList,
+                                        nextPrayerIs,
+                                        this,
+                                        arrayList
+                                    )
                             }
                         })
                 }
@@ -461,11 +488,16 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                         initPrayerTimes(it.latitude, it.longitude)
                 } else {
 
-                    if(getAndSetCurrentCityFromLatLon(it.latitude.toString(),it.longitude.toString())
-                            .equals("Not Found")){
+                    if (getAndSetCurrentCityFromLatLon(
+                            it.latitude.toString(),
+                            it.longitude.toString()
+                        )
+                            .equals("Not Found")
+                    ) {
 
-                        binding.deviceCurrentLocation.text = getString(R.string.couldnt_find_your_address)
-                    }else {
+                        binding.deviceCurrentLocation.text =
+                            getString(R.string.couldnt_find_your_address)
+                    } else {
                         binding.deviceCurrentLocation.text = getAndSetCurrentCityFromLatLon(
                             it.latitude.toString(),
                             it.longitude.toString()
@@ -555,10 +587,9 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                 )
 
             counterForNextPrayer(remainingTimeForNextPrayer)
-            Log.d("remainingTime 2", remainingTimeForNextPrayer)
 
             binding.prayerTimesList.adapter =
-                PrayerAdapter(requireContext(), prayer, nextPrayerIs)
+                PrayerAdapter(requireContext(), prayer, nextPrayerIs, this, arrayList)
 
         } else if (context != null) {
             vm.getPrayerTimesForSpecificDate(nextDay, requireContext())
@@ -573,12 +604,12 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                         val nextPrayerTime = prayer[0].time + " " + prayer[0].date
                         val remainingTimeForNextPrayer =
                             remainingTimeForNextPrayer(currentDateForChecking, nextPrayerTime)
-                      /*  binding.remainingTimeForNextPrayerValue.text =
-                            remainingTimeForNextPrayer*/
+                        /*  binding.remainingTimeForNextPrayerValue.text =
+                              remainingTimeForNextPrayer*/
                         counterForNextPrayer(remainingTimeForNextPrayer)
                         Log.d("remainingTime 3", remainingTimeForNextPrayer)
                         binding.prayerTimesList.adapter =
-                            PrayerAdapter(requireContext(), prayer, nextPrayerIs)
+                            PrayerAdapter(requireContext(), prayer, nextPrayerIs, this, arrayList)
                     }
                 })
         }
@@ -587,7 +618,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
     private fun getAndSetCurrentCityFromLatLon(latitude: String, longitude: String): String {
         if (context != null) {
             val addresses: List<Address>
-            val geocoder = Geocoder(requireContext(), Locale("ar"))
+            val geocoder = Geocoder(requireContext(), Locale(vm.preference.getLanguage()))
             try {
                 Log.d("currentLat", " $latitude , $longitude")
 
@@ -767,6 +798,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
 
     override fun onResume() {
         super.onResume()
+        binding.remainingTimeForNextPrayerValue.text = ""
         getUserLocation()
         renderLoading(true)
     }
@@ -805,8 +837,8 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
                     locationCallback!!,
                     Looper.getMainLooper()
                 )
-            }else {
-                Log.e("flagLocation" , " is calse")
+            } else {
+                Log.e("flagLocation", " is calse")
             }
 
         }
@@ -827,5 +859,37 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View {
         }
 
 
+    }
+
+    override fun prayerId(id: Int) {
+        if (id == 0 && vm.preference.getFajr())
+            vm.preference.setFajr(false)
+        else if (id == 0 && !vm.preference.getFajr())
+            vm.preference.setFajr(true)
+        else if (id == 1 && vm.preference.getSunRise())
+            vm.preference.setSunRise(false)
+        else if (id == 1 && !vm.preference.getSunRise())
+            vm.preference.setSunRise(true)
+        else if (id == 2 && vm.preference.getDuhr())
+            vm.preference.setDuhr(false)
+        else if (id == 2 && !vm.preference.getDuhr())
+            vm.preference.setDuhr(true)
+        else if (id == 3 && vm.preference.getAsr())
+            vm.preference.setAsr(false)
+        else if (id == 3 && !vm.preference.getAsr())
+            vm.preference.setAsr(true)
+        else if (id == 4 && vm.preference.getMaghrib())
+            vm.preference.setMaghrib(false)
+        else if (id == 4 && !vm.preference.getMaghrib())
+            vm.preference.setMaghrib(true)
+        else if (id == 5 && vm.preference.getIsha())
+            vm.preference.setIsha(false)
+        else if (id == 5 && !vm.preference.getIsha())
+            vm.preference.setIsha(true)
+//        Glide.with(this).load(R.drawable.app_widget_background).into()
+        Log.d("ldksldksd", " ${vm.preference.getFajr()} prayer  Fajr")
+        Log.d("ldksldksd", " ${vm.preference.getDuhr()} prayer  Duhr")
+        Log.d("ldksldksd", " ${vm.preference.getAsr()} prayer  Asr")
+        Log.d("ldksldksd", " ${vm.preference.getMaghrib()} prayer  Maghrib")
     }
 }

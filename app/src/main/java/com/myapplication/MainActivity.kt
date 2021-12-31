@@ -59,12 +59,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         replaceFragment(firstFragment)
         bottomNavigationView = findViewById(R.id.bottomNavigationView)
-
         mLocationRequest = LocationRequest.create()
             .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
             .setInterval((1000 * 2).toLong())
             .setFastestInterval((1000 * 1).toLong())
-
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.home -> replaceFragment(firstFragment)

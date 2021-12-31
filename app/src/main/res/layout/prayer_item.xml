@@ -16,7 +16,7 @@
 
     <TextView
         android:id="@+id/prayer_name"
-        android:layout_width="48dp"
+        android:layout_width="54dp"
         android:layout_height="wrap_content"
         android:text="el fajr"
         android:textColor="@color/textColorGreen"

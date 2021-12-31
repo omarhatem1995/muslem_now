@@ -54,8 +54,8 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
         val c: Date = Calendar.getInstance().time
         println("Current time => $c")
 
-        val df = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-        val currentHourDateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+        val df = SimpleDateFormat("dd-MM-yyyy", Locale("en"))
+        val currentHourDateFormat = SimpleDateFormat("HH:mm", Locale("en"))
         Log.e(null, "getCurrentDate: ${df.format(c)} ")
        // df.calendar.timeInMillis
         val formattedDate: String = df.format(c)

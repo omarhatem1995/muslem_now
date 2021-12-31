@@ -20,12 +20,15 @@ import com.myapplication.LocaleUtil.Companion.getTimeAMandPM
 import com.myapplication.LocaleUtil.Companion.setDrawable
 
 
-class PrayerAdapter(mContext: Context, dataItem: List<PrayerTimeModel?>?, nextPrayerIs: Int) :
+class PrayerAdapter(mContext: Context, dataItem: List<PrayerTimeModel?>?, nextPrayerIs: Int ,prayerSoundClickListener: PrayerSoundClickListener,
+list: MutableList<Boolean>) :
     RecyclerView.Adapter<PrayerAdapter.PrayerViewHolder>() {
 
     var mContext: Context = mContext
     var mData: List<PrayerTimeModel?>? = dataItem
     var nextPrayerIs = nextPrayerIs
+    var prayerSoundClickListener = prayerSoundClickListener
+    var list = list
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PrayerViewHolder {
         val v: View
@@ -37,11 +40,43 @@ class PrayerAdapter(mContext: Context, dataItem: List<PrayerTimeModel?>?, nextPr
         val prayerItem = mData!![position]
 
         if (prayerItem != null) {
-            if (prayerItem.imageStatus == 1)
-                holder.imageStatus.setBackgroundResource(R.drawable.ic_volume_high)
-            else
-                holder.imageStatus.setBackgroundColor(R.drawable.ic_volume_mute)
-
+                if(prayerItem.prayerId == 0 && list[0]){
+                    holder.imageStatus.setBackgroundResource(R.drawable.ic_volume_high)
+                    holder.imageStatus.tag = true    //When you change the drawable
+                }else if(prayerItem.prayerId == 0 && !list[0]){
+                    holder.imageStatus.setBackgroundResource(R.drawable.ic_volume_mute)
+                    holder.imageStatus.tag = false    //When
+                }else if(prayerItem.prayerId == 1 && list[1]){
+                    holder.imageStatus.setBackgroundResource(R.drawable.ic_volume_high)
+                    holder.imageStatus.tag = true
+                }else if(prayerItem.prayerId == 1 && !list[1]){
+                    holder.imageStatus.setBackgroundResource(R.drawable.ic_volume_mute)
+                    holder.imageStatus.tag = false
+                }else if(prayerItem.prayerId == 2 && list[2]){
+                    holder.imageStatus.setBackgroundResource(R.drawable.ic_volume_high)
+                    holder.imageStatus.tag = true
+                }else if(prayerItem.prayerId == 2 && !list[2]){
+                    holder.imageStatus.setBackgroundResource(R.drawable.ic_volume_mute)
+                    holder.imageStatus.tag = false
+                }else if(prayerItem.prayerId == 3 && list[3]){
+                    holder.imageStatus.setBackgroundResource(R.drawable.ic_volume_high)
+                    holder.imageStatus.tag = true
+                }else if(prayerItem.prayerId == 3 && !list[3]){
+                    holder.imageStatus.setBackgroundResource(R.drawable.ic_volume_mute)
+                    holder.imageStatus.tag = false
+                }else if(prayerItem.prayerId == 4 && list[4]){
+                    holder.imageStatus.setBackgroundResource(R.drawable.ic_volume_high)
+                    holder.imageStatus.tag = true
+                }else if(prayerItem.prayerId == 4 && !list[4]){
+                    holder.imageStatus.setBackgroundResource(R.drawable.ic_volume_mute)
+                    holder.imageStatus.tag = false
+                }else if(prayerItem.prayerId == 5 && list[5]){
+                    holder.imageStatus.setBackgroundResource(R.drawable.ic_volume_high)
+                    holder.imageStatus.tag = true
+                }else if(prayerItem.prayerId == 5 && !list[5]){
+                    holder.imageStatus.setBackgroundResource(R.drawable.ic_volume_mute)
+                    holder.imageStatus.tag = false
+                }
             holder.imagePrayer.setBackgroundResource(setDrawable(prayerItem.prayerId))
 
             if (prayerItem.prayerId == 3) {
@@ -54,7 +89,7 @@ class PrayerAdapter(mContext: Context, dataItem: List<PrayerTimeModel?>?, nextPr
                     ContextCompat.getColor(mContext, R.color.textColorGreen2)
                 )
             }
-            if (prayerItem?.prayerId == nextPrayerIs) {
+            if (prayerItem?.prayerId == nextPrayerIs ) {
                 holder.namePrayer.setTextColor(
                     ContextCompat.getColor(
                         mContext,
@@ -94,12 +129,58 @@ class PrayerAdapter(mContext: Context, dataItem: List<PrayerTimeModel?>?, nextPr
                 )
             }
         }
+        Log.d("lasdklasdklwe", " ${holder.imageStatus.tag}")
 
         holder.imageStatus.setOnClickListener {
-            if (prayerItem!!.imageStatus == 1) {
+            if (prayerItem != null) {
+                prayerSoundClickListener.prayerId(prayerItem.prayerId)
+            }
+            if (holder.imageStatus.tag.toString().trim() == "true") {
                 holder.imageStatus.setBackgroundResource(R.drawable.ic_volume_mute)
+                holder.imageStatus.tag = false
             } else {
                 holder.imageStatus.setBackgroundResource(R.drawable.ic_volume_high)
+                holder.imageStatus.tag = true
+            if (prayerItem?.prayerId == nextPrayerIs ) {
+                holder.namePrayer.setTextColor(
+                    ContextCompat.getColor(
+                        mContext,
+                        R.color.textSelectedPrayerColor
+                    )
+                )
+                holder.timePrayer.setTextColor(
+                    ContextCompat.getColor(
+                        mContext,
+                        R.color.textSelectedPrayerColor
+                    )
+                )
+                val unwrappedDrawable: Drawable = holder.imagePrayer.getBackground()
+                val unwrappedDrawable2: Drawable = holder.imageStatus.getBackground()
+                val wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable)
+                val wrappedDrawable2 = DrawableCompat.wrap(unwrappedDrawable2)
+                DrawableCompat.setTint(
+                    wrappedDrawable,
+                    ContextCompat.getColor(mContext, R.color.textSelectedPrayerColor)
+                )
+                DrawableCompat.setTint(
+                    wrappedDrawable2,
+                    ContextCompat.getColor(mContext, R.color.textSelectedPrayerColor)
+                )
+            } else {
+                val unwrappedDrawable: Drawable = holder.imagePrayer.getBackground()
+                val unwrappedDrawable2: Drawable = holder.imageStatus.getBackground()
+                val wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable)
+                val wrappedDrawable2 = DrawableCompat.wrap(unwrappedDrawable2)
+                DrawableCompat.setTint(
+                    wrappedDrawable,
+                    ContextCompat.getColor(mContext, R.color.textColorGreen2)
+                )
+                DrawableCompat.setTint(
+                    wrappedDrawable2,
+                    ContextCompat.getColor(mContext, R.color.textColorGreen2)
+                )
+
+        }
             }
         }
 

@@ -27,7 +27,7 @@
     <string name="maghrib">Maghrib</string>
     <string name="isha">Isha</string>
     <string name="comma">\", \"</string>
-    <string name="remaining_time_for">\"Remaining Time For \"</string>
+    <string name="remaining_time_for">Remaining Time For </string>
     <string name="you_can_specify_your_settings_or_skip_and_add_it_later_on">You can specify your settings or skip and add it later on</string>
     <string name="language_settings">Language Settings</string>
     <string name="arabic">Arabic</string>

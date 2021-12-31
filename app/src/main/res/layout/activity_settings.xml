@@ -74,7 +74,7 @@
                     app:layout_constraintTop_toTopOf="@id/languageSettingsImageView" />
 
                 <Spinner
-                    android:id="@+id/spinner1"
+                    android:id="@+id/languageSettings"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginStart="16dp"
@@ -96,7 +96,7 @@
                     android:layout_marginTop="20dp"
                     android:background="@drawable/azan_settings"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/spinner1" />
+                    app:layout_constraintTop_toBottomOf="@id/languageSettings" />
 
                 <TextView
                     android:id="@+id/azanSettingsTextView"
@@ -234,7 +234,7 @@
                         app:layout_constraintTop_toBottomOf="@id/viewSeparator2" />
 
                     <Switch
-                        android:id="@+id/user_or_project_owner_switch"
+                        android:id="@+id/azkar_after_azan_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"

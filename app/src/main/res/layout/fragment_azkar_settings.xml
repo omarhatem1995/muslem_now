@@ -100,7 +100,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/azkarSabahConstraintTiming"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="80dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
@@ -109,135 +109,48 @@
                 android:background="@drawable/view_background_white_rounded"
                 app:layout_constraintTop_toBottomOf="@id/chooseTimeForAzkar">
 
-                <TextView
-                    android:id="@+id/afterFajrWithHalfHour"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/after_fajr_with_half_an_hour"
-                    android:textColor="@color/black"
-                    android:fontFamily="@font/tajawalmedium"
-                    android:textSize="16sp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginStart="20dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
-
-
-                <TextView
-                    android:id="@+id/afterFajrWithHalfHourAt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="After Fajr with half an hour At"
-                    android:fontFamily="@font/tajawalmedium"
-                    android:textSize="12sp"
-                    android:textColor="@color/textColorGrey"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginStart="20dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/afterFajrWithHalfHour"/>
-
-
-                <ImageView
-                    android:id="@+id/afterFajrWithHalfHourImageView"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginEnd="32dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/afterFajrWithHalfHour"
-                    app:layout_constraintBottom_toBottomOf="@id/afterFajrWithHalfHourAt"/>
-
-                <View
-                    android:id="@+id/viewSeparator"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="@android:color/darker_gray"
-                    app:layout_constraintTop_toBottomOf="@id/afterFajrWithHalfHourAt" />
-                <TextView
-                    android:id="@+id/afterFajrWithHour"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/after_fajr_with_an_hour"
-                    android:textColor="@color/black"
-                    android:fontFamily="@font/tajawalmedium"
-                    android:textSize="16sp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginStart="20dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/viewSeparator"/>
+                    android:layout_height="40dp"
+                    android:background="@drawable/view_background_textview_grey_rounded"
+                    android:layout_marginStart="36dp"
+                    android:layout_marginEnd="60dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
 
+                    <ImageButton
+                        android:id="@+id/azkarClockImage"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:background="@drawable/ic_clock"
+                        android:layout_marginStart="12dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
 
-                <TextView
-                    android:id="@+id/afterFajrWithHourAt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="After Fajr with half an hour At"
-                    android:fontFamily="@font/tajawalmedium"
-                    android:textSize="12sp"
-                    android:textColor="@color/textColorGrey"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginStart="20dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/afterFajrWithHour"/>
+                    <TextView
+                        android:id="@+id/azkarSabahTimeTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="05:30"
+                        android:textColor="@color/textColorGrey2"
+                        android:layout_marginStart="14dp"
+                        app:layout_constraintStart_toEndOf="@id/azkarClockImage"
+                        app:layout_constraintTop_toTopOf="@id/azkarClockImage"
+                        app:layout_constraintBottom_toBottomOf="@id/azkarClockImage"/>
 
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <ImageView
-                    android:id="@+id/afterFajrWithHourImageView"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginEnd="32dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/afterFajrWithHour"
-                    app:layout_constraintBottom_toBottomOf="@id/afterFajrWithHourAt"/>
-
-                <View
-                    android:id="@+id/viewSeparator2"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:background="@android:color/darker_gray"
-                    app:layout_constraintTop_toBottomOf="@id/afterFajrWithHourAt" />
-                <TextView
-                    android:id="@+id/afterFajrWithtwoHours"
+                    android:id="@+id/editAzkarSabahTimeImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/after_fajr_with_two_hours"
-                    android:textColor="@color/black"
-                    android:fontFamily="@font/tajawalmedium"
-                    android:textSize="16sp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginStart="20dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/viewSeparator2"/>
-
-
-                <TextView
-                    android:id="@+id/afterFajrWithtwoHoursAt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="After Fajr with half an hour At"
-                    android:fontFamily="@font/tajawalmedium"
-                    android:textSize="12sp"
-                    android:textColor="@color/textColorGrey"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginStart="20dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/afterFajrWithtwoHours"/>
-
-
-                <ImageView
-                    android:id="@+id/afterFajrWithtwoHoursImageView"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:layout_marginEnd="32dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/afterFajrWithtwoHours"
-                    app:layout_constraintBottom_toBottomOf="@id/afterFajrWithtwoHoursAt"/>
-
+                    android:background="@drawable/edit_azkar"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintBottom_toBottomOf="@id/azkarSabahConstraintTiming"
+                    app:layout_constraintTop_toTopOf="@id/azkarSabahConstraintTiming"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+               
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -278,18 +191,79 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+            <TextView
+                android:id="@+id/chooseTimeForAzkarMasaa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/choose_azkar_alarm_timing"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="33dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/azkarElMasaaConstraint"/>
+
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/azkarElMasaaConstraintDummy"
+                android:id="@+id/azkarMasaaConstraintTiming"
                 android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:layout_marginTop="40dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="16dp"
-                android:elevation="2dp"
-                android:background="@color/appWhiteTrans"
-                app:layout_constraintTop_toBottomOf="@id/azkarElMasaaConstraint">
+                android:paddingBottom="20dp"
+                android:elevation="8dp"
+                android:background="@drawable/view_background_white_rounded"
+                app:layout_constraintTop_toBottomOf="@id/chooseTimeForAzkarMasaa">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:background="@drawable/view_background_textview_grey_rounded"
+                    android:layout_marginStart="36dp"
+                    android:layout_marginEnd="60dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                    <ImageButton
+                        android:id="@+id/azkarMasaaClockImage"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:background="@drawable/ic_clock"
+                        android:layout_marginStart="12dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/azkarMasaaTimeTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="05:30"
+                        android:textColor="@color/textColorGrey2"
+                        android:layout_marginStart="14dp"
+                        app:layout_constraintStart_toEndOf="@id/azkarMasaaClockImage"
+                        app:layout_constraintTop_toTopOf="@id/azkarMasaaClockImage"
+                        app:layout_constraintBottom_toBottomOf="@id/azkarMasaaClockImage"/>
+
+              </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <ImageView
+                    android:id="@+id/editAzkarMasaaTimeImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edit_azkar"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintBottom_toBottomOf="@id/azkarMasaaConstraintTiming"
+                    app:layout_constraintTop_toTopOf="@id/azkarMasaaConstraintTiming"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/dummy"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/azkarMasaaConstraintTiming"/>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
     </FrameLayout>
