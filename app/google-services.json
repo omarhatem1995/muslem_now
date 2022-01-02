@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "237200207444",
+    "project_id": "muslem-now",
+    "storage_bucket": "muslem-now.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:237200207444:android:234b31b55609e04a9e47c1",
+        "android_client_info": {
+          "package_name": "com.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "237200207444-hus08b5c5g22b65r38eue04moksjacsv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCE5eP3YLvh7LWLhHla1Wdh0qsPy3Bydf0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "237200207444-hus08b5c5g22b65r38eue04moksjacsv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
