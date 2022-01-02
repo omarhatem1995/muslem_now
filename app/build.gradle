@@ -3,7 +3,10 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
+    id 'com.google.firebase.crashlytics'
     id "androidx.navigation.safeargs"
+    id 'com.google.gms.google-services'
+
 }
 
 android {
@@ -12,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId "com.myapplication"
-        minSdkVersion 23
+        minSdkVersion 26
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"
@@ -101,8 +104,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0"
 
-
-
+    implementation platform('com.google.firebase:firebase-bom:29.0.2')
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 
     dependencies {
         implementation "androidx.recyclerview:recyclerview:1.2.1"
