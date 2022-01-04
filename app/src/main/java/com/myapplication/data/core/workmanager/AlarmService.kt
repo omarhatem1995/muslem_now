@@ -77,44 +77,52 @@ class AlarmService : Service() {
         val channnelID: String = "MuslimChannel +${calendar.timeInMillis}"
         preference.preference.edit().putString("ChannelId",channnelID).apply()
         var sound: Uri? = null
-
+        var priority : Int
 
         val attributes = AudioAttributes.Builder()
             .setUsage(AudioAttributes.USAGE_NOTIFICATION)
             .build()
+        Log.d("getElMoazen", " is : ${ preference.preference.getBoolean(title,true)}" + " before if")
 
+        if (!preference.preference.getBoolean(title , true)) {
+            priority = NotificationCompat.PRIORITY_LOW
+            sound = null
+//                Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.elhosary)
+            Log.d("getElMoazen", " is : ${ preference.preference.getBoolean(title,false)}" + " if")
 
-
-
-
-
-
-        Log.d("getElMoazen", " is : " + preference.getMoazen().toString())
-
-        //preference.getAzanType().equals(Constants.FULL_AZAN) &&
-        Log.e(null, "createNotification: ${preference.getMoazen()}  ", )
-        if ( preference.getAzanType().equals(Constants.FULL_AZAN) &&preference.getMoazen()
-                .equals(Constants.AZANELHOSARY)
-        ) {
-            sound =
-                Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.elhosary)
-            //preference.getAzanType().equals(Constants.FULL_AZAN) &&
-        } else if (preference.getAzanType().equals(Constants.FULL_AZAN) &&preference.getMoazen()
-                .equals(Constants.AZANMESHARY)
-        ) {
-            sound =
-                Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.meshary)
-        } else if (preference.getAzanType().equals(Constants.TAKBIRAT_ONLY)) {
-
-            sound =
-                Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.azan)
-
+        }else if (title == "SunRise"){
+            priority = NotificationCompat.PRIORITY_LOW
+            sound = null
         } else {
-            Log.e(null, "createNotification: else", )
-            sound =
-                Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.elhosary)
-        }
 
+            priority = NotificationCompat.PRIORITY_HIGH
+            Log.d("getElMoazen", " is : ${ preference.preference.getBoolean(title,false)}" + " else")
+
+            //preference.getAzanType().equals(Constants.FULL_AZAN) &&
+            Log.e(null, "createNotification: ${preference.getMoazen()}  ",)
+            if (preference.getAzanType().equals(Constants.FULL_AZAN) && preference.getMoazen()
+                    .equals(Constants.AZANELHOSARY)
+            ) {
+                sound =
+                    Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.elhosary)
+                //preference.getAzanType().equals(Constants.FULL_AZAN) &&
+            } else if (preference.getAzanType()
+                    .equals(Constants.FULL_AZAN) && preference.getMoazen()
+                    .equals(Constants.AZANMESHARY)
+            ) {
+                sound =
+                    Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.meshary)
+            } else if (preference.getAzanType().equals(Constants.TAKBIRAT_ONLY)) {
+
+                sound =
+                    Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.azan)
+
+            } else {
+                Log.e(null, "createNotification: else",)
+                sound =
+                    Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.elhosary)
+            }
+        }
         val channel1 = NotificationChannel(
             channnelID,
             "AzanChannel",
@@ -160,7 +168,7 @@ class AlarmService : Service() {
             .setOngoing(false)
             .setAutoCancel(false)
             .setContentIntent(pendingIntent)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setPriority(priority)
             .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
 
         return builder.build()

@@ -62,12 +62,12 @@ class HomeViewModel (application: Application):AndroidViewModel(application) {
     fun getPrayerTimesForSpecificDate(date:String,applicationContext: Context) : LiveData<List<PrayerTimeModel>>{
         val db = MuslemNowDataBase.getDataBase(applicationContext)
 
-        val savePrayerDao = db.alAdahanDao()
+        val getPrayerDao = db.alAdahanDao()
 
             /*val alAdahan = savePrayerDao.addPrayerTimes(prayerTimesList)
             Log.d("PrayerTimes","alAdahan : "+ alAdahan)*/
 
-            val getAlAdahan : LiveData<List<PrayerTimeModel>> = savePrayerDao.getSpecificDayPrayerTimes(date).asLiveData(context = Dispatchers.IO)
+            val getAlAdahan : LiveData<List<PrayerTimeModel>> = getPrayerDao.getSpecificDayPrayerTimes(date).asLiveData(context = Dispatchers.IO)
             Log.d("getPrayerTimes","data " +  getAlAdahan.value)
 
         return getAlAdahan
