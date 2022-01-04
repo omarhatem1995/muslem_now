@@ -28,7 +28,7 @@ class MuslemApp : Application() {
 
 
     override fun onCreate() {
-        createNotificationChannels()
+       // createNotificationChannels()
         try {
             WorkManager.getInstance(applicationContext)
                 .enqueueUniquePeriodicWork(
@@ -55,8 +55,8 @@ class MuslemApp : Application() {
         .build()
 
     private val request = PeriodicWorkRequestBuilder<ElSalahWorker>(
-        1,
-        java.util.concurrent.TimeUnit.DAYS
+        6,
+        java.util.concurrent.TimeUnit.HOURS
     )
         .setConstraints(constraints)
         .setBackoffCriteria(

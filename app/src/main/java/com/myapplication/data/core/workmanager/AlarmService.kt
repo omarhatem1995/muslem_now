@@ -1,12 +1,12 @@
 package com.myapplication.data.core.workmanager
 
 
-import android.app.Notification
-import android.app.PendingIntent
-import android.app.Service
+import android.app.*
 import android.content.ContentResolver
 import android.content.Intent
+import android.media.AudioAttributes
 import android.net.Uri
+import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -15,6 +15,7 @@ import com.myapplication.R
 import com.myapplication.common.Constants
 import com.myapplication.data.entities.model.PrayerTimeModel
 import com.myapplication.data.repositories.SharedPreferencesRepository
+import java.util.*
 
 class AlarmService : Service() {
 
@@ -54,32 +55,80 @@ class AlarmService : Service() {
     //
     private fun createNotification(title: String): Notification {
         val app: MuslemApp = applicationContext as MuslemApp
+
         val preference = SharedPreferencesRepository(app)
-        var channnelID: String
+        val calendar: Calendar = Calendar.getInstance()
+        val manager = getSystemService(
+            NotificationManager::class.java
+        )
+
+
+        // Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.elhosary)
+        // Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.meshary)
+        // Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.azan)
+        //
+        //
+        val oldChannel = preference.preference.getString("ChannelId",null)
+        if (oldChannel != null)
+        {
+            manager.deleteNotificationChannel(oldChannel)
+        }
+
+        val channnelID: String = "MuslimChannel +${calendar.timeInMillis}"
+        preference.preference.edit().putString("ChannelId",channnelID).apply()
+        var sound: Uri? = null
+
+
+        val attributes = AudioAttributes.Builder()
+            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+            .build()
+
+
+
+
+
+
+
         Log.d("getElMoazen", " is : " + preference.getMoazen().toString())
-        val sound: Uri
-        if (preference.getAzanType().equals(Constants.FULL_AZAN) && preference.getMoazen()
+
+        //preference.getAzanType().equals(Constants.FULL_AZAN) &&
+        Log.e(null, "createNotification: ${preference.getMoazen()}  ", )
+        if ( preference.getAzanType().equals(Constants.FULL_AZAN) &&preference.getMoazen()
                 .equals(Constants.AZANELHOSARY)
         ) {
-            channnelID = MuslemApp.CHANNEL_FULL_AZAN_HOSARY
             sound =
                 Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.elhosary)
-        } else if (preference.getAzanType().equals(Constants.FULL_AZAN) && preference.getMoazen()
+            //preference.getAzanType().equals(Constants.FULL_AZAN) &&
+        } else if (preference.getAzanType().equals(Constants.FULL_AZAN) &&preference.getMoazen()
                 .equals(Constants.AZANMESHARY)
         ) {
-            channnelID = MuslemApp.CHANNEL_FULL_AZAN_MESHARY
             sound =
                 Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.meshary)
         } else if (preference.getAzanType().equals(Constants.TAKBIRAT_ONLY)) {
-            channnelID = MuslemApp.CHANNEL_TAKBIRAT_AZAN_HOSARY
+
             sound =
                 Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.azan)
 
         } else {
-            channnelID = MuslemApp.CHANNEL_FULL_AZAN_HOSARY
+            Log.e(null, "createNotification: else", )
             sound =
                 Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.elhosary)
         }
+
+        val channel1 = NotificationChannel(
+            channnelID,
+            "AzanChannel",
+            NotificationManager.IMPORTANCE_HIGH
+        )
+        channel1.description = "This is Azan Notification Channel"
+
+        channel1.setSound(
+            sound,
+            attributes
+        )
+
+        manager.createNotificationChannel(channel1)
+
         val pendingIntent: PendingIntent =
             Intent(this, MainActivity::class.java).let { notificationIntent ->
                 PendingIntent.getActivity(this, 0, notificationIntent, 0)
@@ -109,10 +158,9 @@ class AlarmService : Service() {
                 }
             )
             .setOngoing(false)
-            .setAutoCancel(true)
+            .setAutoCancel(false)
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setSound(sound)
             .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
 
         return builder.build()

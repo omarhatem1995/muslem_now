@@ -69,7 +69,7 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
 
         val intent = Intent(applicationContext, MyNotificationPublisher::class.java)
         intent.action = "Off"
-        val intent2 = Intent(applicationContext, MyNotificationPublisher::class.java)
+        val intent2 = Intent(applicationContext, AlarmService::class.java)
         intent2.action = "Trigger"
         //setting up a pending intent
 
@@ -105,7 +105,10 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
                     //FLAG_UPDATE_CURRENT
                     val alarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(applicationContext, prayerTime.prayerId, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
 
-                    val goOffPendingIntent = PendingIntent.getBroadcast(applicationContext, prayerTime.prayerId, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+                    var goOffPendingIntent = PendingIntent.getService(applicationContext, prayerTime.prayerId, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        goOffPendingIntent = PendingIntent.getForegroundService(applicationContext, prayerTime.prayerId, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+                    }
                     val alarmInfo = AlarmManager.AlarmClockInfo(calendar.timeInMillis,alarmPendingIntent )
                     if (hasPermission == true)
                     {
