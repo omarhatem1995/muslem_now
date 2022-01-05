@@ -1,6 +1,7 @@
 package com.myapplication.ui.azkar
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Parcelable
@@ -11,6 +12,8 @@ import org.json.JSONArray
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import com.myapplication.MainActivity
+import com.myapplication.QiblahActivity
 import com.myapplication.common.Constants
 import com.myapplication.data.entities.model.AzkarModel
 import com.myapplication.databinding.ActivityZekrBinding
@@ -30,6 +33,9 @@ class AzkarActivity : AppCompatActivity() {
     lateinit var binding: ActivityZekrBinding
     private val viewModel: AzkarViewModel by viewModels()
     lateinit var recyclerViewState: Parcelable
+    lateinit var localTime: String
+    val cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+1:00"))
+    val updateAzkarModel = arrayListOf<AzkarModel>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,61 +47,18 @@ class AzkarActivity : AppCompatActivity() {
         zekrCategory = findViewById<TextView>(R.id.azkarCategory)
         recyclerViewState = binding.azkarRecyclerViewList.layoutManager?.onSaveInstanceState()!!
         loadJSONFromAsset()
-/*        viewModel.update(AzkarModel(1,"asdasd","asdasd","sdlsd",
-        2,3,"sdsd","21-12-2021"))*/
     }
 
-    fun fileExists(context: Context, filename: String?): Boolean {
-        val file = context.getFileStreamPath(filename)
-        return if (file == null || !file.exists()) {
-            Log.d("filesasdlkasd", " doesnt exists")
-            false
-        } else {
-            Log.d("filesasdlkasd", " exists")
-            true
+    override fun onBackPressed() {
+        super.onBackPressed()
+        if(isTaskRoot) {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
         }
     }
 
-    fun readInput(id: Int): String {
-        var ret = ""
-        if (fileExists(this, "savedAzkar.json")) {
-
-            try {
-                val inputStream: InputStream = this.openFileInput("savedAzkar.json")
-                if (inputStream != null) {
-                    val inputStreamReader = InputStreamReader(inputStream)
-                    val bufferedReader = BufferedReader(inputStreamReader)
-                    var receiveString: String? = ""
-                    val stringBuilder = StringBuilder()
-                    while (bufferedReader.readLine().also { receiveString = it } != null) {
-                        stringBuilder.append("\n").append(receiveString)
-                        Log.d("foundLoasdkasd", "found: " + receiveString)
-                        val obj = JSONObject(receiveString)
-                        if (id == obj.getString("id").toInt()) {
-                            ret = obj.getString("counter")
-                        } else {
-                            ret = "300"
-                        }
-                        Log.d("foundLoasdkasd", "found: " + obj.getString("id"))
-                        Log.d("foundLoasdkasd", "found: " + obj.getString("counter"))
-                    }
-
-                    inputStream.close()
-//                ret = stringBuilder.toString()
-                }
-            } catch (e: FileNotFoundException) {
-                Log.e("login activity", "File not found: " + e.toString())
-            } catch (e: IOException) {
-                Log.e("login activity", "Can not read file: $e")
-            }
-        }
-        return ret
-    }
-
-    lateinit var localTime: String
-    val cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+1:00"))
-    var flagPress = true
-    val updateAzkarModel = arrayListOf<AzkarModel>()
     fun loadJSONFromAsset() {
         val georgianDateFormatForInsertion: DateFormat =
             SimpleDateFormat("dd-MM-yyyy", Locale("en"))
