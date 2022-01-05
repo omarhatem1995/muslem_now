@@ -77,7 +77,7 @@ class AzkarSettingsFragment : Fragment() {
                 timeSetListener,
                 cal.get(Calendar.HOUR_OF_DAY),
                 cal.get(Calendar.MINUTE),
-                true
+                false
             ).show()
         }
         binding.editAzkarMasaaTimeImage.setOnClickListener {
@@ -99,7 +99,7 @@ class AzkarSettingsFragment : Fragment() {
                 timeSetListener,
                 cal.get(Calendar.HOUR_OF_DAY),
                 cal.get(Calendar.MINUTE),
-                true
+                false
             ).show()
         }
     }
