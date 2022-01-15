@@ -493,7 +493,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                         )
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        initQiblaDirection(it.latitude, it.longitude)
+//                        initQiblaDirection(it.latitude, it.longitude)
                         initPrayerTimes(it.latitude, it.longitude)
                     }
                 }
@@ -547,7 +547,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
 //                    fusedLocationClient.removeLocationUpdates(locationCallback);
 
 
-                    initQiblaDirection(latitude, longitude)
+//                    initQiblaDirection(latitude, longitude)
                     binding.deviceCurrentLocation.text =
                         getAndSetCurrentCityFromLatLon(latitude.toString(), longitude.toString())
                 }

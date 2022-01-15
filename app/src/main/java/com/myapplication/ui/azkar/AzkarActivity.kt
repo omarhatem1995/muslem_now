@@ -96,8 +96,9 @@ class AzkarActivity : AppCompatActivity() {
             }
         } else {
             if (name != null) {
-                viewModel.getSpecificDayAzkar(name).observe(this, { it ->
-                    if (!it.isNullOrEmpty()) {
+                viewModel.getSpecificDayAzkar(name)
+                    viewModel.viewStateAzkar.observe(this, {
+                        if (it != null) {
                         val adapter = AzkarListAdapter { type, data ->
                             when (type) {
                                 Constants.INCREASEADAPTER -> {

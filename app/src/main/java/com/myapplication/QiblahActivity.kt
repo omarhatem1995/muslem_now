@@ -24,6 +24,11 @@ import com.myapplication.databinding.ActivityQiblahBinding
 import com.myapplication.ui.fragments.home.HomeFragment
 import com.myapplication.ui.fragments.home.HomeViewModel
 import kotlin.math.roundToInt
+import android.hardware.SensorManager
+import android.hardware.SensorEventListener
+
+
+
 
 
 class QiblahActivity : AppCompatActivity() {
@@ -43,7 +48,8 @@ class QiblahActivity : AppCompatActivity() {
     var currentDegree: Float = 0f
     var currentNeedleDegree: Float = 0f
 
-    lateinit var sensorManager: SensorManager
+//    var sensorManager: SensorManager
+    lateinit var sensorManager : SensorManager
     lateinit var sensor: Sensor
     lateinit var userLocation: Location
     lateinit var qiblahDirectionImageView: ImageView
@@ -53,7 +59,7 @@ class QiblahActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_qiblah)
         binding.homeViewmodel = qiblahViewModel
-
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         qiblahDirectionImageView = findViewById<ImageView>(R.id.qiblahDirectionImageView)
         needleAnimation = RotateAnimation(
             currentNeedleDegree,
@@ -63,8 +69,19 @@ class QiblahActivity : AppCompatActivity() {
             Animation.RELATIVE_TO_SELF,
             .5f
         )
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
 
         initLocationPermissions()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        sensorManager.registerListener(
+            this as SensorEventListener,
+            sensor,
+            SensorManager.SENSOR_DELAY_NORMAL
+        )
+
     }
 
     override fun onRequestPermissionsResult(
@@ -147,8 +164,7 @@ class QiblahActivity : AppCompatActivity() {
 
         userLocation.latitude = latitude
         userLocation.longitude = longitude
-        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
+
         sensorManager.registerListener(object : SensorEventListener {
             override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
 
