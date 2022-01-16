@@ -39,29 +39,29 @@ class MyNotificationPublisher : BroadcastReceiver() {
 //            ExistingWorkPolicy.KEEP,
 //            WorkRequest
 //        )
-        Log.e(null, "onReceive1: ${intent.action} ", )
-        if (intent.action == "Trigger") {
-
-            Log.e(null, "onReceive2: triggered ", )
-            val workManager = WorkManager.getInstance(context)
-            val intentData = intent.getBundleExtra("prayerObject")?.get("prayerTime")
-            var name: String = ""
-            if (intentData is PrayerTimeModel) {
-                name = intentData.name
-            }
-
-            val WorkRequest = NotificationWorker.buildWorkRequest(name)
-            workManager.enqueueUniqueWork(
-                NotificationWorker.UNIQUE_WORK_NAME,
-                ExistingWorkPolicy.KEEP,
-                WorkRequest
-            )
-        } else if (intent.action == "Off") {
-            Log.e(null, "onReceive2: off ", )
-        }else if(intent.action == "Azkar"){
-            Log.e("ThisiSOnCRecieve", "onReceive2: off ", )
-
-        }
+//        Log.e(null, "onReceive1: ${intent.action} ", )
+//        if (intent.action == "Trigger") {
+//
+//            Log.e(null, "onReceive2: triggered ", )
+//            val workManager = WorkManager.getInstance(context)
+//            val intentData = intent.getBundleExtra("prayerObject")?.get("prayerTime")
+//            var name: String = ""
+//            if (intentData is PrayerTimeModel) {
+//                name = intentData.name
+//            }
+//
+//            val WorkRequest = NotificationWorker.buildWorkRequest(name)
+//            workManager.enqueueUniqueWork(
+//                NotificationWorker.UNIQUE_WORK_NAME,
+//                ExistingWorkPolicy.KEEP,
+//                WorkRequest
+//            )
+//        } else if (intent.action == "Off") {
+//            Log.e(null, "onReceive2: off ", )
+//        }else if(intent.action == "Azkar"){
+//            Log.e("ThisiSOnCRecieve", "onReceive2: off ", )
+//
+//        }
 //        val notification: Notification = intent.getParcelableExtra(NOTIFICATION)!!
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //            val importance = NotificationManager.IMPORTANCE_HIGH

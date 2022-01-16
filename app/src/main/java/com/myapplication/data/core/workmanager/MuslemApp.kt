@@ -55,7 +55,7 @@ class MuslemApp : Application() {
         .build()
 
     private val request = PeriodicWorkRequestBuilder<ElSalahWorker>(
-        6,
+        3,
         java.util.concurrent.TimeUnit.HOURS
     )
         .setConstraints(constraints)

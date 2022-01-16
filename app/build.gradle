@@ -103,6 +103,7 @@ dependencies {
     implementation 'com.vmadalin:easypermissions-ktx:1.0.0'
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.4.0"
+    implementation("androidx.lifecycle:lifecycle-service:2.4.0")
 
     implementation platform('com.google.firebase:firebase-bom:29.0.2')
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
