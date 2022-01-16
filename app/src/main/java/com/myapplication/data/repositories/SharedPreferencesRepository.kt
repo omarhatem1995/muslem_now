@@ -91,44 +91,44 @@ class SharedPreferencesRepository(application: Application) {
 
     fun setFajr(isFajr:Boolean?) = isFajr?.let {
         preference.edit()
-        .putBoolean("fajr", it).apply()
+        .putBoolean("Fajr", it).apply()
     }
 
-    fun getFajr() = preference.getBoolean("fajr", true)
+    fun getFajr() = preference.getBoolean("Fajr", true)
 
     fun setDuhr(isDuhr:Boolean?) = isDuhr?.let {
         preference.edit()
-        .putBoolean("duhr", it).apply()
+        .putBoolean("Dhur", it).apply()
     }
 
-    fun getDuhr() = preference.getBoolean("duhr", true)
+    fun getDuhr() = preference.getBoolean("Dhur", true)
 
     fun setSunRise(isSunRise:Boolean?) = isSunRise?.let {
         preference.edit()
-        .putBoolean("sunrise", it).apply()
+        .putBoolean("SunRise", it).apply()
     }
 
-    fun getSunRise() = preference.getBoolean("sunrise", true)
+    fun getSunRise() = preference.getBoolean("SunRise", true)
 
     fun setAsr(isAsr:Boolean?) = isAsr?.let {
         preference.edit()
-        .putBoolean("asr", it).apply()
+        .putBoolean("Asr", it).apply()
     }
 
-    fun getAsr() = preference.getBoolean("asr", true)
+    fun getAsr() = preference.getBoolean("Asr", true)
 
     fun setMaghrib(isMaghrib:Boolean?) = isMaghrib?.let {
         preference.edit()
-        .putBoolean("maghrib", it).apply()
+        .putBoolean("Maghrib", it).apply()
     }
 
-    fun getMaghrib() = preference.getBoolean("maghrib", true)
+    fun getMaghrib() = preference.getBoolean("Maghrib", true)
 
     fun setIsha(isIsha:Boolean?) = isIsha?.let {
         preference.edit()
-        .putBoolean("isha", it).apply()
+        .putBoolean("Isha", it).apply()
     }
 
-    fun getIsha() = preference.getBoolean("isha", true)
+    fun getIsha() = preference.getBoolean("Isha", true)
 
 }

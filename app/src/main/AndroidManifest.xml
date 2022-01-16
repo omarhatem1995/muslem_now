@@ -70,6 +70,10 @@
             android:exported="false"
             android:launchMode = "singleTop"/>
         <activity
+            android:name=".ui.QiblahActivityNewLogic"
+            android:exported="false"
+            android:launchMode = "singleTop"/>
+        <activity
             android:name=".ui.settings.SettingsInAppActivity"
             android:exported="false"
             android:theme="@style/AppFullScreenTheme"

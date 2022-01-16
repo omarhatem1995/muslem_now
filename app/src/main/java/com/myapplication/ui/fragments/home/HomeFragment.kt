@@ -135,6 +135,11 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
         )
 
         binding.lifecycleOwner = this
+        initViews()
+        return binding.root
+    }
+
+    fun initViews(){
         userLocation = Location("User Location")
         arrayList.add(0, vm.preference.getFajr())
         arrayList.add(1, vm.preference.getDuhr())
@@ -144,14 +149,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
         arrayList.add(5, vm.preference.getIsha())
         getUserLocation()
         getDateAndTime()
-
-        Log.d(
-            "setAzkaray7aga", " " + vm.preference.getAzkarAfterAzan() + " , "
-                    + vm.preference.getAzkarSabah() + " , " + vm.preference.getAzkarMasaa()
-        )
-
-        getNotification("10 second delay")?.let { scheduleNotification(it, 10000) };
-
         binding.ivQiblaDirection.setOnClickListener {
             val intent = Intent(context, QiblahActivity::class.java)
             context?.startActivity(intent)
@@ -160,18 +157,10 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
         binding.sideMenu.setOnClickListener {
             val sideMenuFragment = SideMenuFragment()
             addFragmentOnlyOnce(parentFragmentManager, sideMenuFragment, "BLANK")
-            /* val transaction = this.parentFragmentManager.beginTransaction()
-             transaction.setCustomAnimations(
-                 R.anim.fragment_sidemenu_enter_animation,
-                 R.anim.fragment_sidemenu_exit_animation, R.anim.fragment_sidemenu_enter_animation,
-                 R.anim.fragment_sidemenu_exit_animation
-             )
-             transaction.addToBackStack(null)
-             transaction.add(R.id.frameLayoutSideMenu, sideMenuFragment, "BLANK").commit()
-         */
+
         }
         progressDialog = context?.let { Dialog(it) }!!
-        return binding.root
+
     }
 
     fun addFragmentOnlyOnce(fragmentManager: FragmentManager, fragment: Fragment?, tag: String?) {
@@ -223,7 +212,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
         binding.dateGeorgian.text = georgianFullDateFormat.format(cal.time).toString()
 
     }
-
+/*
     private fun scheduleNotification(notification: Notification, delay: Int) {
         val notificationIntent = Intent(context, MyNotificationPublisher::class.java)
         notificationIntent.putExtra(MyNotificationPublisher.NOTIFICATION_ID, 1)
@@ -248,7 +237,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
         builder?.setAutoCancel(true)
         builder?.setChannelId(NOTIFICATION_CHANNEL_ID)
         return builder?.build()
-    }
+    }*/
 
     private fun getTimeOnlyForPrayer(input: String): String {
         var firstFiveChars = ""
@@ -504,7 +493,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                         )
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        initQiblaDirection(it.latitude, it.longitude)
+//                        initQiblaDirection(it.latitude, it.longitude)
                         initPrayerTimes(it.latitude, it.longitude)
                     }
                 }
@@ -558,7 +547,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
 //                    fusedLocationClient.removeLocationUpdates(locationCallback);
 
 
-                    initQiblaDirection(latitude, longitude)
+//                    initQiblaDirection(latitude, longitude)
                     binding.deviceCurrentLocation.text =
                         getAndSetCurrentCityFromLatLon(latitude.toString(), longitude.toString())
                 }

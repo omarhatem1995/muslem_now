@@ -26,4 +26,7 @@ interface AlAzkarDao {
 
     @Query("SELECT * FROM Azkar WHERE category = :category")
     fun getSpecificDayAzkar(category:String ): LiveData<List<AzkarModel>>
+
+    @Query("SELECT * FROM Azkar WHERE category = :category")
+    fun getSpecificDayAzkar2(category:String ): List<AzkarModel>
 }

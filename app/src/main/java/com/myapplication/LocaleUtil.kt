@@ -103,8 +103,8 @@ class LocaleUtil {
             var hours = input.substring(0, 2)
             var minutes = input.substring(2, 5)
             var hoursInt = hours.toInt()
-
-            return if (hoursInt < 12) {
+            Log.d("getTimeAMandPM" , " is $hoursInt")
+            return if (hoursInt <= 12) {
                 hours = String.format("%02d", hoursInt)
                 "$hours$minutes " + context.getString(R.string.am)
             } else {

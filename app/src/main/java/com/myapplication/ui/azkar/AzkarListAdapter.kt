@@ -115,6 +115,16 @@ class AzkarListAdapter (
             counterPressed = 0
             onClick.invoke(Constants.RESETADAPTER,newItem)
         }
+        binding.azkarReloadTextView.setOnClickListener {
+            var newItem = item
+            newItem.userPressedCount = 0
+            counter = item.count
+            binding.azkarCircle.setImageResource(R.drawable.azkar_circle)
+            binding.azkarCount.visibility = View.VISIBLE
+            binding.azkarCount.text = item.count.toString()
+            counterPressed = 0
+            onClick.invoke(Constants.RESETADAPTER,newItem)
+        }
         binding.azkarShareImageView.setOnClickListener {
             val sendIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
