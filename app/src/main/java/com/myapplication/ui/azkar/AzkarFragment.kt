@@ -6,10 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.myapplication.LocaleUtil
 import com.myapplication.R
+import com.myapplication.databinding.FragmentAzkarBinding
+import com.myapplication.databinding.FragmentHomeBinding
+import com.myapplication.ui.fragments.home.HomeViewModel
 import org.json.JSONArray
 import java.io.IOException
 import java.io.InputStream
@@ -22,8 +27,9 @@ import java.io.InputStream
 
 class AzkarFragment : Fragment() {
 
-    lateinit var layoutManager: LinearLayoutManager
     lateinit var recyclerViewAzkar : RecyclerView
+    private val vm: AzkarViewModel by viewModels()
+    lateinit var binding: FragmentAzkarBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,14 +40,21 @@ class AzkarFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        context?.let { LocaleUtil.applyLocalizedContext(it,"ar") }
-        var view : View = inflater.inflate(R.layout.fragment_azkar, container, false)
-        recyclerViewAzkar = view.findViewById<RecyclerView>(R.id.azkar_recyclerview)
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_azkar, container, false
+        )
+        binding.azkarFragment = vm
 
-        layoutManager  = LinearLayoutManager(requireContext())
+     /*   vm.preference.getLanguage()?.let { context?.let { it1 ->
+            LocaleUtil.applyLocalizedContext(
+                it1,
+                it
+            )
+        } }*/
+
         loadJSONFromAsset()
-
-        return view
+        return binding.root
     }
 
     fun loadJSONFromAsset() {
@@ -56,9 +69,8 @@ class AzkarFragment : Fragment() {
             for (i in 0..jsonArray.length()-1) {
                 var jsonObj = jsonArray.getString(i)
                 strings.add(jsonObj)
-                recyclerViewAzkar.adapter = AzkarAdapter(requireContext(),strings)
+                binding.azkarRecyclerview.adapter = AzkarAdapter(requireContext(),strings)
             }
-            recyclerViewAzkar.layoutManager =layoutManager
         } catch (ex: IOException) {
             ex.printStackTrace()
             Log.d("jsonText", "error " + ex.message)

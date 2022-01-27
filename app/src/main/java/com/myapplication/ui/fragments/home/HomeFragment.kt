@@ -56,6 +56,10 @@ import androidx.core.app.NotificationCompat
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.bumptech.glide.Glide
+import com.myapplication.LocaleUtil.Companion.applyLocalizedContext
+import com.myapplication.LocaleUtil.Companion.initSensorManager
+import com.myapplication.LocaleUtil.Companion.sensor
+import com.myapplication.LocaleUtil.Companion.sensorManager
 import com.myapplication.MyNotificationPublisher
 import com.myapplication.QiblahActivity
 import com.myapplication.R
@@ -84,12 +88,12 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
 
-    lateinit var sensorManager: SensorManager
-    lateinit var sensor: Sensor
+/*    lateinit var sensorManager: SensorManager
+    lateinit var sensor: Sensor*/
     lateinit var userLocation: Location
     lateinit var tvHeading: TextView
     lateinit var needleAnimation: RotateAnimation
-    lateinit var fusedLocationClient: FusedLocationProviderClient
+    var fusedLocationClient: FusedLocationProviderClient? = null
     lateinit var linearLayoutManager: LinearLayoutManager
     lateinit var currentTime: TextView
     lateinit var localTime: String
@@ -115,7 +119,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        vm.preference.getLanguage()?.let { context?.let { it1 -> applyLocalizedContext(it1, it) } }
         var view: View = inflater.inflate(R.layout.fragment_home, container, false)
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
@@ -123,6 +127,8 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
             R.layout.fragment_home, container, false
         )
         binding.homeViewmodel = vm
+//        vm.preference.getLanguage()?.let { context?.let { it1 -> applyLocalizedContext(it1, it) } }
+
         tvHeading = view.findViewById<TextView>(R.id.tvHeading)
         currentTime = view.findViewById<TextView>(R.id.date_georgian)
         needleAnimation = RotateAnimation(
@@ -254,8 +260,8 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
     override fun renderParentTimings(data: List<Datum>) {
         var flagFoundPrayerId = false
 
-        val currentHourDateFormat: DateFormat = SimpleDateFormat("HH:mm")
-        val dateFormatForChecking: DateFormat = SimpleDateFormat("HH:mm dd-MM-yyyy")
+        val currentHourDateFormat: DateFormat = SimpleDateFormat("HH:mm",Locale("en"))
+        val dateFormatForChecking: DateFormat = SimpleDateFormat("HH:mm dd-MM-yyyy",Locale("en"))
         val currentHour = currentHourDateFormat.format(cal.time)
         val currentDateForChecking = dateFormatForChecking.format(cal.time)
 
@@ -353,13 +359,16 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
 
 
                         binding.prayerTimesList.adapter =
-                            PrayerAdapter(
-                                requireContext(),
-                                prayerList,
-                                nextPrayerIs,
-                                this,
-                                arrayList
-                            )
+                            vm.preference.getLanguage()?.let {
+                                PrayerAdapter(
+                                    requireContext(),
+                                    prayerList,
+                                    nextPrayerIs,
+                                    this,
+                                    arrayList,
+                                    it
+                                )
+                            }
                     }
                 }
                 if (!flagFoundPrayerId) {
@@ -382,13 +391,16 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                                 counterForNextPrayer(remainingTimeForNextPrayer)
                                 Log.d("remainingTime", remainingTimeForNextPrayer)
                                 binding.prayerTimesList.adapter =
-                                    PrayerAdapter(
-                                        requireContext(),
-                                        prayerList,
-                                        nextPrayerIs,
-                                        this,
-                                        arrayList
-                                    )
+                                    vm.preference.getLanguage()?.let {
+                                        PrayerAdapter(
+                                            requireContext(),
+                                            prayerList,
+                                            nextPrayerIs,
+                                            this,
+                                            arrayList,
+                                            it
+                                        )
+                                    }
                             }
                         })
                 }
@@ -454,48 +466,40 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
             )
         } else
             progressDialog.dismiss()
-        Log.d("renderData", "data $show")
     }
 
     override fun renderNetworkFailure() {
         Log.d("renderData", "data")
+        apiCall = false
+        initLocationListener()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission")
     private fun initLocationListener() {
-        if (!fusedLocationClient.lastLocation.equals(null)) {
+//        if (!fusedLocationClient?.lastLocation?.equals(null)) {
 
             fusedLocationClient =
-                activity?.let { LocationServices.getFusedLocationProviderClient(it) }!!
+                activity?.let { LocationServices.getFusedLocationProviderClient(it) }
             fusedLocationClient?.lastLocation?.addOnSuccessListener {
-                if (it == null) {
-                    val getCity = vm.getCityFromPreferences()
-                    if (getCity == null)
-                        getUserLocation()
-                    else
-                        initPrayerTimes(it.latitude, it.longitude)
+
+                if (getAndSetCurrentCityFromLatLon(
+                        it.latitude.toString(),
+                        it.longitude.toString()
+                    ) == "Not Found"
+                ) {
+
+                    binding.deviceCurrentLocation.text =
+                        getString(R.string.couldnt_find_your_address)
                 } else {
-
-                    if (getAndSetCurrentCityFromLatLon(
-                            it.latitude.toString(),
-                            it.longitude.toString()
-                        )
-                            .equals("Not Found")
-                    ) {
-
-                        binding.deviceCurrentLocation.text =
-                            getString(R.string.couldnt_find_your_address)
-                    } else {
-                        binding.deviceCurrentLocation.text = getAndSetCurrentCityFromLatLon(
-                            it.latitude.toString(),
-                            it.longitude.toString()
-                        )
-                    }
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                        initQiblaDirection(it.latitude, it.longitude)
-                        initPrayerTimes(it.latitude, it.longitude)
-                    }
+                    binding.deviceCurrentLocation.text = getAndSetCurrentCityFromLatLon(
+                        it.latitude.toString(),
+                        it.longitude.toString()
+                    )
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        initQiblaDirection(it.latitude, it.longitude)
+                    initPrayerTimes(it.latitude, it.longitude)
                 }
             }
             fusedLocationClient?.lastLocation?.addOnFailureListener {
@@ -503,7 +507,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                     .show()
             }
 
-        }
+//        }
 
     }
 
@@ -536,18 +540,20 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                             }
                             is AlAdahanViewState.NetworkFailure -> {
                                 renderNetworkFailure()
+                                renderLoading(false)
                             }
                             is AlAdahanViewState.Data -> {
                                 renderParentTimings(viewState.data)
                                 apiCall = true
                                 renderLoading(false)
                             }
+                            else -> renderLoading(false)
                         }
                     })
 //                    fusedLocationClient.removeLocationUpdates(locationCallback);
 
 
-//                    initQiblaDirection(latitude, longitude)
+                    initQiblaDirection(latitude, longitude)
                     binding.deviceCurrentLocation.text =
                         getAndSetCurrentCityFromLatLon(latitude.toString(), longitude.toString())
                 }
@@ -559,9 +565,9 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
     private fun getPrayerTimesFromDatabase(prayer: List<PrayerTimeModel>) {
         binding.dateHijri.text =
             prayer[0].hijriDate
-        val currentHourDateFormat: DateFormat = SimpleDateFormat("HH:mm")
+        val currentHourDateFormat: DateFormat = SimpleDateFormat("HH:mm",Locale("en"))
         val currentHour = currentHourDateFormat.format(cal.time)
-        val dateFormatForChecking: DateFormat = SimpleDateFormat("HH:mm dd-MM-yyyy")
+        val dateFormatForChecking: DateFormat = SimpleDateFormat("HH:mm dd-MM-yyyy",Locale("en"))
         val currentDateForChecking = dateFormatForChecking.format(cal.time)
         nextPrayerIs = nextPrayer(prayer.toMutableList(), currentHour)
         if (nextPrayerIs != 300) {
@@ -578,7 +584,11 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
             counterForNextPrayer(remainingTimeForNextPrayer)
 
             binding.prayerTimesList.adapter =
-                PrayerAdapter(requireContext(), prayer, nextPrayerIs, this, arrayList)
+                vm.preference.getLanguage()?.let {
+                    PrayerAdapter(requireContext(), prayer, nextPrayerIs, this, arrayList ,
+                        it
+                    )
+                }
 
         } else if (context != null) {
             vm.getPrayerTimesForSpecificDate(nextDay, requireContext())
@@ -598,7 +608,11 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                         counterForNextPrayer(remainingTimeForNextPrayer)
                         Log.d("remainingTime 3", remainingTimeForNextPrayer)
                         binding.prayerTimesList.adapter =
-                            PrayerAdapter(requireContext(), prayer, nextPrayerIs, this, arrayList)
+                            vm.preference.getLanguage()?.let {
+                                PrayerAdapter(requireContext(), prayer, nextPrayerIs, this, arrayList,
+                                    it
+                                )
+                            }
                     }
                 })
         }
@@ -618,6 +632,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                 ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
                 Log.d("currentLat", " $latitude , $addresses")
 
+
                 if (!addresses.isNullOrEmpty()) {
                     val address: String =
                         addresses[0].getAddressLine(0) // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
@@ -626,6 +641,9 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                         city = addresses[0].getLocality()
                     val country: String = addresses[0].getCountryName()
                     val currentCity = "$country, $city"
+                    if(currentCity != vm.preference.getCity())
+                        apiCall = true
+
                     vm.preference.setCity(currentCity)
 
                     return currentCity
@@ -651,11 +669,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
         locationRequest.smallestDisplacement = 170f // 170 m = 0.1 mile
         locationRequest.priority =
             LocationRequest.PRIORITY_HIGH_ACCURACY //set according to your app function
-        /*      fusedLocationClient.requestLocationUpdates(locationRequest,
-                  locationCallback,
-                  Looper.getMainLooper())*/
 
-//        Log.d("asdasdasd" ,"is called" + fusedLocationClient.lastLocation.toString())
         locationCallback = object : LocationCallback() {
             @SuppressLint("MissingPermission")
             @RequiresApi(Build.VERSION_CODES.O)
@@ -668,24 +682,21 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
 //                        initPrayerTimes(location.latitude,location.longitude)
                     } else {
 
-                        fusedLocationClient.requestLocationUpdates(
+                        fusedLocationClient?.requestLocationUpdates(
                             locationRequest,
                             locationCallback,
                             Looper.getMainLooper()
                         )
 
-                        Log.d("asdasdasd", fusedLocationClient.lastLocation.toString())
-
                     }
                 } else {
 
-                    fusedLocationClient.requestLocationUpdates(
+                    fusedLocationClient?.requestLocationUpdates(
                         locationRequest,
                         locationCallback,
                         Looper.getMainLooper()
                     )
 
-                    Log.d("asdasdasd", fusedLocationClient.lastLocation.toString())
 
                 }
             }
@@ -701,9 +712,11 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
         userLocation.longitude = longitude
         Log.d("getLatitude", " : " + latitude + " , " + longitude)
         if (context != null) {
-            sensorManager =
+
+            initSensorManager(context!!)
+ /*           sensorManager =
                 requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
-            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)*/
             sensorManager.registerListener(object : SensorEventListener {
                 override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
 
@@ -821,9 +834,9 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
 
                     }
                 }
-                fusedLocationClient.requestLocationUpdates(
+                fusedLocationClient?.requestLocationUpdates(
                     locationRequest,
-                    locationCallback!!,
+                    locationCallback,
                     Looper.getMainLooper()
                 )
             } else {

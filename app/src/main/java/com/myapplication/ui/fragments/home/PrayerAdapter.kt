@@ -15,13 +15,14 @@ import androidx.core.graphics.drawable.DrawableCompat
 
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
+import com.myapplication.LocaleUtil.Companion.convertToArabic
 import com.myapplication.LocaleUtil.Companion.getNameOfPrayer
 import com.myapplication.LocaleUtil.Companion.getTimeAMandPM
 import com.myapplication.LocaleUtil.Companion.setDrawable
 
 
 class PrayerAdapter(mContext: Context, dataItem: List<PrayerTimeModel?>?, nextPrayerIs: Int ,prayerSoundClickListener: PrayerSoundClickListener,
-list: MutableList<Boolean>) :
+list: MutableList<Boolean> , language:String) :
     RecyclerView.Adapter<PrayerAdapter.PrayerViewHolder>() {
 
     var mContext: Context = mContext
@@ -29,6 +30,7 @@ list: MutableList<Boolean>) :
     var nextPrayerIs = nextPrayerIs
     var prayerSoundClickListener = prayerSoundClickListener
     var list = list
+    var language = language
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PrayerViewHolder {
         val v: View
@@ -184,9 +186,11 @@ list: MutableList<Boolean>) :
             }
         }
 
-        if (prayerItem?.time != null)
-            holder.timePrayer.text = getTimeAMandPM(prayerItem?.time, mContext)
-
+        if (prayerItem?.time != null) {
+            holder.timePrayer.text =
+                convertToArabic(prayerItem?.time,language)?.let { getTimeAMandPM(it, mContext) }
+            Log.d("asdlsakdasdww" , getTimeAMandPM(prayerItem?.time, mContext).toString())
+        }
         if (prayerItem?.prayerId != null)
             holder.namePrayer.text = getNameOfPrayer(mContext, prayerItem?.prayerId)
     }

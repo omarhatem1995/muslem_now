@@ -46,20 +46,12 @@ class PrayerTimesWidget : AppWidgetProvider() {
         )
         val timeDiffInMillis: Long = totalTime - System.currentTimeMillis()
 
-        Log.d("setAlramManager", " is called $alarmMgr")
-
         val alarmUp = PendingIntent.getBroadcast(
             context, 0,
             Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE),
             PendingIntent.FLAG_NO_CREATE
         ) != null
 
-        if (alarmUp) {
-            Log.d("myTag", "Alarm is already active $timeDiffInMillis")
-        } else {
-            Log.d("myTag", "Alarm is already Not Active $timeDiffInMillis")
-
-        }
     }
 
     override fun onDisabled(context: Context?) {
@@ -75,12 +67,9 @@ class PrayerTimesWidget : AppWidgetProvider() {
     override fun onReceive(context: Context?, intent: Intent?) {
         RemoteViews(context!!.packageName, R.layout.prayer_times_widget).also {
         }
-
-        Log.d("laksdlsakdlasd", "getWidget ID $intent")
         super.onReceive(context, intent)
         if (intent!!.action != null) {
             val extras = intent!!.extras
-            Log.d("laksdlsakdlasd", "getWidget ID ")
             if (extras != null) {
                 super.onReceive(context, intent)
                 val widgetId = extras.getInt(
@@ -92,14 +81,8 @@ class PrayerTimesWidget : AppWidgetProvider() {
                 val viewsPrayer = RemoteViews(context.packageName, R.layout.prayer_times_widget)
                 var currentDayHijri = " "
 
-                // do something for the widget that has appWidgetId = widgetId
-                Log.d("laksdlsakdlasd", "getWidget ID Prayer" + widgetId.toString() + "$widgetsId")
                 if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(intent.getAction())) {
                     // do something useful here
-                    Log.d(
-                        "laksdlsakdlasd22",
-                        "getWidget ID Prayer" + widgetId.toString() + "$widgetsId"
-                    )
                     val cal = Calendar.getInstance()
                     val georgianDateFormatForInsertion: DateFormat =
                         SimpleDateFormat("dd-MM-yyyy", Locale("en"))
@@ -138,7 +121,6 @@ class PrayerTimesWidget : AppWidgetProvider() {
             }
 
         } else {
-            Log.d("laksdlsakdlasd", "getWidget ID " + "null")
         }
     }
 
@@ -152,9 +134,12 @@ class PrayerTimesWidget : AppWidgetProvider() {
         val prayerDao = db.alAdahanDao()
         var currentDayHijri = " "
         var currentFajr = " "
-//        var timings = PrayerTimeModel
+        val cal = Calendar.getInstance()
+        val georgianDateFormatForInsertion: DateFormat =
+            SimpleDateFormat("dd-MM-yyyy", Locale("en"))
+        localTime = georgianDateFormatForInsertion.format(cal.time)
         GlobalScope.launch {
-            val x: Flow<List<PrayerTimeModel>> = prayerDao.getSpecificDayPrayerTimes("24-12-2021")
+            val x: Flow<List<PrayerTimeModel>> = prayerDao.getSpecificDayPrayerTimes(localTime)
             val y = x.collect {
                 it.map { prayerTime ->
                     prayerTime.prayerId
@@ -162,17 +147,11 @@ class PrayerTimesWidget : AppWidgetProvider() {
                     currentFajr = it[0].time
                 }
             }
-            Log.d("getCurrentDay", "lsdlsdlsd $y")
-            /*val y = x.observe(ProcessLifecycleOwner.get(), androidx.lifecycle.Observer { prayer ->
-                Log.d("prayerCurrentDay", prayer[0].date)
-            })*/
-
         }
         super.onUpdate(context, appWidgetManager, appWidgetIds)
         for (i in 0 until appWidgetIds.size) {
             val currentWidgetId = appWidgetIds[0]
             widgetsId = currentWidgetId
-            Log.d("asdlasdlasdl", currentWidgetId.toString())
             val viewsPrayer = RemoteViews(context.packageName, R.layout.prayer_times_widget)
             val intentUpdatePrayer = Intent(Intent.ACTION_VIEW)
             intentUpdatePrayer.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -184,12 +163,6 @@ class PrayerTimesWidget : AppWidgetProvider() {
                 context, currentWidgetId, intentUpdatePrayer,
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
-//            viewsPrayer.setOnClickPendingIntent(R.id.ivFajr, pendingUpdatePrayer)
-/*
-            viewsPrayer.setTextViewText(R.id.tvCalendarDate, currentDayHijri)
-            viewsPrayer.setTextViewText(R.id.tvFajrTime, currentFajr)
-*/
-
 
             var alarmManager: AlarmManager
             val intent = Intent(context, Update::class.java)
@@ -206,7 +179,6 @@ class PrayerTimesWidget : AppWidgetProvider() {
                 AlarmManager.RTC_WAKEUP, cal
                     .timeInMillis, (5 * 1000).toLong(), pendingIntent
             )
-
             appWidgetManager.updateAppWidget(currentWidgetId, viewsPrayer)
 
         }

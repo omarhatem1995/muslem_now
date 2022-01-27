@@ -8,6 +8,8 @@ import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
 import androidx.room.Update
 import com.myapplication.data.entities.model.AzkarModel
+import com.myapplication.data.entities.model.PrayerTimeModel
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AlAzkarDao {
@@ -29,4 +31,7 @@ interface AlAzkarDao {
 
     @Query("SELECT * FROM Azkar WHERE category = :category")
     fun getSpecificDayAzkar2(category:String ): List<AzkarModel>
+
+    @Query("SELECT * FROM Azkar WHERE id = :id")
+    fun getSpecificAzkar(id:Long): Flow<AzkarModel>
 }

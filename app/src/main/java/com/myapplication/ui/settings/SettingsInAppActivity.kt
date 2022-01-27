@@ -20,6 +20,8 @@ import com.myapplication.data.entities.model.MoazenModel
 import com.myapplication.databinding.ActivityInappSettingsBinding
 
 import android.content.Intent
+import android.widget.CompoundButton
+import android.widget.Toast
 import com.myapplication.common.Constants
 import com.myapplication.ui.splash.SplashActivity
 
@@ -30,6 +32,7 @@ class SettingsInAppActivity : AppCompatActivity() {
     lateinit var mediaPlayer: MediaPlayer
     lateinit var changeLanguageDialog: Dialog
     var firstTime: Boolean = false
+    var setAzkarAfterAzan = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inapp_settings)
@@ -55,6 +58,18 @@ class SettingsInAppActivity : AppCompatActivity() {
             transaction.addToBackStack(null)
             transaction.replace(R.id.frame_azkar_settings, azkarSettingsFragment, "BLANK").commit()
         }
+  /*      Log.d("getAfterAzan" , " ${settingsViewModel.preference.getAzkarAfterAzan()}")
+        Toast.makeText(this,"azkar ${settingsViewModel.preference.getAzkarAfterAzan()}"
+        , Toast.LENGTH_LONG).show()*/
+        if(settingsViewModel.preference.getAzkarAfterAzan()){
+            binding.azkarAfterAzanSwitch.isChecked = true
+        }
+        binding.azkarAfterAzanSwitch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { _, isChecked ->
+            // do something, the isChecked will be
+            // true if the switch is in the On position
+            setAzkarAfterAzan = isChecked
+            settingsViewModel.preference.setAzkarAfterAzan(setAzkarAfterAzan)
+        })
 
         if(settingsViewModel.preference.getAzanType().equals(Constants.FULL_AZAN)) {
             binding.fullAzanImageView.setImageResource(R.drawable.marked)

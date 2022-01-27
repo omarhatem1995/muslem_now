@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.AdapterView
@@ -22,9 +23,7 @@ import com.myapplication.data.entities.model.MoazenModel
 import com.myapplication.databinding.ActivitySettingsBinding
 import com.myapplication.ui.splash.SplashActivity
 import android.widget.CompoundButton
-
-
-
+import android.widget.Toast
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -46,6 +45,7 @@ class SettingsActivity : AppCompatActivity() {
         getLanguages()
         getMoazen()
         mediaPlayer = MediaPlayer()
+
 
         binding.skipNow.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))

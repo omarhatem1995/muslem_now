@@ -1,14 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".SecondFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <data>
+        <variable
+            name="quranFragment"
+            type="com.myapplication.ui.fragments.quran.QuranViewModel" />
+
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello Second Fragment" />
+        android:background="@drawable/ic_background_pattern_all_screens">
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/imageBackground"
+            android:layout_width="match_parent"
+            android:layout_height="148dp"
+            android:background="@color/transGreenBackground"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:layout_width="600dp"
+            android:layout_height="200dp"
+            android:background="@drawable/background_pattern_small_green"
+            app:layout_constraintTop_toTopOf="@id/imageBackground"
+            app:layout_constraintBottom_toBottomOf="@id/imageBackground"
+            app:layout_constraintStart_toStartOf="@id/imageBackground"
+            app:layout_constraintEnd_toEndOf="@id/imageBackground"/>
+
+        <TextView
+            android:id="@+id/indexingTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/indexing"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:fontFamily="@font/tajawalregular"
+            android:layout_marginTop="50dp"
+            android:layout_marginStart="20dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+        <TextView
+            android:id="@+id/elQuranHeaderTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:text="@string/the_holy_quran"
+            android:fontFamily="@font/tajawalbold"
+            app:layout_constraintTop_toBottomOf="@id/indexingTextView"
+            app:layout_constraintStart_toStartOf="@id/indexingTextView"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/_30_full_parts"
+            android:textColor="@color/white"
+            android:fontFamily="@font/tajawalregular"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/elQuranHeaderTextView"
+            app:layout_constraintTop_toBottomOf="@id/elQuranHeaderTextView"/>
+
+        <ImageView
+            android:id="@+id/quranFragmentImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="60dp"
+            android:background="@drawable/quran_fragment_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/quranIndexRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            tools:listitem="@layout/index_soura_item"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="25dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@id/imageBackground"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

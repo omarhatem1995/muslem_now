@@ -1,62 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
-        android:id="@+id/imagePatternBackground"
+    <data>
+        <variable
+            name="azkarFragment"
+            type="com.myapplication.ui.azkar.AzkarViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/ic_background_pattern_all_green_screens"/>
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:background="@color/transGreenBackground2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        <ImageView
+            android:id="@+id/imagePatternBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/ic_background_pattern_all_green_screens" />
 
-    <ImageView
-        android:id="@+id/azkar_background_image"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:background="@drawable/image_azkar"
-        android:layout_marginEnd="24dp"
-        android:layout_marginTop="60dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:background="@color/transGreenBackground2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-    <TextView
-        android:id="@+id/dailyAzkarTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/daily_azkar"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:fontFamily="@font/tajawalbold"
-        android:layout_marginTop="76dp"
-        android:layout_marginStart="24dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        <ImageView
+            android:id="@+id/azkar_background_image"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:background="@drawable/image_azkar"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="60dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/azkarFromQuranAndSonaTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/daily_azkar"
-        android:textColor="@color/white"
-        android:textSize="12sp"
-        android:fontFamily="@font/tajawalmedium"
-        app:layout_constraintTop_toBottomOf="@id/dailyAzkarTextView"
-        app:layout_constraintStart_toStartOf="@id/dailyAzkarTextView"/>
+        <TextView
+            android:id="@+id/dailyAzkarTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/daily_azkar"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:fontFamily="@font/tajawalbold"
+            android:layout_marginTop="76dp"
+            android:layout_marginStart="24dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/azkar_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/azkar_background_image"
-        tools:listitem="@layout/azkar_item" />
+        <TextView
+            android:id="@+id/azkarFromQuranAndSonaTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/daily_azkar"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:fontFamily="@font/tajawalmedium"
+            app:layout_constraintTop_toBottomOf="@id/dailyAzkarTextView"
+            app:layout_constraintStart_toStartOf="@id/dailyAzkarTextView" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/azkar_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="4dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/azkar_background_image"
+            tools:listitem="@layout/azkar_item" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

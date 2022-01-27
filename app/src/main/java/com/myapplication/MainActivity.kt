@@ -28,19 +28,17 @@ import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.shape.CornerFamily
-import com.google.android.material.shape.MaterialShapeDrawable
 import com.myapplication.data.core.workmanager.MuslemApp
 import com.myapplication.ui.MainViewModel
 import com.myapplication.ui.azkar.AzkarFragment
 import com.myapplication.ui.fragments.home.HomeFragment
-import com.myapplication.ui.fragments.more.MoreFragment
+import com.myapplication.ui.fragments.quran.QuranFragment
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     lateinit var bottomNavigationView: BottomNavigationView
     var firstFragment = HomeFragment()
-    var secondFragment = MoreFragment()
+    var quranFragment = QuranFragment()
     var azkarFragment = AzkarFragment()
 
     private val viewModel: MainViewModel by lazy {
@@ -66,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.home -> replaceFragment(firstFragment)
-                R.id.quran -> replaceFragment(secondFragment)
+                R.id.quran -> replaceFragment(quranFragment)
                 R.id.azkar -> replaceFragment(azkarFragment)
             }
             true

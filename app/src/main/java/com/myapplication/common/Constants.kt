@@ -7,5 +7,6 @@ object Constants {
     val TAKBIRAT_ONLY = "TAKBIRAT_ONLY"
     val AZANMESHARY = "AZANMESHARY"
     val AZANELHOSARY = "AZANELHOSARY"
+    val OPENSOURA = "OPENSOURA"
 
 }

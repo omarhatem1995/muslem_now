@@ -48,7 +48,7 @@ class QiblahActivity : AppCompatActivity() {
     var currentDegree: Float = 0f
     var currentNeedleDegree: Float = 0f
 
-//    var sensorManager: SensorManager
+    //    var sensorManager: SensorManager
     lateinit var sensorManager : SensorManager
     lateinit var sensor: Sensor
     lateinit var userLocation: Location
@@ -76,11 +76,13 @@ class QiblahActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+/*
         sensorManager.registerListener(
             this as SensorEventListener,
             sensor,
             SensorManager.SENSOR_DELAY_NORMAL
         )
+*/
 
     }
 

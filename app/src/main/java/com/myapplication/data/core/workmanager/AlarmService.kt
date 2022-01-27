@@ -101,7 +101,7 @@ class AlarmService : LifecycleService() {
         manager.createNotificationChannel(channel2)
 
         val intent =  Intent(this, AzkarActivity::class.java)
-        intent.putExtra("category","أذكار الصباح")
+        intent.putExtra("category","اذكار ما بعد الاذان")
 
         val azkarPendingIntent: PendingIntent =
             intent.let { notificationIntent ->
