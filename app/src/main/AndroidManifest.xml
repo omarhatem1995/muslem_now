@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.myapplication">
 
-    <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS"/>
+    <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -20,13 +20,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MuslemNow"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ui.fragments.quran.QuranActivity"
+            android:exported="false" />
+
         <receiver
             android:name=".widgets.QiblaWidget"
             android:exported="true">
             <intent-filter>
-                    <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-                    <action android:name="com.android.FirstWidget.arrow_left"/>
-                    <action android:name="com.android.FirstWidget.arrow_right"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.android.FirstWidget.arrow_left" />
+                <action android:name="com.android.FirstWidget.arrow_right" />
             </intent-filter>
 
             <meta-data
@@ -37,25 +41,24 @@
             android:name=".widgets.PrayerTimesWidget"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.intent.action.DATE_CHANGED" />
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/prayer_times_widget_info" />
         </receiver>
-
         <receiver
             android:name=".widgets.AzkarWidget"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="android.intent.action.DATE_CHANGED" />
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
@@ -65,46 +68,48 @@
         <receiver
             android:name=".MyNotificationPublisher"
             android:enabled="true"
-
             android:exported="false">
             <intent-filter>
-                <action android:name="Trigger"/>
+                <action android:name="Trigger" />
             </intent-filter>
         </receiver>
         <receiver
-            android:name="com.myapplication.data.core.workmanager.AzkarReciever"
-            android:exported="true"
+            android:name=".data.core.workmanager.AzkarReciever"
             android:enabled="true"
+            android:exported="true"
             android:process=":remote">
             <intent-filter>
                 <action android:name="android.intent.action.NOTIFY" />
             </intent-filter>
         </receiver>
+
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:exported="false"
-            android:launchMode = "singleTop"/>
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.QiblahActivityNewLogic"
             android:exported="false"
-            android:launchMode = "singleTop"/>
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.settings.SettingsInAppActivity"
             android:exported="false"
-            android:theme="@style/AppFullScreenTheme"
-            android:launchMode = "singleTop"/>
+            android:launchMode="singleTop"
+            android:theme="@style/AppFullScreenTheme" />
         <activity
             android:name=".ui.azkar.AzkarActivity"
             android:exported="true"
-            android:launchMode = "singleTop"/>
-        <activity android:name=".QiblahActivity"
-            android:launchMode = "singleTop"/>
-        <activity android:name=".MainActivity"
-            android:launchMode = "singleTop"/>
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".QiblahActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTop" />
         <activity
             android:name=".ui.splash.SplashActivity"
             android:exported="true"
-            android:launchMode = "singleTop">
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -115,8 +120,7 @@
         <service
             android:name=".data.core.workmanager.AlarmService"
             android:enabled="true"
-            android:exported="true"
-            />
+            android:exported="true" />
     </application>
 
 </manifest>
