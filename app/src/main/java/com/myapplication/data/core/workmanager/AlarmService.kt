@@ -59,8 +59,15 @@ class AlarmService : LifecycleService() {
                         startForeground(notificationId, createSalahNotification(name,preference))
                         if (azkarState)
                         {
-                            delay(180000)
+                            delay(240000)
                             startForeground(notificationId, createAzkarNotification(name,preference))
+                            delay(180000)
+                            stopSelf()
+
+                        }else
+                        {
+                            delay(240000)
+                            stopSelf()
                         }
 
                     }
@@ -68,8 +75,6 @@ class AlarmService : LifecycleService() {
                 }
 
 
-            } else {
-                stopSelf()
             }
         }
 
@@ -229,7 +234,7 @@ class AlarmService : LifecycleService() {
                 }
             )
             .setOngoing(false)
-            .setAutoCancel(false)
+            .setAutoCancel(true)
             .setContentIntent(pending)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)

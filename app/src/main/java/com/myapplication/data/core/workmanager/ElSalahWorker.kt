@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.myapplication.LocaleUtil.Companion.prayerFilter
+import com.myapplication.MainActivity
 import com.myapplication.MyNotificationPublisher
 
 import com.myapplication.data.entities.model.PrayerTimeModel
@@ -67,8 +68,8 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
             hasPermission = alarmManager.canScheduleExactAlarms()
         }
 
-        val intent = Intent(applicationContext, MyNotificationPublisher::class.java)
-        intent.action = "Off"
+        val intent = Intent(applicationContext, MainActivity::class.java)
+        intent.action = "edit"
         val intent2 = Intent(applicationContext, AlarmService::class.java)
         intent2.action = "Trigger"
         //setting up a pending intent
@@ -103,12 +104,10 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
                     intent2.putExtra("prayerObject",bundle)
 
                     //FLAG_UPDATE_CURRENT
-                    val alarmPendingIntent: PendingIntent = PendingIntent.getBroadcast(applicationContext, prayerTime.prayerId, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+                    val alarmPendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, prayerTime.prayerId, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
 
-                    var goOffPendingIntent = PendingIntent.getService(applicationContext, prayerTime.prayerId, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        goOffPendingIntent = PendingIntent.getForegroundService(applicationContext, prayerTime.prayerId, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-                    }
+                    val goOffPendingIntent = PendingIntent.getForegroundService(applicationContext, prayerTime.prayerId, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+
                     val alarmInfo = AlarmManager.AlarmClockInfo(calendar.timeInMillis,alarmPendingIntent )
                     if (hasPermission == true)
                     {
