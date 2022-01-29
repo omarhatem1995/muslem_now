@@ -54,23 +54,24 @@ class AlarmService : LifecycleService() {
                 val azkarState = preference.getAzkarAfterAzan()
 
                 this.lifecycleScope.launch(Dispatchers.Main) {
-                    lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED)
-                    {
+
                         startForeground(notificationId, createSalahNotification(name,preference))
                         if (azkarState)
                         {
-                            delay(240000)
+                            delay(300000)
                             startForeground(notificationId, createAzkarNotification(name,preference))
-                            delay(180000)
+                            delay(1800000)
+                            stopForeground(true)
                             stopSelf()
 
                         }else
                         {
-                            delay(240000)
+                            delay(300000)
+                            stopForeground(true)
                             stopSelf()
                         }
 
-                    }
+
 
                 }
 
@@ -92,7 +93,13 @@ class AlarmService : LifecycleService() {
         val oldChannel2 = preference.preference.getString("ChannelId2",null)
         if (oldChannel2 != null)
         {
-            manager.deleteNotificationChannel(oldChannel2)
+            try {
+                manager.deleteNotificationChannel(oldChannel2)
+            }catch (e:Exception)
+            {
+                e.printStackTrace()
+            }
+
         }
         val channnelID2: String = "AzkarChannel +${calendar.timeInMillis}"
         preference.preference.edit().putString("ChannelId2",channnelID2).apply()
@@ -134,7 +141,13 @@ class AlarmService : LifecycleService() {
         val oldChannel = preference.preference.getString("ChannelId",null)
         if (oldChannel != null)
         {
-            manager.deleteNotificationChannel(oldChannel)
+            try {
+                manager.deleteNotificationChannel(oldChannel)
+            }catch (e:Exception)
+            {
+                e.printStackTrace()
+            }
+
 
         }
 
