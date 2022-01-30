@@ -105,8 +105,12 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
 
                     //FLAG_UPDATE_CURRENT
                     val alarmPendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, prayerTime.prayerId, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+                    var goOffPendingIntent = PendingIntent.getForegroundService(applicationContext, prayerTime.prayerId, intent2, PendingIntent.FLAG_UPDATE_CURRENT)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                    {
+                         goOffPendingIntent = PendingIntent.getForegroundService(applicationContext, prayerTime.prayerId, intent2, PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+                    }
 
-                    val goOffPendingIntent = PendingIntent.getForegroundService(applicationContext, prayerTime.prayerId, intent2, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
 
                     val alarmInfo = AlarmManager.AlarmClockInfo(calendar.timeInMillis,alarmPendingIntent )
                     if (hasPermission == true)

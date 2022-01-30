@@ -117,10 +117,15 @@ class AlarmService : LifecycleService() {
 
         val azkarPendingIntent: PendingIntent =
             intent.let { notificationIntent ->
-                PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+                }else
+                {
+                    PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+                }
             }
 
-        val builder = provideNotificationBuilder(name,"حان وقت الازكار",channnelID2,azkarPendingIntent)
+        val builder = provideNotificationBuilder(name,"حان وقت الازكار",channnelID2,azkarPendingIntent,null)
         return builder.build()
     }
 
@@ -138,7 +143,7 @@ class AlarmService : LifecycleService() {
         // Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.azan)
         //
         //
-        val oldChannel = preference.preference.getString("ChannelId",null)
+        var oldChannel = preference.preference.getString("ChannelId",null)
         if (oldChannel != null)
         {
             try {
@@ -157,7 +162,8 @@ class AlarmService : LifecycleService() {
 
 
         val attributes = AudioAttributes.Builder()
-            .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+            .setUsage(AudioAttributes.USAGE_ALARM)
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
             .build()
 
 
@@ -208,19 +214,25 @@ class AlarmService : LifecycleService() {
 
         val pendingIntent: PendingIntent =
             Intent(this, MainActivity::class.java).let { notificationIntent ->
-                PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+                }else
+                {
+                    PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+                }
+
             }
 
 
 
 
 
-        val builder = provideNotificationBuilder(title,title,channnelID,pendingIntent)
+        val builder = provideNotificationBuilder(title,title,channnelID,pendingIntent,sound)
         return builder.build()
     }
 
 
-    private fun provideNotificationBuilder(salahTitle:String, notificationTitle:String, channelId:String, pending:PendingIntent):NotificationCompat.Builder
+    private fun provideNotificationBuilder(salahTitle:String, notificationTitle:String, channelId:String, pending:PendingIntent,sound:Uri?):NotificationCompat.Builder
     {
         return NotificationCompat.Builder(applicationContext, channelId)
             .setContentTitle(notificationTitle)
@@ -250,6 +262,7 @@ class AlarmService : LifecycleService() {
             .setAutoCancel(true)
             .setContentIntent(pending)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setSound(sound)
             .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
 
     }
