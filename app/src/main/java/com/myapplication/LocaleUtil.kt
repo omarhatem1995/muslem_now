@@ -105,29 +105,28 @@ class LocaleUtil {
             var hoursInt = hours.toInt()
             Log.d("getTimeAMandPM", " is $hoursInt")
             Log.d("getTimeAMandPM", " is $minutes")
-            return if (hoursInt <= 12) {
+            return if (hoursInt < 12) {
                 hours = String.format("%02d", hoursInt)
                 "$hours$minutes " + context.getString(R.string.am)
             } else {
                 hoursInt -= 12
                 if (hoursInt == 0)
-                    hoursInt = 1
+                    hoursInt = 12
                 hours = String.format("%02d", hoursInt)
                 "$hours$minutes " + context.getString(R.string.pm)
             }
         }
         fun convertToArabic(value: String,language:String): String? {
-            if(language == "ar") {
-                return (value + "")
+            return if(language == "ar") {
+                (value + "")
                     .replace("1".toRegex(), "١").replace("2".toRegex(), "٢")
                     .replace("3".toRegex(), "٣").replace("4".toRegex(), "٤")
                     .replace("5".toRegex(), "٥").replace("6".toRegex(), "٦")
                     .replace("7".toRegex(), "٧").replace("8".toRegex(), "٨")
                     .replace("9".toRegex(), "٩").replace("0".toRegex(), "٠")
                     .replace(":".toRegex(), ":")
-            }
-            else
-                return value
+            } else
+                value
         }
         fun getNameOfPrayer(context: Context, id: Int): String {
             return when (id) {
@@ -324,14 +323,14 @@ class LocaleUtil {
             }
             return finalList
         }
-        lateinit var sensorManager : SensorManager
+      /*  lateinit var sensorManager : SensorManager
         lateinit var sensor: Sensor
 
         fun initSensorManager(context: Context){
             sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
             sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
 
-        }
+        }*/
 
         fun getJuzName(number:String,context:Context):String {
             when (number) {

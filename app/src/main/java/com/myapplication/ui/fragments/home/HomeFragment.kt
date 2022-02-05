@@ -57,13 +57,14 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.bumptech.glide.Glide
 import com.myapplication.LocaleUtil.Companion.applyLocalizedContext
-import com.myapplication.LocaleUtil.Companion.initSensorManager
-import com.myapplication.LocaleUtil.Companion.sensor
-import com.myapplication.LocaleUtil.Companion.sensorManager
+//import com.myapplication.LocaleUtil.Companion.initSensorManager
+//import com.myapplication.LocaleUtil.Companion.sensor
+//import com.myapplication.LocaleUtil.Companion.sensorManager
 import com.myapplication.MyNotificationPublisher
 import com.myapplication.QiblahActivity
 import com.myapplication.R
 import com.myapplication.ui.ViewUtils
+import com.myapplication.widgets.sensorManager
 import java.io.IOException
 import java.lang.reflect.InvocationTargetException
 
@@ -88,8 +89,8 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
 
-/*    lateinit var sensorManager: SensorManager
-    lateinit var sensor: Sensor*/
+    lateinit var sensorManager: SensorManager
+    lateinit var sensor: Sensor
     lateinit var userLocation: Location
     lateinit var tvHeading: TextView
     lateinit var needleAnimation: RotateAnimation
@@ -498,7 +499,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                     )
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        initQiblaDirection(it.latitude, it.longitude)
+//                        initQiblaDirection(it.latitude, it.longitude)
                     initPrayerTimes(it.latitude, it.longitude)
                 }
             }
@@ -553,7 +554,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
 //                    fusedLocationClient.removeLocationUpdates(locationCallback);
 
 
-                    initQiblaDirection(latitude, longitude)
+//                    initQiblaDirection(latitude, longitude)
                     binding.deviceCurrentLocation.text =
                         getAndSetCurrentCityFromLatLon(latitude.toString(), longitude.toString())
                 }
@@ -713,10 +714,10 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
         Log.d("getLatitude", " : " + latitude + " , " + longitude)
         if (context != null) {
 
-            initSensorManager(context!!)
- /*           sensorManager =
+//            initSensorManager(context!!)
+            sensorManager =
                 requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
-            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)*/
+            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
             sensorManager.registerListener(object : SensorEventListener {
                 override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
 

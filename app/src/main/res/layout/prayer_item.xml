@@ -6,7 +6,7 @@
 
     <ImageView
         android:id="@+id/icon_image"
-        android:layout_width="wrap_content"
+        android:layout_width="14dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:background="@drawable/ic_elfajr"
@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <TextView
+    <com.myapplication.ui.AutoFitTextView
         android:id="@+id/prayer_name"
         android:layout_width="54dp"
         android:layout_height="wrap_content"

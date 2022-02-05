@@ -6,9 +6,66 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragments.quran.QuranActivity">
 
-    <androidx.viewpager.widget.ViewPager
+  <!--  <androidx.viewpager.widget.ViewPager
         android:id="@+id/quranViewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"/>-->
+
+    <TextView
+        android:id="@+id/idLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/p1"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="ﭑ ﭒ ﭓ ﭔ ﭕ"/>
+
+    <TextView
+        android:id="@+id/idLabel2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/p1"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/idLabel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="ﭖ ﭗ ﭘ ﭙ ﭚ"/>
+
+    <TextView
+        android:id="@+id/idLabel3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bsml"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/idLabel2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="\uFC20 "/>
+    <TextView
+        android:id="@+id/idLabel4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bsml"
+        android:textSize="10sp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toTopOf="@id/idLabel3"
+        app:layout_constraintBottom_toBottomOf="@id/idLabel3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="\uFB8C \uFB8E"/>
+<TextView
+        android:id="@+id/idLabel5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bsml"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/idLabel4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text=""/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
