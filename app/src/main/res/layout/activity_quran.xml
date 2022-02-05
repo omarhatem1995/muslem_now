@@ -21,7 +21,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="ﭑ ﭒ ﭓ ﭔ ﭕ"/>
+        android:text="\ufb51"/>
 
     <TextView
         android:id="@+id/idLabel2"
@@ -36,10 +36,11 @@
 
     <TextView
         android:id="@+id/idLabel3"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/bsml"
-        android:textSize="20sp"
+        android:gravity="center"
+        android:textScaleX="4.0"
         android:textColor="@color/black"
         app:layout_constraintTop_toBottomOf="@id/idLabel2"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/bsml"
-        android:textSize="10sp"
+        android:textSize="12sp"
         android:textColor="@color/black"
         app:layout_constraintTop_toTopOf="@id/idLabel3"
         app:layout_constraintBottom_toBottomOf="@id/idLabel3"

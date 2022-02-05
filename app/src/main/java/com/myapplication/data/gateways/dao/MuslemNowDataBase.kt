@@ -6,14 +6,17 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.myapplication.data.entities.model.AzkarModel
 import com.myapplication.data.entities.model.PrayerTimeModel
+import com.myapplication.data.entities.model.QuranVersesEntity
 import com.myapplication.data.gateways.dao.aladahangateway.AlAdahanDao
 import com.myapplication.data.gateways.dao.alazkargateway.AlAzkarDao
+import com.myapplication.data.gateways.dao.qurangateway.QuranDao
 
-@Database(entities = [PrayerTimeModel::class , AzkarModel::class], version = 1)
+@Database(entities = [PrayerTimeModel::class , AzkarModel::class , QuranVersesEntity::class], version = 1)
 abstract class MuslemNowDataBase : RoomDatabase(){
 
     abstract fun alAdahanDao(): AlAdahanDao
     abstract fun alAzkarDao(): AlAzkarDao
+   abstract fun alQuranDao(): QuranDao
 
     companion object {
         @Volatile
