@@ -35,7 +35,10 @@ class MuslemApp : Application() {
             dataBase.alQuranDao().getAllQuran().collect {
                 if (it.isEmpty())
                 {
-                    val quran =getLocalQuranResponse(this@MuslemApp)
+                    val quran =getLocalQuranResponse(this@MuslemApp).onEach { entity->
+                       var oldUniCode =entity.unicode
+                        entity.unicode = "\\u$oldUniCode"
+                    }
 
                     dataBase.alQuranDao().loadQuran(quran)
                 }else

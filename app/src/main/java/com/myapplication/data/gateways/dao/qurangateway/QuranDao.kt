@@ -1,5 +1,6 @@
 package com.myapplication.data.gateways.dao.qurangateway
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -17,4 +18,10 @@ interface QuranDao {
 
     @Query("Select * From QuranTable")
      fun getAllQuran(): Flow<List<QuranVersesEntity>>
+
+    @Query("Select * From QuranTable Where page = :pageNum")
+     suspend fun getQuranPaged(pageNum:Int):List<QuranVersesEntity>
+
+     @Query("Select MAX(page) From QuranTable ")
+     suspend fun getLastPage():Int?
 }
