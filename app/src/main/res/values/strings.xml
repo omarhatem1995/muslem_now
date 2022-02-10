@@ -112,5 +112,6 @@
     <string name="_30_full_parts">30 Full Parts</string>
     <string name="the_holy_quran">The Holy Quran</string>
     <string name="indexing">Indexing</string>
-    <string name="u">\\u</string>
+    <string name="u">\ufb5b</string>
+
 </resources>

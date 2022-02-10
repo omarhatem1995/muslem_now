@@ -14,7 +14,7 @@
             android:id="@+id/aya"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            />
+            android:textAllCaps="false"   />
 
 
     </LinearLayout>

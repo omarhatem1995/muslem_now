@@ -21,13 +21,17 @@
         android:theme="@style/Theme.MuslemNow"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ui.fragments.quran.QuranActivity"
+            android:name=".ui.TestActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.fragments.quran.QuranActivity"
+            android:exported="true">
 
         </activity>
 
@@ -116,8 +120,7 @@
         <activity
             android:name=".ui.splash.SplashActivity"
             android:exported="true"
-            android:launchMode="singleTop"/>
-
+            android:launchMode="singleTop" />
 
         <service
             android:name=".data.core.workmanager.AlarmService"

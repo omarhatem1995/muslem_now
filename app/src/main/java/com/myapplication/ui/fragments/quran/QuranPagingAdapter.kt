@@ -27,13 +27,13 @@ class QuranPagingAdapter(val context:Context):PagingDataAdapter<QuranVersesEntit
         {
 
             val kelma = quranVersesEntity.unicode
-            binding.aya.text = quranVersesEntity.text
+            binding.aya.setText(Html.fromHtml("$kelma"))
+
 
            // val  typeface:Typeface = ResourcesCompat.getFont(context, R.font.p1)!!
            // binding.aya.typeface = typeface
 
-            Log.e(null, "onBind: $kelma", )
-               // Html.fromHtml("\\u$kelma")
+            Log.e("LogcatApplicaiton", "onBind: $kelma", )
 
         }
     }
