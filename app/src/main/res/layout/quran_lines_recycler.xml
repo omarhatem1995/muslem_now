@@ -17,9 +17,21 @@
         <TextView
             android:id="@+id/line1"
             android:visibility="gone"
-            android:text="20asdasd"
+            android:text="\u00F2"
+            android:textSize="40sp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/bsml"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="62dp"/>
+        <TextView
+            android:id="@+id/lineWord"
+            android:visibility="gone"
+            android:text="\u00F1"
+            android:textSize="40sp"
+            android:textColor="@color/black"
+            android:fontFamily="@font/bsml"
+            android:layout_width="wrap_content"
+            android:layout_height="62dp"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/lineRecycler"

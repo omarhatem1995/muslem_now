@@ -1,35 +1,23 @@
 package com.myapplication.ui.fragments.quran
 
 import android.content.Context
-import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
-import android.graphics.Paint
 import android.graphics.Typeface
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.myapplication.LocaleUtil.Companion.getMakkiyahOrMaddaniyah
 import com.myapplication.R
-import com.myapplication.data.entities.model.QuranIndexModel
 import com.myapplication.data.entities.model.QuranVersesEntity
-import com.myapplication.databinding.IndexSouraItemBinding
 import com.myapplication.databinding.QuranItemBinding
-import com.myapplication.databinding.QuranJuzItemBinding
-import com.myapplication.databinding.QuranLinesRecyclerBinding
 import com.myapplication.utils.common.DataBoundListAdapter
 
 
 class QuranLineAdapter(
     var language: String,
+    var listOfEmpty : List<Int>
 //    var onClick: (String, QuranVersesEntity) -> Unit
 ) : DataBoundListAdapter<QuranVersesEntity, QuranItemBinding>
     (diffCallback = object : DiffUtil.ItemCallback<QuranVersesEntity>() {
@@ -61,13 +49,17 @@ class QuranLineAdapter(
     ) {
         var lineNumber = language
 
-        val typeface: Typeface = ResourcesCompat.getFont(context, R.font.p10)!!
+        val typeface: Typeface = ResourcesCompat.getFont(context, R.font.p603)!!
 
-       binding.quranLine.text = item.mobileCode
-        binding.quranLine.typeface = typeface
+        if(item.mobileCode!=null && item.quranAya!=null) {
+        Log.d("getCurrentItem" , "${item.line} , ${position}")
+            binding.quranLine.text = item.mobileCode
+            binding.quranLine.typeface = typeface
 
-        binding.quranLine.setOnClickListener {
-            Toast.makeText(context,"aya : ${item.quranAya}",Toast.LENGTH_LONG).show()
+            binding.quranLine.setOnClickListener {
+                Toast.makeText(context, "aya : ${item.quranAya}", Toast.LENGTH_LONG).show()
+            }
         }
+
     }
 }

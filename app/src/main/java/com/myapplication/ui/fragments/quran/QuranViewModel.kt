@@ -30,7 +30,7 @@ class QuranViewModel(application: Application): AndroidViewModel(application)  {
 
     init {
         viewModelScope.launch {
-            getPagingData(10)
+            getPagingData(603)
         }
 
     }
