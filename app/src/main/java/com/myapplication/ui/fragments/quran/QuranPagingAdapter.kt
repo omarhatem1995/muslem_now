@@ -39,6 +39,7 @@ class QuranPagingAdapter(val context:Context):ListAdapter<QuranPage,QuranPagingA
             binding.lineRecycler.adapter = linesAdapter
 
             var lineNum = 1
+            var quranList : QuranPage
           //  Log.e(null, "onBindViewHolder: $list ,position :$position ", )
             if (list.isNotEmpty())
             {
@@ -52,7 +53,6 @@ class QuranPagingAdapter(val context:Context):ListAdapter<QuranPage,QuranPagingA
                        it.line == number
 
                    }
-
 
                     Log.e("QuranPagingAdapter", "onBind: $filteredByLine", )
                     if (filteredByLine?.isNotEmpty()!!)

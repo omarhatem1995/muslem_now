@@ -2,17 +2,14 @@ package com.myapplication.ui.fragments.quran
 
 import android.app.Application
 import android.util.Log
-import android.util.Log.ASSERT
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import com.myapplication.data.entities.model.QuranPage
 import com.myapplication.data.entities.model.QuranVersesEntity
 import com.myapplication.data.gateways.dao.MuslemNowDataBase
 import com.myapplication.data.repositories.QuranPagingRepositoryImpl
 import com.myapplication.data.repositories.SharedPreferencesRepository
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -25,6 +22,7 @@ class QuranViewModel(application: Application): AndroidViewModel(application)  {
    // private val quranPagingSource = QuranPagingSource(quranDao)
 
     var quranFlow:MutableStateFlow<List<QuranPage>?> = MutableStateFlow(null)
+    var quranVersesMutableLiveData:MutableLiveData<List<QuranVersesEntity>?> = MutableLiveData()
 
     private val pages:MutableList<QuranPage> = mutableListOf()
 
@@ -32,7 +30,7 @@ class QuranViewModel(application: Application): AndroidViewModel(application)  {
 
     init {
         viewModelScope.launch {
-            getPagingData(1)
+            getPagingData(10)
         }
 
     }
@@ -44,7 +42,7 @@ class QuranViewModel(application: Application): AndroidViewModel(application)  {
             .collect {
                 val quranPage = QuranPage(it,page,it.last().line)
                 pages.add(quranPage)
-
+                quranVersesMutableLiveData.postValue(it)
                 quranFlow.value = pages
                 Log.d("pages", "getPagingData: $pages", )
             }

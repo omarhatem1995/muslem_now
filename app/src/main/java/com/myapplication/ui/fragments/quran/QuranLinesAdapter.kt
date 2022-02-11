@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
@@ -20,15 +21,13 @@ import com.myapplication.databinding.WordItemBinding
 import java.util.*
 
 
-class QuranLinesAdapter(val context: Context):ListAdapter<QuranVersesEntity,QuranLinesAdapter.QuranLinesViewHolder>(DiffCallBack) {
+class QuranLinesAdapter(val context: Context) :
+    ListAdapter<QuranVersesEntity, QuranLinesAdapter.QuranLinesViewHolder>(DiffCallBack) {
 
 
-
-
-    inner class QuranLinesViewHolder(private val binding:QuranItemBinding): RecyclerView.ViewHolder(binding.root)
-    {
-        fun onBind(entity:QuranVersesEntity)
-        {
+    inner class QuranLinesViewHolder(private val binding: QuranItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun onBind(entity: QuranVersesEntity) {
             //Log.e("QuranLinesAdapter", "onBind:$list ")
             Log.e("QuranLinesAdapter", "currentList:$currentList ")
 //           val newList = list.map {
@@ -45,14 +44,13 @@ class QuranLinesAdapter(val context: Context):ListAdapter<QuranVersesEntity,Qura
 //            }
 
 
-
             val kelma = entity.mobileCode
-                val text = TextView(context)
-                val  typeface: Typeface = ResourcesCompat.getFont(context, R.font.p1)!!
-                text.text= kelma
-                // Log.e(null, "onBind: $kelma", )
-                text.typeface = typeface
-            binding.quranLine.addView(text)
+            val text = TextView(context)
+            val typeface: Typeface = ResourcesCompat.getFont(context, R.font.p1)!!
+            text.text = kelma
+            // Log.e(null, "onBind: $kelma", )
+            text.typeface = typeface
+//            binding.quranLine.addView(text)
 //           list.forEach {
 //               val view = itemInflator()
 //               wordItemBinding.quranWord.text = it.mobileCode
@@ -61,7 +59,7 @@ class QuranLinesAdapter(val context: Context):ListAdapter<QuranVersesEntity,Qura
 //               binding.quranLine.addView(wordItemBinding.root)
 //
 //           }
-           // val view = itemInflator()
+            // val view = itemInflator()
 
 
         }
@@ -69,7 +67,7 @@ class QuranLinesAdapter(val context: Context):ListAdapter<QuranVersesEntity,Qura
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuranLinesViewHolder {
-        val binding = QuranItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding = QuranItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
         return QuranLinesViewHolder(binding)
     }
@@ -79,20 +77,18 @@ class QuranLinesAdapter(val context: Context):ListAdapter<QuranVersesEntity,Qura
         val line = currentList[position]
 
         Log.d("lines", "onBindViewHolder: $line")
-
+//        Toast.makeText(context, line.text, Toast.LENGTH_LONG).show()
         holder.onBind(line)
     }
 
 
-
-    companion object DiffCallBack: DiffUtil.ItemCallback<QuranVersesEntity>() {
+    companion object DiffCallBack : DiffUtil.ItemCallback<QuranVersesEntity>() {
         override fun areItemsTheSame(
             oldItem: QuranVersesEntity,
             newItem: QuranVersesEntity
         ): Boolean {
 
-                return oldItem.id == newItem.id
-
+            return oldItem.id == newItem.id
 
 
         }
@@ -102,7 +98,7 @@ class QuranLinesAdapter(val context: Context):ListAdapter<QuranVersesEntity,Qura
             newItem: QuranVersesEntity
         ): Boolean {
 
-                return oldItem == newItem
+            return oldItem == newItem
 
 
         }

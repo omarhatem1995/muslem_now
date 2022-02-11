@@ -56,7 +56,7 @@ class QuranJuzAdapter(
         val quranAdapter = QuranAdapter(language) { item, data ->
         }
         var x : MutableList<QuranIndexModel> = ArrayList()
-        for(i in 0..list.size-1) {
+        for(i in list.indices) {
             if (list[i].indexOut == item.indexOut) {
                 x.add(list[i])
             }

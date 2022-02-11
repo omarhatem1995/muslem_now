@@ -60,7 +60,7 @@ class QuranFragment : Fragment() {
             json = inputStream?.bufferedReader().use { it?.readText() }
             var jsonArray = JSONArray(json)
             var quranModelList: MutableList<QuranIndexModel> = ArrayList()
-            for (i in 0..jsonArray.length() - 1) {
+            for (i in 0 until jsonArray.length()) {
                 var jsonObject = jsonArray.getJSONObject(i)
 
                 var place = jsonObject.getString("place")
