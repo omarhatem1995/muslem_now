@@ -5,17 +5,23 @@
 
     </data>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp">
-
-        <TextView
-            android:id="@+id/aya"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
 
 
-    </LinearLayout>
+
+
+     <GridLayout
+         android:id="@+id/quranLine"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layoutDirection="rtl"
+         android:gravity="center"
+         android:orientation="horizontal">
+
+
+
+     </GridLayout>
+
+
+
+
 </layout>

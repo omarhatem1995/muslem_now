@@ -3,72 +3,131 @@ package com.myapplication.ui.fragments.quran
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Typeface
-import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.myapplication.R
+import com.myapplication.data.entities.model.QuranPage
 import com.myapplication.data.entities.model.QuranVersesEntity
 import com.myapplication.databinding.QuranItemBinding
+import com.myapplication.databinding.QuranLinesRecyclerBinding
 
-class QuranPagingAdapter(val context:Context):PagingDataAdapter<QuranVersesEntity,QuranPagingAdapter.QuranAyaViewHolder>(DiffCallBack) {
+class QuranPagingAdapter(val context:Context):ListAdapter<QuranPage,QuranPagingAdapter.QuranAyaViewHolder>(DiffCallBack) {
 
 
-   inner class QuranAyaViewHolder(val binding:QuranItemBinding):RecyclerView.ViewHolder(binding.root)
+    private var pageNumber = 1
+    private val linesAdapter:QuranLinesAdapter = QuranLinesAdapter(context)
+   inner class QuranAyaViewHolder(val binding:QuranLinesRecyclerBinding):RecyclerView.ViewHolder(binding.root)
     {
 
+
+
         @SuppressLint("SetTextI18n")
-        fun onBind(quranVersesEntity: QuranVersesEntity)
+        fun onBind(position: Int)
 
         {
 
-            val kelma = quranVersesEntity.unicode
-            binding.aya.text = quranVersesEntity.text
+
+
+            val list = currentList
+            binding.lineRecycler.adapter = linesAdapter
+
+            var lineNum = 1
+          //  Log.e(null, "onBindViewHolder: $list ,position :$position ", )
+            if (list.isNotEmpty())
+            {
+                lineNum = list[position].lines!!
+
+
+                for (number in 2..lineNum)
+                {
+                   val filteredByLine = list[position].versesList?.filter {
+
+                       it.line == number
+
+                   }
+
+
+                    Log.e("QuranPagingAdapter", "onBind: $filteredByLine", )
+                    if (filteredByLine?.isNotEmpty()!!)
+                    {
+                        linesAdapter.submitList(filteredByLine)
+                    }
+
+
+
+
+
+                }
+            }
+
+
+
+                }
+
+
+
+
+
+           //binding.quranLine.addView()
 
            // val  typeface:Typeface = ResourcesCompat.getFont(context, R.font.p1)!!
            // binding.aya.typeface = typeface
 
-            Log.e(null, "onBind: $kelma", )
+           // Log.e(null, "onBind: $kelma", )
                // Html.fromHtml("\\u$kelma")
 
-        }
+
+
+
     }
 
     override fun onBindViewHolder(holder: QuranAyaViewHolder, position: Int) {
-        val aya =getItem(position)
 
-        if(aya?.line != 1)
 
-        if (aya != null) {
-            holder.onBind(aya)
-        }
+            holder.onBind(position)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuranAyaViewHolder {
-        val binding = QuranItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        val binding = QuranLinesRecyclerBinding.inflate(LayoutInflater.from(parent.context),parent,false)
         return QuranAyaViewHolder(binding)
     }
 
 
-    companion object DiffCallBack: DiffUtil.ItemCallback<QuranVersesEntity>() {
+    companion object DiffCallBack: DiffUtil.ItemCallback<QuranPage>() {
         override fun areItemsTheSame(
-            oldItem: QuranVersesEntity,
-            newItem: QuranVersesEntity
+            oldItem: QuranPage,
+            newItem:QuranPage
         ): Boolean {
-           return oldItem.id == newItem.id
+         return   if (!oldItem.versesList.isNullOrEmpty()&&!newItem.versesList.isNullOrEmpty())
+          return oldItem.page == newItem.page
+            else
+                true
         }
 
         override fun areContentsTheSame(
-            oldItem: QuranVersesEntity,
-            newItem: QuranVersesEntity
+            oldItem: QuranPage,
+            newItem: QuranPage
         ): Boolean {
-          return  oldItem == newItem
+            return   if (!oldItem.versesList.isNullOrEmpty()&&!newItem.versesList.isNullOrEmpty())
+                return oldItem== newItem
+            else
+                true
         }
 
 
     }
+
+    fun getPage(page:Int)
+    {
+        this.pageNumber = page
+    }
+
 }

@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.myapplication.data.entities.model.QuranPage
 import com.myapplication.data.entities.model.QuranVersesEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -19,8 +20,8 @@ interface QuranDao {
     @Query("Select * From QuranTable")
      fun getAllQuran(): Flow<List<QuranVersesEntity>>
 
-    @Query("Select * From QuranTable Where page = :pageNum")
-     suspend fun getQuranPaged(pageNum:Int):List<QuranVersesEntity>
+    @Query("Select * From QuranTable Where page = :page")
+      fun getQuranPaged(page:Int):Flow<List<QuranVersesEntity>>
 
      @Query("Select MAX(page) From QuranTable ")
      suspend fun getLastPage():Int?

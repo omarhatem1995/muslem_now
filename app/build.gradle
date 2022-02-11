@@ -48,7 +48,7 @@ dependencies {
     def retrofit_version = "2.6.0"
     def glide_version = "4.9.0"
     def coroutines_version = "1.1.1"
-    def room_version = "2.4.0"
+    def room_version = "2.4.1"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin_version"
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -86,6 +86,7 @@ dependencies {
    kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     testImplementation "androidx.room:room-testing:$room_version"
+    implementation("androidx.room:room-paging:2.4.1")
 
     implementation "androidx.navigation:navigation-fragment-ktx:2.1.0-alpha05"
     implementation "androidx.navigation:navigation-ui-ktx:2.1.0-alpha05"
@@ -116,7 +117,7 @@ dependencies {
     //paging 3
     def paging_version = "3.1.0"
 
-    implementation "androidx.paging:paging-runtime:$paging_version"
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 
 
 }

@@ -57,3 +57,6 @@ data class QuranVersesEntity(
 
     val rub: Int? = null
                                           )
+
+
+     data class QuranPage(val versesList:List<QuranVersesEntity>?=null,val page: Int?=null,val lines:Int? = null)
