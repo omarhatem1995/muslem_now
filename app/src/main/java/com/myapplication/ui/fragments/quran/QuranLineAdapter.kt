@@ -53,8 +53,8 @@ class QuranLineAdapter(
 
         if(item.mobileCode!=null && item.quranAya!=null) {
         Log.d("getCurrentItem" , "${item.line} , ${position}")
-            binding.quranLine.text = item.mobileCode
-            binding.quranLine.typeface = typeface
+//            binding.quranLine.text = item.mobileCode
+//            binding.quranLine.typeface = typeface
 
             binding.quranLine.setOnClickListener {
                 Toast.makeText(context, "aya : ${item.quranAya}", Toast.LENGTH_LONG).show()

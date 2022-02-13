@@ -59,7 +59,7 @@ class QuranPageAdapter(
         adapterPosition: Int
     ) {
 //        Toast.makeText(context,list[position].text,Toast.LENGTH_LONG).show()
-        binding.line1.text = list[position].text
+        //binding.line1.text = list[position].text
 //        Toast.makeText(context," ${list.size}",Toast.LENGTH_LONG).show()
         /*val quranLineAdapter = QuranLineAdapter(list) { item, data ->
         }*/
@@ -77,14 +77,14 @@ class QuranPageAdapter(
         if(listOfEmpty.contains(position))
         {
 
-            binding.line1.visibility = View.VISIBLE
-            binding.lineWord.visibility = View.VISIBLE
-            binding.lineRecycler.visibility = View.GONE
-            binding.line1.text = "\u00F2"
-            binding.lineWord.text = "\u00F1"
-            val typeface2: Typeface = ResourcesCompat.getFont(context, R.font.bsml)!!
-            binding.line1.typeface = typeface2
-            binding.lineWord.typeface = typeface2
+//            binding.line1.visibility = View.VISIBLE
+//            binding.lineWord.visibility = View.VISIBLE
+//            binding.lineRecycler.visibility = View.GONE
+//            binding.line1.text = "\u00F2"
+//            binding.lineWord.text = "\u00F1"
+//            val typeface2: Typeface = ResourcesCompat.getFont(context, R.font.bsml)!!
+//            binding.line1.typeface = typeface2
+//            binding.lineWord.typeface = typeface2
 
         }
     }

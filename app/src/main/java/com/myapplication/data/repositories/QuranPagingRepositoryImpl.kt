@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
 class QuranPagingRepositoryImpl :QuranPagingRepo {
-    override fun getQuranPagingData(context: Context,page:Int): Flow<List<QuranVersesEntity>> {
+    override fun getQuranPagingData(context: Context,page:Int): Flow<List<QuranVersesEntity>?> {
 //        return Pager(defaultPageConfig(),pagingSourceFactory = {MuslemNowDataBase.getDataBase(context).alQuranDao().getQuranPaged()}).flow.
 //        flowOn(Dispatchers.IO)
 

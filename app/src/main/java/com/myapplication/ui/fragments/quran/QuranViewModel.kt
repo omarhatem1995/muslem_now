@@ -21,37 +21,68 @@ class QuranViewModel(application: Application): AndroidViewModel(application)  {
 
    // private val quranPagingSource = QuranPagingSource(quranDao)
 
-    var quranFlow:MutableStateFlow<List<QuranPage>?> = MutableStateFlow(null)
+    var quranFlow:MutableLiveData<MutableList<QuranPage>?> = MutableLiveData(null)
     var quranVersesMutableLiveData:MutableLiveData<List<QuranVersesEntity>?> = MutableLiveData()
+    var currentPage:Int = 1
 
-    private val pages:MutableList<QuranPage> = mutableListOf()
+    val isLastPageState:MutableLiveData<Boolean> = MutableLiveData(false)
+    val pageSize:MutableLiveData<Int> = MutableLiveData(1)
+
+    private var pages:MutableList<QuranPage> = mutableListOf()
 
     private val quranRepository=QuranPagingRepositoryImpl()
 
     init {
         viewModelScope.launch {
-            getPagingData(603)
+            getPagingData()
         }
 
     }
 
 
-    suspend fun getPagingData(page:Int)
+     fun getPagingData()
     {
-        return quranRepository.getQuranPagingData(getApplication(),page)
-            .collect {
-                val quranPage = QuranPage(it,page,it.last().line)
-                pages.add(quranPage)
-                quranVersesMutableLiveData.postValue(it)
-                quranFlow.value = pages
-                Log.d("pages", "getPagingData: $pages", )
-            }
+        viewModelScope.launch {
+            quranRepository.getQuranPagingData(getApplication(),currentPage)
+                .collect {
+                    Log.e("pageNum", "getPagingData: $currentPage ", )
+
+                    //quranVersesMutableLiveData.postValue(it)
+
+                    if (it != null && it.isNotEmpty())
+                    {
+                        val quranPage = QuranPage(it,currentPage,it.last().line)
+                        val oldList = pages
+                        pages.clear()
+                        oldList.add(quranPage)
+                        pages.addAll(oldList)
+
+
+                        quranFlow.value = pages
+
+                        Log.d("pages", "getPagingData: $oldList ")
+                        currentPage += 1
+
+                        getLastPage()
+                        pageSize.value = it.size
+                    }
+
+
+                   // Log.d("pages", "getPagingData: $pages", )
+
+                }
+        }
+
+
 
     }
 
-    suspend fun getLastPage(currentPage:Int):Boolean
+    suspend fun getLastPage()
     {
-        return quranDao.getLastPage()==currentPage
+           val lastOfPaging = quranDao.getLastPage()
+            isLastPageState.value = lastOfPaging==currentPage
+        Log.e("lastPage", "getLastPage: $lastOfPaging , ${isLastPageState.value} ", )
+
     }
 
 }

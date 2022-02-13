@@ -2,20 +2,14 @@ package com.myapplication.ui.fragments.quran
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Typeface
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
-import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.myapplication.R
 import com.myapplication.data.entities.model.QuranPage
 import com.myapplication.data.entities.model.QuranVersesEntity
-import com.myapplication.databinding.QuranItemBinding
 import com.myapplication.databinding.QuranLinesRecyclerBinding
 
 class QuranPagingAdapter(val context:Context):ListAdapter<QuranPage,QuranPagingAdapter.QuranAyaViewHolder>(DiffCallBack) {
@@ -23,6 +17,9 @@ class QuranPagingAdapter(val context:Context):ListAdapter<QuranPage,QuranPagingA
 
     private var pageNumber = 1
     private val linesAdapter:QuranLinesAdapter = QuranLinesAdapter(context)
+    val linesList:MutableList<List<QuranVersesEntity>> = mutableListOf()
+    var pages:MutableList<QuranPage> = mutableListOf()
+
    inner class QuranAyaViewHolder(val binding:QuranLinesRecyclerBinding):RecyclerView.ViewHolder(binding.root)
     {
 
@@ -35,29 +32,42 @@ class QuranPagingAdapter(val context:Context):ListAdapter<QuranPage,QuranPagingA
 
 
 
+
+
             val list = currentList
             binding.lineRecycler.adapter = linesAdapter
+
+            Log.e("Position", "onBind: $position", )
+            Log.e("adapterPage", "onBind: ${currentList[position]} ", )
+
 
             var lineNum = 1
             var quranList : QuranPage
           //  Log.e(null, "onBindViewHolder: $list ,position :$position ", )
-            if (list.isNotEmpty())
+            if (currentList[position].versesList?.isNotEmpty()!!)
             {
-                lineNum = list[position].lines!!
 
+                lineNum = currentList[position].lines!!
 
-                for (number in 2..lineNum)
+                Log.e("CurrentPages", "onBind: $currentList ", )
+                for (number in 1..lineNum)
                 {
-                   val filteredByLine = list[position].versesList?.filter {
+                   val filteredByLine = currentList[position].versesList?.filter {
 
                        it.line == number
 
                    }
 
-                    Log.e("QuranPagingAdapter", "onBind: $filteredByLine", )
+                    //Log.e("QuranPagingAdapter", "onBind: $filteredByLine", )
                     if (filteredByLine?.isNotEmpty()!!)
                     {
-                        linesAdapter.submitList(filteredByLine)
+                        if (filteredByLine.first().line == 1)
+                        {
+                            linesList.clear()
+                            linesAdapter.submitList(listOf())
+                        }
+                        linesList.add(filteredByLine)
+                        linesAdapter.submitList(linesList)
                     }
 
 
@@ -106,20 +116,18 @@ class QuranPagingAdapter(val context:Context):ListAdapter<QuranPage,QuranPagingA
             oldItem: QuranPage,
             newItem:QuranPage
         ): Boolean {
-         return   if (!oldItem.versesList.isNullOrEmpty()&&!newItem.versesList.isNullOrEmpty())
-          return oldItem.page == newItem.page
-            else
-                true
+         return oldItem == newItem
+
+           // if (!oldItem.versesList.isNullOrEmpty()&&!newItem.versesList.isNullOrEmpty())
         }
 
         override fun areContentsTheSame(
             oldItem: QuranPage,
             newItem: QuranPage
         ): Boolean {
-            return   if (!oldItem.versesList.isNullOrEmpty()&&!newItem.versesList.isNullOrEmpty())
-                return oldItem== newItem
-            else
-                true
+            return   false
+
+
         }
 
 
