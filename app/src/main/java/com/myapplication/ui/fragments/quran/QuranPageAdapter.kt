@@ -80,8 +80,9 @@ class QuranPageAdapter(
             binding.line1.visibility = View.VISIBLE
             binding.lineWord.visibility = View.VISIBLE
             binding.lineRecycler.visibility = View.GONE
+            binding.constraintQuran.visibility = View.VISIBLE
             binding.line1.text = "\u00F2"
-            binding.lineWord.text = "\u00F1"
+            binding.lineWord.text = "\u00F1 \u005C"
             val typeface2: Typeface = ResourcesCompat.getFont(context, R.font.bsml)!!
             binding.line1.typeface = typeface2
             binding.lineWord.typeface = typeface2
