@@ -3,6 +3,8 @@ package com.myapplication.ui.fragments.quran
 import android.content.Context
 import android.graphics.Typeface
 import android.util.Log
+import android.util.TypedValue
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,12 +24,12 @@ import java.util.*
 
 
 class QuranLinesAdapter(val context: Context) :
-    ListAdapter<QuranVersesEntity, QuranLinesAdapter.QuranLinesViewHolder>(DiffCallBack) {
+    ListAdapter<List<QuranVersesEntity>, QuranLinesAdapter.QuranLinesViewHolder>(DiffCallBack) {
 
 
     inner class QuranLinesViewHolder(private val binding: QuranItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun onBind(entity: QuranVersesEntity) {
+        fun onBind(entities: List<QuranVersesEntity>) {
             //Log.e("QuranLinesAdapter", "onBind:$list ")
             Log.e("QuranLinesAdapter", "currentList:$currentList ")
 //           val newList = list.map {
@@ -42,14 +44,30 @@ class QuranLinesAdapter(val context: Context) :
 //                return
 //
 //            }
+            var typeface: Typeface?
+            entities.forEach {
+                val kelma = it.mobileCode
+                val text = TextView(context)
+                if (it.page == 1)
+                {
+                    typeface = ResourcesCompat.getFont(context, R.font.p1)!!
+                }else if (it.page == 2)
+                {
+                    typeface = ResourcesCompat.getFont(context, R.font.p2)!!
 
+                }else
+                {
+                    typeface = ResourcesCompat.getFont(context, R.font.p3)!!
+                }
 
-            val kelma = entity.mobileCode
-            val text = TextView(context)
-            val typeface: Typeface = ResourcesCompat.getFont(context, R.font.p1)!!
-            text.text = kelma
-            // Log.e(null, "onBind: $kelma", )
-            text.typeface = typeface
+                text.text = kelma
+                // Log.e(null, "onBind: $kelma", )
+                text.typeface = typeface
+                text.gravity = Gravity.CENTER_HORIZONTAL
+                text.setTextSize(TypedValue.COMPLEX_UNIT_SP,20f)
+                binding.quranLine.addView(text)
+            }
+
 //            binding.quranLine.addView(text)
 //           list.forEach {
 //               val view = itemInflator()
@@ -82,20 +100,20 @@ class QuranLinesAdapter(val context: Context) :
     }
 
 
-    companion object DiffCallBack : DiffUtil.ItemCallback<QuranVersesEntity>() {
+    companion object DiffCallBack : DiffUtil.ItemCallback<List<QuranVersesEntity>>() {
         override fun areItemsTheSame(
-            oldItem: QuranVersesEntity,
-            newItem: QuranVersesEntity
+            oldItem: List<QuranVersesEntity>,
+            newItem: List<QuranVersesEntity>
         ): Boolean {
 
-            return oldItem.id == newItem.id
+            return oldItem.last().id == newItem.last().id
 
 
         }
 
         override fun areContentsTheSame(
-            oldItem: QuranVersesEntity,
-            newItem: QuranVersesEntity
+            oldItem: List<QuranVersesEntity>,
+            newItem: List<QuranVersesEntity>
         ): Boolean {
 
             return oldItem == newItem
