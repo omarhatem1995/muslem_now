@@ -91,10 +91,10 @@ package com.myapplication.ui.fragments.quran
 //    }
 //
 //}
-            Log.d("getPage", "  , $position")
-        binding.lineRecycler.adapter = quranLineAdapter
+//            Log.d("getPage", "  , $position")
+//        binding.lineRecycler.adapter = quranLineAdapter
 //        if(list.size-1 == position)
-        quranLineAdapter.submitList(list.filter { it.line == position })
+/*        quranLineAdapter.submitList(list.filter { it.line == position })
         if(listOfEmpty.contains(position))
         {
 
@@ -111,4 +111,4 @@ package com.myapplication.ui.fragments.quran
         }
     }
 
-}
+}*/
