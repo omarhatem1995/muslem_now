@@ -63,3 +63,4 @@ data class QuranPage(
     val page: Int? = null,
     val lines: Int? = null
 )
+

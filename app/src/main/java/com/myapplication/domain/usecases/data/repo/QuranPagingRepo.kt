@@ -8,5 +8,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface QuranPagingRepo {
 
-    fun getQuranPagingData(context: Context): Flow<PagingData<QuranVersesEntity>>
+   suspend fun getQuranPagingData(context: Context,page:Int): List<QuranVersesEntity>
 }
