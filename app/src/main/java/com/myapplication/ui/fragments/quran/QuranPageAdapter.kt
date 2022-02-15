@@ -87,6 +87,28 @@ package com.myapplication.ui.fragments.quran
 //            binding.lineWord.typeface = typeface2
 //
 //        }
+
 //    }
 //
 //}
+            Log.d("getPage", "  , $position")
+        binding.lineRecycler.adapter = quranLineAdapter
+//        if(list.size-1 == position)
+        quranLineAdapter.submitList(list.filter { it.line == position })
+        if(listOfEmpty.contains(position))
+        {
+
+            binding.line1.visibility = View.VISIBLE
+            binding.lineWord.visibility = View.VISIBLE
+            binding.lineRecycler.visibility = View.GONE
+            binding.constraintQuran.visibility = View.VISIBLE
+            binding.line1.text = "\u00F2"
+            binding.lineWord.text = "\u00F1 \u005C"
+            val typeface2: Typeface = ResourcesCompat.getFont(context, R.font.bsml)!!
+            binding.line1.typeface = typeface2
+            binding.lineWord.typeface = typeface2
+
+        }
+    }
+
+}
