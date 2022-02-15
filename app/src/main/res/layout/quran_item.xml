@@ -9,21 +9,17 @@
 
 
 
-     <TextView
-         android:id="@+id/quranLine"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layoutDirection="rtl"
-         android:gravity="center"
-         android:text="123"
-         android:maxLines="1"
-         android:textSize="24sp"
-         android:textColor="@color/black"
-         android:orientation="horizontal">
+    <LinearLayout
+        android:id="@+id/quranLine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layoutDirection="rtl"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
 
 
 
-     </TextView>
+    </LinearLayout>
 
 
 

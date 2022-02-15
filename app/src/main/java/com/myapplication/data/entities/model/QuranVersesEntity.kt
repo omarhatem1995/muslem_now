@@ -2,7 +2,6 @@ package com.myapplication.data.entities.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "QuranTable")
 data class QuranVersesEntity(
@@ -60,7 +59,8 @@ data class QuranVersesEntity(
 
 
 data class QuranPage(
-    val versesList: List<QuranVersesEntity>? = null,
+    val versesList: List<QuranVersesEntity?> = listOf(),
     val page: Int? = null,
     val lines: Int? = null
 )
+

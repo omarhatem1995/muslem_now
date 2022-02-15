@@ -2,91 +2,103 @@ package com.myapplication.ui.fragments.quran
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Typeface
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
-import androidx.paging.PagingDataAdapter
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.myapplication.R
 import com.myapplication.data.entities.model.QuranPage
 import com.myapplication.data.entities.model.QuranVersesEntity
-import com.myapplication.databinding.QuranItemBinding
 import com.myapplication.databinding.QuranLinesRecyclerBinding
 
-class QuranPagingAdapter(val context:Context):ListAdapter<QuranPage,QuranPagingAdapter.QuranAyaViewHolder>(DiffCallBack) {
+class QuranPagingAdapter(val context:Context):ListAdapter<QuranVersesEntity,QuranPagingAdapter.QuranAyaViewHolder>(DiffCallBack) {
 
 
     private var pageNumber = 1
-    private val linesAdapter:QuranLinesAdapter = QuranLinesAdapter(context)
-   inner class QuranAyaViewHolder(val binding:QuranLinesRecyclerBinding):RecyclerView.ViewHolder(binding.root)
-    {
+    val getNewPages:MutableLiveData<Int> = MutableLiveData(0)
 
 
 
-        @SuppressLint("SetTextI18n")
-        fun onBind(position: Int)
-
-        {
+   inner class QuranAyaViewHolder(val binding:QuranLinesRecyclerBinding):RecyclerView.ViewHolder(binding.root) {
 
 
 
-            val list = currentList
-            binding.lineRecycler.adapter = linesAdapter
 
-            var lineNum = 1
-            var quranList : QuranPage
-          //  Log.e(null, "onBindViewHolder: $list ,position :$position ", )
-            if (list.isNotEmpty())
-            {
-                lineNum = list[position].lines!!
+       @SuppressLint("SetTextI18n")
+       fun onBind(position: Int) {
+           val linesList:MutableList<List<QuranVersesEntity>> = mutableListOf()
+
+           if (getNewPages.value!! <= position)
+           {
+               getNewPages.value = position
+           }
 
 
-                for (number in 2..lineNum)
-                {
-                   val filteredByLine = list[position].versesList?.filter {
+           var page: QuranPage? = null
 
-                       it.line == number
+           Log.d("totalList", "onBind: $currentList",)
+
+           val list = currentList
+
+
+
+           var lineNum = 1
+           var pageData: List<QuranVersesEntity?> = listOf()
+           if (list.isNotEmpty()) {
+               pageData=  list.filter {
+
+                    it?.page == position+1
+
 
                    }
 
-                    Log.e("QuranPagingAdapter", "onBind: $filteredByLine", )
-                    if (filteredByLine?.isNotEmpty()!!)
-                    {
-                        linesAdapter.submitList(filteredByLine)
-                    }
 
+                if (pageData.isNotEmpty())
+                {
 
-
-
-
+                    page = QuranPage(pageData,pageData.last()?.page,pageData.last()?.line)
                 }
+
             }
 
-
-
-                }
-
-
-
-
-
-           //binding.quranLine.addView()
-
-           // val  typeface:Typeface = ResourcesCompat.getFont(context, R.font.p1)!!
-           // binding.aya.typeface = typeface
-
-           // Log.e(null, "onBind: $kelma", )
-               // Html.fromHtml("\\u$kelma")
+               Log.e("page", "onBindViewHolder:position :$position , $page ,",)
+               if (page != null) {
+                   lineNum = page.lines!!
 
 
 
+                   for (number in 1..lineNum) {
+                       val filteredByLine = page.versesList?.filter {
 
-    }
+                           it?.line == number
+
+                       }
+
+                       Log.e("QuranPagingAdapter", "onBind: $filteredByLine",)
+                       if (filteredByLine?.isNotEmpty()!!) {
+                           val linesAdapter: QuranLinesAdapter = QuranLinesAdapter(context)
+                           binding.lineRecycler.adapter = linesAdapter
+                           if (filteredByLine.first()?.line == 1) {
+                              // linesList.clear()
+                              // linesAdapter.submitList(listOf())
+                           }
+                           linesList.add(filteredByLine as List<QuranVersesEntity>)
+                           linesAdapter.submitList(linesList)
+
+                       }
+
+
+                   }
+               }
+
+
+           }
+
+
+
+       }
 
     override fun onBindViewHolder(holder: QuranAyaViewHolder, position: Int) {
 
@@ -101,25 +113,23 @@ class QuranPagingAdapter(val context:Context):ListAdapter<QuranPage,QuranPagingA
     }
 
 
-    companion object DiffCallBack: DiffUtil.ItemCallback<QuranPage>() {
+    companion object DiffCallBack: DiffUtil.ItemCallback<QuranVersesEntity>() {
         override fun areItemsTheSame(
-            oldItem: QuranPage,
-            newItem:QuranPage
+            oldItem: QuranVersesEntity,
+            newItem:QuranVersesEntity
         ): Boolean {
-         return   if (!oldItem.versesList.isNullOrEmpty()&&!newItem.versesList.isNullOrEmpty())
-          return oldItem.page == newItem.page
-            else
-                true
+         return   oldItem.id == newItem.id
+
+
         }
 
         override fun areContentsTheSame(
-            oldItem: QuranPage,
-            newItem: QuranPage
+            oldItem: QuranVersesEntity,
+            newItem: QuranVersesEntity
         ): Boolean {
-            return   if (!oldItem.versesList.isNullOrEmpty()&&!newItem.versesList.isNullOrEmpty())
-                return oldItem== newItem
-            else
-                true
+            return   oldItem == newItem
+
+
         }
 
 
@@ -129,5 +139,6 @@ class QuranPagingAdapter(val context:Context):ListAdapter<QuranPage,QuranPagingA
     {
         this.pageNumber = page
     }
+
 
 }

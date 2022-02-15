@@ -20,8 +20,8 @@ interface QuranDao {
     @Query("Select * From QuranTable")
      fun getAllQuran(): Flow<List<QuranVersesEntity>>
 
-    @Query("Select * From QuranTable Where page = :page")
-      fun getQuranPaged(page:Int):Flow<List<QuranVersesEntity>>
+    @Query("Select * From QuranTable Where page >= :initial <= :page+10")
+       suspend fun getQuranPaged(page:Int,initial: Int =1):List<QuranVersesEntity>
 
      @Query("Select MAX(page) From QuranTable ")
      suspend fun getLastPage():Int?
