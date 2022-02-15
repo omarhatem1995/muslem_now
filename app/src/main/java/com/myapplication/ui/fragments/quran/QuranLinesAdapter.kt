@@ -41,10 +41,11 @@ class QuranLinesAdapter(val context: Context) :
             entities.forEach {
                 val kelma = it.mobileCode
                 val text = TextView(context)
-                if (it.page == 1)
-                {
-                    typeface = ResourcesCompat.getFont(context, R.font.p1)!!
-                }else if (it.page == 2)
+                var pageNumber = it.page
+//                if (it.page == 1)
+//                {
+                    typeface = Typeface.createFromAsset(context.assets,"p$pageNumber.ttf")!!
+                /*}else if (it.page == 2)
                 {
                     typeface = ResourcesCompat.getFont(context, R.font.p2)!!
 
@@ -57,13 +58,13 @@ class QuranLinesAdapter(val context: Context) :
                 }else
                 {
                     typeface = ResourcesCompat.getFont(context, R.font.p5)!!
-                }
+                }*/
 
                 text.text = kelma
                 // Log.e(null, "onBind: $kelma", )
                 text.typeface = typeface
                 //text.gravity = Gravity.CENTER_HORIZONTAL
-                text.setTextSize(TypedValue.COMPLEX_UNIT_SP,20f)
+                text.setTextSize(TypedValue.COMPLEX_UNIT_SP,22f)
                 binding.quranLine.addView(text)
             }
 
