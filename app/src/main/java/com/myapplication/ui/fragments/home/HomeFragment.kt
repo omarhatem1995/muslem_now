@@ -375,7 +375,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                 if (!flagFoundPrayerId) {
                     vm.getPrayerTimesForSpecificDate(nextDay, requireContext())
                         .observe(requireActivity(), androidx.lifecycle.Observer { prayer ->
-                            if (!prayer.isNullOrEmpty()) {
+                            if (!prayer.isNullOrEmpty() && context!=null) {
                                 binding.remainingTimeForNextPrayer.text =
                                     getString(R.string.remaining_time_for) + getNameOfPrayer(
                                         requireContext(),

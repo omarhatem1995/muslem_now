@@ -30,7 +30,8 @@ class QuranActivity : AppCompatActivity() {
         val pager = PagerSnapHelper()
         pager.attachToRecyclerView(binding.quranRecycler)
 
-
+        val pageNumber = intent.getIntExtra("pageNumber",1)
+        Log.d("pageNumber", pageNumber.toString())
 
         lifecycleScope.launch {
            viewModel.quranFlow.flowWithLifecycle(lifecycle,Lifecycle.State.STARTED).collectLatest {

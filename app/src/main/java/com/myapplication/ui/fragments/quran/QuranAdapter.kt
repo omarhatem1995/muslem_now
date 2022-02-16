@@ -70,5 +70,11 @@ class QuranAdapter(
             "${item.type?.let { getMakkiyahOrMaddaniyah(context, it) }} - ${item.count.toString()} " + context.getString(R.string.aya)
 
         binding.pageNumber.text = item.page + " " +context.getString(R.string.page)
+
+        binding.itemSoura.setOnClickListener {
+            val intentQuranActivity = Intent(context,QuranActivity::class.java)
+            intentQuranActivity.putExtra("pageNumber",item.page?.toInt())
+            context.startActivity(intentQuranActivity)
+        }
     }
 }
