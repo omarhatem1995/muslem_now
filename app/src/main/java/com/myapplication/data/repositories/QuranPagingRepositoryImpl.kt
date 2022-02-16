@@ -11,7 +11,7 @@ class QuranPagingRepositoryImpl :QuranPagingRepo {
 
 
 
-    override suspend fun getQuranPagingData(context: Context,page:Int): List<QuranVersesEntity>{
+    override suspend fun getQuranPagingData(context: Context,page:Int,initPage:Int): List<QuranVersesEntity>{
         val dao = MuslemNowDataBase.getDataBase(context).alQuranDao()
 //        val source = QuranPagingSource(dao)
 //
@@ -20,7 +20,7 @@ class QuranPagingRepositoryImpl :QuranPagingRepo {
 
 
 
-         return  MuslemNowDataBase.getDataBase(context).alQuranDao().getQuranPaged(page)
+         return  MuslemNowDataBase.getDataBase(context).alQuranDao().getQuranPaged(page,initPage)
 
     }
 

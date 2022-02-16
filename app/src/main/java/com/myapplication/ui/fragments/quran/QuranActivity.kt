@@ -32,16 +32,19 @@ class QuranActivity : AppCompatActivity() {
 
         val pageNumber = intent.getIntExtra("pageNumber",1)
         Log.d("pageNumber", pageNumber.toString())
+        adapter = QuranPagingAdapter(this@QuranActivity)
+
+        binding.quranRecycler.adapter = adapter
+        viewModel.getPagingData(pageNumber)
 
         lifecycleScope.launch {
            viewModel.quranFlow.flowWithLifecycle(lifecycle,Lifecycle.State.STARTED).collectLatest {
-               adapter = QuranPagingAdapter(this@QuranActivity)
 
-             binding.quranRecycler.adapter = adapter
                if (it != null) {
                    adapter!!.submitList(it)
 
 
+                   binding.quranRecycler.scrollToPosition(pageNumber-1)
                }
 
             }
@@ -51,7 +54,8 @@ class QuranActivity : AppCompatActivity() {
             it.getNewPages.observe(this){ position->
                 Log.e("swiped", "onSwiped: right :$position", )
                 if (position!=0 &&position%5 ==0)
-                    viewModel.getPagingData(position)
+                    viewModel.getPagingData(position+1)
+                binding.quranRecycler.scrollToPosition(position)
             }
         }
 
