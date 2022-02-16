@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
@@ -16,7 +17,7 @@ import com.myapplication.data.entities.model.QuranVersesEntity
 import com.myapplication.databinding.QuranItemBinding
 
 
-class QuranLinesAdapter(val context: Context) :
+class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>) :
     ListAdapter<List<QuranVersesEntity>, QuranLinesAdapter.QuranLinesViewHolder>(DiffCallBack) {
 
 
@@ -44,7 +45,6 @@ class QuranLinesAdapter(val context: Context) :
                 var pageNumber = it.page
 //                if (it.page == 1)
 //                {
-                    typeface = Typeface.createFromAsset(context.assets,"p$pageNumber.ttf")!!
                 /*}else if (it.page == 2)
                 {
                     typeface = ResourcesCompat.getFont(context, R.font.p2)!!
@@ -59,9 +59,17 @@ class QuranLinesAdapter(val context: Context) :
                 {
                     typeface = ResourcesCompat.getFont(context, R.font.p5)!!
                 }*/
-
+                Log.d("emptyList", " is ${emptyList} , ${position}")
                 text.text = kelma
+                if(emptyList.contains(position)){
+                    binding.headerQuran.text = "\u00F2"
+                    binding.headerQuran.visibility = View.VISIBLE
+                    binding.headerNameQuran.visibility = View.VISIBLE
+                    typeface = Typeface.createFromAsset(context.assets,"bsml.ttf")!!
+                    binding.headerQuran.typeface = typeface
+                }
                 // Log.e(null, "onBind: $kelma", )
+                typeface = Typeface.createFromAsset(context.assets,"p$pageNumber.ttf")!!
                 text.typeface = typeface
                 //text.gravity = Gravity.CENTER_HORIZONTAL
                 text.setTextSize(TypedValue.COMPLEX_UNIT_SP,22f)

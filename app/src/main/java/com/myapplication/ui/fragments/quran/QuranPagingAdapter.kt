@@ -24,6 +24,7 @@ class QuranPagingAdapter(val context:Context):ListAdapter<QuranVersesEntity,Qura
    inner class QuranAyaViewHolder(val binding:QuranLinesRecyclerBinding):RecyclerView.ViewHolder(binding.root) {
 
 
+       var emptyLines : ArrayList<Int> = ArrayList()
 
 
        @SuppressLint("SetTextI18n")
@@ -38,7 +39,7 @@ class QuranPagingAdapter(val context:Context):ListAdapter<QuranVersesEntity,Qura
 
            var page: QuranPage? = null
 
-           Log.d("totalList", "onBind: $currentList",)
+           Log.d("totalList", "onBind: $currentList")
 
            val list = currentList
 
@@ -63,7 +64,7 @@ class QuranPagingAdapter(val context:Context):ListAdapter<QuranVersesEntity,Qura
 
             }
 
-               Log.e("page", "onBindViewHolder:position :$position , $page ,",)
+               Log.e("page", "onBindViewHolder:position :$position , $page ,")
                if (page != null) {
                    lineNum = page.lines!!
 
@@ -75,13 +76,18 @@ class QuranPagingAdapter(val context:Context):ListAdapter<QuranVersesEntity,Qura
                            it?.line == number
 
                        }
+                       if(filteredByLine.isEmpty() && isOdd(number)) {
+                           emptyLines.add(number - 1)
+                       }
+                       Log.e("QuranPagingAdapter", "onBind: $filteredByLine")
+                       Log.e("emptyAdapterList", "${position} onBind: $emptyLines")
 
-                       Log.e("QuranPagingAdapter", "onBind: $filteredByLine",)
                        if (filteredByLine?.isNotEmpty()!!) {
-                           val linesAdapter: QuranLinesAdapter = QuranLinesAdapter(context)
+                           val linesAdapter: QuranLinesAdapter = QuranLinesAdapter(context , emptyLines)
                            binding.lineRecycler.adapter = linesAdapter
                            if (filteredByLine.first()?.line == 1) {
-                              // linesList.clear()
+                               emptyLines.clear()
+                               // linesList.clear()
                               // linesAdapter.submitList(listOf())
                            }
                            linesList.add(filteredByLine as List<QuranVersesEntity>)
@@ -99,6 +105,10 @@ class QuranPagingAdapter(val context:Context):ListAdapter<QuranVersesEntity,Qura
 
 
        }
+
+    fun isOdd(`val`: Int): Boolean {
+        return `val` and 0x01 != 0
+    }
 
     override fun onBindViewHolder(holder: QuranAyaViewHolder, position: Int) {
 
