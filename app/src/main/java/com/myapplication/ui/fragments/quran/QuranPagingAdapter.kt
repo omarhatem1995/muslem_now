@@ -25,6 +25,7 @@ class QuranPagingAdapter(val context:Context):ListAdapter<QuranVersesEntity,Qura
 
 
        var emptyLines : ArrayList<Int> = ArrayList()
+       var suraNumber : Int = 1
 
 
        @SuppressLint("SetTextI18n")
@@ -78,6 +79,8 @@ class QuranPagingAdapter(val context:Context):ListAdapter<QuranVersesEntity,Qura
                        }
                        if(filteredByLine.isEmpty() && isOdd(number)) {
                            emptyLines.add(number - 1)
+                  /*         if(filteredByLine[number-1]!=null)
+                           suraNumber = filteredByLine[number-1]?.sura!!*/
                        }
                        Log.e("QuranPagingAdapter", "onBind: $filteredByLine")
                        Log.e("emptyAdapterList", "${position} onBind: $emptyLines")

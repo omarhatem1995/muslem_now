@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.myapplication.R
+import com.myapplication.SuraNameUtil
 import com.myapplication.data.entities.model.QuranVersesEntity
 import com.myapplication.databinding.QuranItemBinding
 
@@ -43,6 +44,7 @@ class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>) :
                 val kelma = it.mobileCode
                 val text = TextView(context)
                 var pageNumber = it.page
+                var suraNumber = it.sura
 //                if (it.page == 1)
 //                {
                 /*}else if (it.page == 2)
@@ -65,7 +67,14 @@ class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>) :
                     binding.headerQuran.text = "\u00F2"
                     binding.headerQuran.visibility = View.VISIBLE
                     binding.headerNameQuran.visibility = View.VISIBLE
+                    Log.d("suraNumber", suraNumber.toString())
+                    binding.headerNameQuran.text = "\u005C ${suraNumber?.let { it1 ->
+                        SuraNameUtil.getSuraName(
+                            it1
+                        )
+                    }}"
                     typeface = Typeface.createFromAsset(context.assets,"bsml.ttf")!!
+                    binding.headerNameQuran.typeface = typeface
                     binding.headerQuran.typeface = typeface
                 }
                 // Log.e(null, "onBind: $kelma", )
