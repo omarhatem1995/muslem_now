@@ -1,6 +1,7 @@
 package com.myapplication.ui.fragments.quran
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -19,13 +20,16 @@ class QuranViewModel(application: Application): AndroidViewModel(application)  {
     var quranFlow:MutableStateFlow<List<QuranPage?>?> = MutableStateFlow(null)
     var quranVersesMutableLiveData:MutableLiveData<List<QuranVersesEntity>?> = MutableLiveData()
 
-    private val pages:MutableList<QuranPage?> = mutableListOf()
+    private var pages:ArrayList<QuranPage?> = ArrayList()
 
     private val quranRepository=QuranPagingRepositoryImpl()
 
     init {
 
-            //getPagingData(1)
+        for (num in 0..603)
+        {
+            pages.add(QuranPage())
+        }
 
 
     }
@@ -36,6 +40,8 @@ class QuranViewModel(application: Application): AndroidViewModel(application)  {
 //       return quranRepository.getQuranPagingData(getApplication()).stateIn(viewModelScope,
 //           SharingStarted.WhileSubscribed(5000), PagingData.empty())
 
+
+
         viewModelScope.launch(Dispatchers.IO) {
             var initialPage = page-10
             if (initialPage <= 0)
@@ -43,6 +49,11 @@ class QuranViewModel(application: Application): AndroidViewModel(application)  {
                 initialPage = 1
             }
             val verses =quranRepository.getQuranPagingData(getApplication(),page,initialPage)
+
+
+
+
+            Log.e("verses", "getPagingData: ${pages.size}", )
 
             val quranPages = preparePages(verses,page+10,initialPage)
             if (quranPages.isNotEmpty())
@@ -54,6 +65,7 @@ class QuranViewModel(application: Application): AndroidViewModel(application)  {
             }
 
 
+            Log.e("pages", "getPagingData: $pages", )
             quranFlow.emit(pages.toList())
             }
         }
@@ -63,16 +75,22 @@ class QuranViewModel(application: Application): AndroidViewModel(application)  {
 
    private fun preparePages(list:List<QuranVersesEntity>,start:Int,end:Int):List<QuranPage>
    {
-       var pageData: List<QuranVersesEntity> = listOf()
        var pages:MutableList<QuranPage> = mutableListOf()
-       var quranPage:QuranPage? = null
        if (list.isNotEmpty()) {
+           Log.e("compare", "preparePages: $start , $end", )
+           var pageData: List<QuranVersesEntity> = listOf()
 
-           for (page in start..end)
+           var quranPage:QuranPage? = null
+
+           for (page in end..start)
            {
+               Log.e("pageNumber", "preparePages: $page ", )
                pageData=  list.filter {
 
-                   it?.page == page
+
+                   it.page == page
+
+
 
 
                }
@@ -80,7 +98,8 @@ class QuranViewModel(application: Application): AndroidViewModel(application)  {
                {
 
                    quranPage = QuranPage(pageData,pageData.last()?.page,pageData.last()?.line)
-                   pageData = listOf()
+                   Log.e("perPage", "preparePages: $quranPage", )
+                   //pageData = listOf()
                }
 
                if (quranPage != null) {
@@ -91,6 +110,7 @@ class QuranViewModel(application: Application): AndroidViewModel(application)  {
 
 
        }
+       Log.e("toPages", "preparePages: $pages", )
        return pages.toList()
    }
 

@@ -21,6 +21,7 @@ class QuranPagingAdapter(val context:Context):ListAdapter<QuranPage,QuranPagingA
 
 
 
+
    inner class QuranAyaViewHolder(val binding:QuranLinesRecyclerBinding):RecyclerView.ViewHolder(binding.root) {
 
 
@@ -69,7 +70,7 @@ class QuranPagingAdapter(val context:Context):ListAdapter<QuranPage,QuranPagingA
 //            }
 
                Log.e("page", "onBindViewHolder:position :$position , $page ,")
-               if (page != null) {
+               if (page != null && page.versesList.isNotEmpty()) {
                    lineNum = page.lines!!
 
 

@@ -68,11 +68,11 @@ class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>) :
                     binding.headerQuran.visibility = View.VISIBLE
                     binding.headerNameQuran.visibility = View.VISIBLE
                     Log.d("suraNumber", suraNumber.toString())
-                    binding.headerNameQuran.text = "\u005C ${suraNumber?.let { it1 ->
+                    binding.headerNameQuran.text = "${suraNumber?.let { it1 ->
                         SuraNameUtil.getSuraName(
                             it1
                         )
-                    }}"
+                    }} \u005C"
                     typeface = Typeface.createFromAsset(context.assets,"bsml.ttf")!!
                     binding.headerNameQuran.typeface = typeface
                     binding.headerQuran.typeface = typeface

@@ -32,13 +32,16 @@ class QuranActivity : AppCompatActivity() {
 
         val pageNumber = intent.getIntExtra("pageNumber",1)
         Log.d("pageNumber", pageNumber.toString())
-        adapter = QuranPagingAdapter(this@QuranActivity)
 
-        binding.quranRecycler.adapter = adapter
         viewModel.getPagingData(pageNumber)
 
         lifecycleScope.launch {
            viewModel.quranFlow.flowWithLifecycle(lifecycle,Lifecycle.State.STARTED).collectLatest {
+
+               Log.e("submit", "onCreate: $it ", )
+               adapter = QuranPagingAdapter(this@QuranActivity)
+
+               binding.quranRecycler.adapter = adapter
 
                if (it != null) {
                    adapter!!.submitList(it)
