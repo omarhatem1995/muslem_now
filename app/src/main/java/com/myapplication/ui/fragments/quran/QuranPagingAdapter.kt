@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.*
+import com.myapplication.SuraNameUtil
 import com.myapplication.data.entities.model.QuranPage
 import com.myapplication.data.entities.model.QuranVersesEntity
 import com.myapplication.databinding.QuranLinesRecyclerBinding
@@ -73,8 +74,29 @@ class QuranPagingAdapter(val context:Context):ListAdapter<QuranPage,QuranPagingA
                if (page != null && page.versesList.isNotEmpty()) {
                    lineNum = page.lines!!
 
-
-
+                   binding.pageNumber.text = page.page.toString()
+                   if(page.versesList[0]!=null && page.versesList.isNotEmpty()) {
+                       binding.suraName.text = page.versesList[0]?.sura?.let {
+                           SuraNameUtil.getSuraName(
+                               it
+                           )
+                       }
+                       binding.suraJuz.text = page.versesList[0]?.juz.toString()
+                   }else if(page.versesList[1]!=null) {
+                       binding.suraName.text = page.versesList[1]?.sura?.let {
+                           SuraNameUtil.getSuraName(
+                               it
+                           )
+                       }
+                       binding.suraJuz.text = page.versesList[1]?.juz.toString()
+                   }else {
+                       binding.suraName.text = page.versesList[2]?.sura?.let {
+                           SuraNameUtil.getSuraName(
+                               it
+                           )
+                       }
+                       binding.suraJuz.text = page.versesList[2]?.juz.toString()
+                   }
                    for (number in 1..lineNum) {
                        val filteredByLine = page.versesList?.filter {
 
