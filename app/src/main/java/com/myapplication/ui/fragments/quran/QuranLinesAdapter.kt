@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -45,6 +46,7 @@ class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>) :
                 val text = TextView(context)
                 var pageNumber = it.page
                 var suraNumber = it.sura
+                text.contentDescription = "${it.aya}"
 //                if (it.page == 1)
 //                {
                 /*}else if (it.page == 2)
@@ -78,6 +80,22 @@ class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>) :
                     typeface = Typeface.createFromAsset(context.assets,"bsml.ttf")!!
                     binding.headerNameQuran.typeface = typeface
                     binding.headerQuran.typeface = typeface
+                }
+                text.setOnClickListener {
+                    Log.d("getItemCount" , " is ${text.contentDescription}")
+                    Toast.makeText(context," is ${text.contentDescription}",Toast.LENGTH_LONG).show()
+                    text.background = context.getDrawable(R.color.backgroundGreen)
+//                    text.setTextColor(context.getColor(R.color.backgroundGreen))
+                    for(i in entities.indices){
+                        if(entities[i].aya.toString().contains(text.contentDescription)) {
+                            text.background = context.getDrawable(R.color.backgroundGreen)
+                            Log.d("getEntities" , " is ${entities[i].aya} , " +
+                                    "${entities[i].text} "  )
+                        }else{
+                            Log.d("getEntities", "is not ${entities[i].aya} , " +
+                                    "$${entities[i].text}")
+                        }
+                    }
                 }
                 // Log.e(null, "onBind: $kelma", )
                 typeface = Typeface.createFromAsset(context.assets,"p$pageNumber.ttf")!!
