@@ -4,7 +4,7 @@ class SuraNameUtil {
     companion object{
         fun getSuraName(suraNumber:Int):String{
             return when(suraNumber){
-                1 -> "\u005B"
+                1 -> "\u005D"
                 2 -> "\u005E"
                 3 -> "\u005F"
                 4 -> "\u0060"

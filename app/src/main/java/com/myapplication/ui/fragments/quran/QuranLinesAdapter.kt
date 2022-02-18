@@ -65,6 +65,7 @@ class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>) :
                 }*/
                 Log.d("emptyList", " is ${emptyList} , ${position}")
                 text.text = kelma
+                Log.d("suraNumber", suraNumber.toString())
                 if(emptyList.contains(position)){
                     binding.headerQuran.text = "\u00F2"
                     binding.headerQuran.visibility = View.VISIBLE
