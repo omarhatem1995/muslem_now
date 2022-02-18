@@ -15,11 +15,15 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.myapplication.R
 import com.myapplication.SuraNameUtil
+import com.myapplication.data.entities.model.AzkarModel
 import com.myapplication.data.entities.model.QuranVersesEntity
 import com.myapplication.databinding.QuranItemBinding
+import com.myapplication.domain.core.Constants
 
 
-class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>) :
+class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>, val click:String,
+                        var onClick: (String, String)-> Unit
+) :
     ListAdapter<List<QuranVersesEntity>, QuranLinesAdapter.QuranLinesViewHolder>(DiffCallBack) {
 
 
@@ -82,12 +86,15 @@ class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>) :
                     binding.headerNameQuran.typeface = typeface
                     binding.headerQuran.typeface = typeface
                 }
+                if(text.contentDescription == click) {
+                    text.background = context.getDrawable(R.color.backgroundGreen)
+                }
                 text.setOnClickListener {
                     Log.d("getItemCount" , " is ${text.contentDescription}")
-                    Toast.makeText(context," is ${text.contentDescription}",Toast.LENGTH_LONG).show()
-                    text.background = context.getDrawable(R.color.backgroundGreen)
+//                    text.background = context.getDrawable(R.color.backgroundGreen)
+                    onClick.invoke(com.myapplication.common.Constants.INCREASEADAPTER,text.contentDescription.toString())
 //                    text.setTextColor(context.getColor(R.color.backgroundGreen))
-                    for(i in entities.indices){
+                    /*for(i in entities.indices){
                         if(entities[i].aya.toString().contains(text.contentDescription)) {
                             text.background = context.getDrawable(R.color.backgroundGreen)
                             Log.d("getEntities" , " is ${entities[i].aya} , " +
@@ -96,7 +103,7 @@ class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>) :
                             Log.d("getEntities", "is not ${entities[i].aya} , " +
                                     "$${entities[i].text}")
                         }
-                    }
+                    }*/
                 }
                 // Log.e(null, "onBind: $kelma", )
                 typeface = Typeface.createFromAsset(context.assets,"p$pageNumber.ttf")!!

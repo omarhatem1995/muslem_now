@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.*
 import com.myapplication.SuraNameUtil
+import com.myapplication.common.Constants
 import com.myapplication.data.entities.model.QuranPage
 import com.myapplication.data.entities.model.QuranVersesEntity
 import com.myapplication.databinding.QuranLinesRecyclerBinding
@@ -114,13 +115,24 @@ class QuranPagingAdapter(val context: Context) :
                     }
                     Log.e("QuranPagingAdapter", "onBind: $filteredByLine")
                     Log.e("emptyAdapterList", "$emptyLinesForChecking onBind: $emptyLines")
-
+                    var click = "0"
                     if (filteredByLine?.isNotEmpty()!!) {
-                        val linesAdapter: QuranLinesAdapter = QuranLinesAdapter(context, emptyLines)
+                        val linesAdapter: QuranLinesAdapter = QuranLinesAdapter(context, emptyLines , click){
+                            type , data ->
+                                when (type) {
+                                    Constants.INCREASEADAPTER -> {
+                                        click = data
+//                                        Log.d("ClickListener", " $click")
+                                        recursiveOnClick(filteredByLine,emptyLines,click,linesList)
+                                    }
+                                }
+
+                        }
+//                        Log.d("getLinesList", " $linesList")
                         binding.lineRecycler.adapter = linesAdapter
                         if (filteredByLine.first()?.line == 1) {
                             emptyLines.clear()
-                            // linesList.clear()
+//                             linesList.clear()
                             // linesAdapter.submitList(listOf())
                         }
                         linesList.add(filteredByLine as List<QuranVersesEntity>)
@@ -135,8 +147,35 @@ class QuranPagingAdapter(val context: Context) :
 
         }
 
+        private fun recursiveOnClick(filteredByLine :List<QuranVersesEntity?>,emptyLines : ArrayList<Int>,
+                                     click:String,linesList : MutableList<List<QuranVersesEntity>>) {
+            if (filteredByLine?.isNotEmpty()!!) {
+                val linesAdapter: QuranLinesAdapter = QuranLinesAdapter(context, emptyLines , click){
+                        type , data ->
+                    when (type) {
+                        Constants.INCREASEADAPTER -> {
+//                        click = data
+                            Log.d("ClickListener", " $click")
+                            recursiveOnClick(filteredByLine,emptyLines,data,linesList)
+                        }
+                    }
+
+                }
+
+                binding.lineRecycler.adapter = linesAdapter
+                if (filteredByLine.first()?.line == 1) {
+                    emptyLines.clear()
+//                     linesList.clear()
+                    // linesAdapter.submitList(listOf())
+                }
+//                linesList.add(filteredByLine as List<QuranVersesEntity>)
+                linesAdapter.submitList(linesList)
+
+            }
+        }
 
     }
+
 
     fun isOdd(`val`: Int): Boolean {
         return `val` and 0x01 != 0
