@@ -8,5 +8,7 @@ object Constants {
     val AZANMESHARY = "AZANMESHARY"
     val AZANELHOSARY = "AZANELHOSARY"
     val OPENSOURA = "OPENSOURA"
+    val LONGCLICK = "LONGCLICK"
+    val ONCLICK = "ONCLICK"
 
 }

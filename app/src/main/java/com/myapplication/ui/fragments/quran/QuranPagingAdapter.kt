@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.*
 import com.myapplication.SuraNameUtil
@@ -68,6 +69,7 @@ class QuranPagingAdapter(val context: Context) :
 //
 //            }
 
+
             Log.e("page", "onBindViewHolder:position :$position , $page ,")
             if (page != null && page.versesList.isNotEmpty()) {
                 lineNum = page.lines!!
@@ -115,17 +117,23 @@ class QuranPagingAdapter(val context: Context) :
                     }
                     Log.e("QuranPagingAdapter", "onBind: $filteredByLine")
                     Log.e("emptyAdapterList", "$emptyLinesForChecking onBind: $emptyLines")
-                    var click = "0"
+                    var longClick = "0"
                     if (filteredByLine?.isNotEmpty()!!) {
-                        val linesAdapter: QuranLinesAdapter = QuranLinesAdapter(context, emptyLines , click){
+                        val linesAdapter: QuranLinesAdapter = QuranLinesAdapter(context, emptyLines , longClick,{type ->
+                            when (type){
+                                Constants.ONCLICK-> recursiveOnClick(filteredByLine,emptyLines,"0",linesList)
+                            }
+                        })
+                        {
                             type , data ->
                                 when (type) {
-                                    Constants.INCREASEADAPTER -> {
-                                        click = data
+                                    Constants.LONGCLICK -> {
+                                        longClick = data
 //                                        Log.d("ClickListener", " $click")
-                                        recursiveOnClick(filteredByLine,emptyLines,click,linesList)
+                                        recursiveOnClick(filteredByLine,emptyLines,longClick,linesList)
                                     }
                                 }
+                            return@QuranLinesAdapter true
 
                         }
 //                        Log.d("getLinesList", " $linesList")
@@ -139,6 +147,15 @@ class QuranPagingAdapter(val context: Context) :
                         linesAdapter.submitList(linesList)
 
                     }
+                    binding.linesContainer.setOnClickListener {
+                        recursiveOnClick(filteredByLine,emptyLines,"0",linesList)
+                        Log.d("getLogcatClick", " is lineContainer")
+                    }
+
+                    binding.lineRecycler.setOnClickListener {
+                        recursiveOnClick(filteredByLine,emptyLines,"0",linesList)
+                        Log.d("getLogcatClick", " is lineRecycler")
+                    }
 
 
                 }
@@ -148,17 +165,23 @@ class QuranPagingAdapter(val context: Context) :
         }
 
         private fun recursiveOnClick(filteredByLine :List<QuranVersesEntity?>,emptyLines : ArrayList<Int>,
-                                     click:String,linesList : MutableList<List<QuranVersesEntity>>) {
+                                     longClick:String,linesList : MutableList<List<QuranVersesEntity>>) {
             if (filteredByLine?.isNotEmpty()!!) {
-                val linesAdapter: QuranLinesAdapter = QuranLinesAdapter(context, emptyLines , click){
+                val linesAdapter: QuranLinesAdapter = QuranLinesAdapter(context, emptyLines , longClick,{ type ->
+                    when (type){
+                        Constants.ONCLICK-> recursiveOnClick(filteredByLine,emptyLines,"0",linesList)
+                    }
+                    }){
                         type , data ->
                     when (type) {
-                        Constants.INCREASEADAPTER -> {
-//                        click = data
-                            Log.d("ClickListener", " $click")
+                        Constants.LONGCLICK -> {
+                            Log.d("ClickListener", " $longClick")
                             recursiveOnClick(filteredByLine,emptyLines,data,linesList)
                         }
+
                     }
+                    return@QuranLinesAdapter true
+
 
                 }
 

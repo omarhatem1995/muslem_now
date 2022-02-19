@@ -22,7 +22,8 @@ import com.myapplication.domain.core.Constants
 
 
 class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>, val click:String,
-                        var onClick: (String, String)-> Unit
+                        var onClick: (String) -> Unit,
+                        var onLongClick : (String,String) -> Boolean
 ) :
     ListAdapter<List<QuranVersesEntity>, QuranLinesAdapter.QuranLinesViewHolder>(DiffCallBack) {
 
@@ -89,21 +90,15 @@ class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>, val c
                 if(text.contentDescription == click) {
                     text.background = context.getDrawable(R.color.backgroundGreen)
                 }
+                text.setOnLongClickListener {
+                    onLongClick.invoke(com.myapplication.common.Constants.LONGCLICK,text.contentDescription.toString())
+
+                }
                 text.setOnClickListener {
-                    Log.d("getItemCount" , " is ${text.contentDescription}")
-//                    text.background = context.getDrawable(R.color.backgroundGreen)
-                    onClick.invoke(com.myapplication.common.Constants.INCREASEADAPTER,text.contentDescription.toString())
-//                    text.setTextColor(context.getColor(R.color.backgroundGreen))
-                    /*for(i in entities.indices){
-                        if(entities[i].aya.toString().contains(text.contentDescription)) {
-                            text.background = context.getDrawable(R.color.backgroundGreen)
-                            Log.d("getEntities" , " is ${entities[i].aya} , " +
-                                    "${entities[i].text} "  )
-                        }else{
-                            Log.d("getEntities", "is not ${entities[i].aya} , " +
-                                    "$${entities[i].text}")
-                        }
-                    }*/
+                    onClick.invoke(com.myapplication.common.Constants.ONCLICK)
+                }
+                binding.constraintQuranItem.setOnClickListener {
+                    onClick.invoke(com.myapplication.common.Constants.ONCLICK)
                 }
                 // Log.e(null, "onBind: $kelma", )
                 typeface = Typeface.createFromAsset(context.assets,"p$pageNumber.ttf")!!
