@@ -2,6 +2,7 @@ package com.myapplication.ui.fragments.quran
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.AbsListView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -9,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.PagerSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.myapplication.R
 import com.myapplication.databinding.ActivityQuranBinding
 import kotlinx.coroutines.flow.collectLatest
@@ -30,39 +32,76 @@ class QuranActivity : AppCompatActivity() {
         val pager = PagerSnapHelper()
         pager.attachToRecyclerView(binding.quranRecycler)
 
-        val pageNumber = intent.getIntExtra("pageNumber",1)
+        var pageNumber = intent.getIntExtra("pageNumber",1)
         Log.d("pageNumber", pageNumber.toString())
+        adapter = QuranPagingAdapter(this@QuranActivity)
+
+        binding.quranRecycler.adapter = adapter
 
         viewModel.getPagingData(pageNumber)
 
+        pageNumber -=1
+
+        binding.quranRecycler.addOnScrollListener(object: RecyclerView.OnScrollListener() {
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                Log.e("dx", "onScrolled: $dx ", )
+                if (pageNumber  > 604)
+                {
+
+                    if (dx<0)
+                    {
+                        this@QuranActivity.finish()
+                    }
+                }
+            }
+            })
+
         lifecycleScope.launch {
-           viewModel.quranFlow.flowWithLifecycle(lifecycle,Lifecycle.State.STARTED).collectLatest {
+            viewModel.quranFlow.flowWithLifecycle(lifecycle,Lifecycle.State.STARTED).collectLatest {
 
-               Log.e("submit", "onCreate: $it ", )
-               adapter = QuranPagingAdapter(this@QuranActivity)
-
-               binding.quranRecycler.adapter = adapter
-
-               if (it != null) {
-                   adapter!!.submitList(it)
+                Log.e("submit", "onCreate: $pageNumber ", )
 
 
-                   binding.quranRecycler.scrollToPosition(pageNumber-1)
-               }
+                if (it != null) {
+
+                    adapter!!.submitList(it)
+
+
+
+                    binding.quranRecycler.scrollToPosition(pageNumber)
+                }
 
             }
         }
 
         adapter?.let {
             it.getNewPages.observe(this){ position->
-                Log.e("swiped", "onSwiped: right :$position", )
-                if (position!=0 &&position%5 ==0)
+                if (position>0)
+                {
+                    pageNumber = position
+                }
+
+                if (position in 1..603 && position%5 ==0)
+                {
+                    Log.e("swiped", "onSwiped: right :$position", )
+
                     viewModel.getPagingData(position+1)
-                binding.quranRecycler.scrollToPosition(position)
+                    // binding.quranRecycler.scrollToPosition(position)
+                }
+
+
+
             }
         }
 
 
-        }
+    }
+
+    override fun onStop() {
+        super.onStop()
 
     }
+
+}

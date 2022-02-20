@@ -17,19 +17,19 @@ class QuranViewModel(application: Application): AndroidViewModel(application)  {
     var preference = SharedPreferencesRepository(application)
 
 
-    var quranFlow:MutableStateFlow<List<QuranPage?>?> = MutableStateFlow(null)
+    var quranFlow:MutableStateFlow<MutableList<QuranPage?>?> = MutableStateFlow(null)
     var quranVersesMutableLiveData:MutableLiveData<List<QuranVersesEntity>?> = MutableLiveData()
 
-    private var pages:ArrayList<QuranPage?> = ArrayList()
+   // private var pages:ArrayList<QuranPage?> = ArrayList()
 
     private val quranRepository=QuranPagingRepositoryImpl()
 
     init {
 
-        for (num in 0..603)
-        {
-            pages.add(QuranPage())
-        }
+//        for (num in 0..603)
+//        {
+//            pages.add(QuranPage())
+//        }
 
 
     }
@@ -48,14 +48,25 @@ class QuranViewModel(application: Application): AndroidViewModel(application)  {
             {
                 initialPage = 1
             }
-            val verses =quranRepository.getQuranPagingData(getApplication(),page,initialPage)
+            var verses:List<QuranVersesEntity>? = null
+            verses =quranRepository.getQuranPagingData(getApplication(),page+10,initialPage)
+            if (page in 595..604)
+            {
+                verses =quranRepository.getQuranPagingData(getApplication(),(604-page)+page,initialPage)
+
+            }
 
 
+
+
+
+
+            val pages = pagesReset()
 
 
             Log.e("verses", "getPagingData: ${pages.size}", )
 
-            val quranPages = preparePages(verses,page+10,initialPage)
+            val quranPages = preparePages(verses!!,if (page == 604)page else page+10,initialPage)
             if (quranPages.isNotEmpty())
             {
                 quranPages.forEach {
@@ -66,11 +77,12 @@ class QuranViewModel(application: Application): AndroidViewModel(application)  {
 
 
             Log.e("pages", "getPagingData: $pages", )
-            quranFlow.emit(pages.toList())
+
+            quranFlow.emit(pages)
             }
         }
 
-        }
+
 
 
    private fun preparePages(list:List<QuranVersesEntity>,start:Int,end:Int):List<QuranPage>
@@ -114,3 +126,14 @@ class QuranViewModel(application: Application): AndroidViewModel(application)  {
        return pages.toList()
    }
 
+  private fun pagesReset():ArrayList<QuranPage?>
+   {
+       val pages:ArrayList<QuranPage?> = ArrayList()
+       for (num in 0..603)
+       {
+           pages.add(QuranPage())
+       }
+
+       return pages
+   }
+}

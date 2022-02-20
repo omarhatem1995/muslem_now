@@ -26,14 +26,15 @@ class QuranPagingAdapter(val context: Context) :
         RecyclerView.ViewHolder(binding.root) {
 
 
-        var emptyLines: ArrayList<Int> = ArrayList()
-        var emptyLinesForChecking: ArrayList<Int> = ArrayList()
+
         var suraNumber: Int = 1
 
 
         @SuppressLint("SetTextI18n")
         fun onBind(position: Int) {
             val linesList: MutableList<List<QuranVersesEntity>> = mutableListOf()
+            var emptyLines: ArrayList<Int> = ArrayList()
+            var emptyLinesForChecking: ArrayList<Int> = ArrayList()
 
 //           if (getNewPages.value!! <= position)
 //           {
@@ -41,6 +42,7 @@ class QuranPagingAdapter(val context: Context) :
 //           }
 
             getNewPages.value = position
+            //var fullList = currentList
 
 
             var page: QuranPage? = currentList[position]
@@ -71,7 +73,7 @@ class QuranPagingAdapter(val context: Context) :
 
 
             Log.e("page", "onBindViewHolder:position :$position , $page ,")
-            if (page != null && page.versesList.isNotEmpty()) {
+            if (page != null && page.versesList.isNotEmpty() && page.lines != null) {
                 lineNum = page.lines!!
 
                 binding.pageNumber.text = page.page.toString()
