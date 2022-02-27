@@ -10,11 +10,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.*
 import com.myapplication.SuraNameUtil
 import com.myapplication.common.Constants
+import com.myapplication.data.entities.model.QuranIndexModel
 import com.myapplication.data.entities.model.QuranPage
 import com.myapplication.data.entities.model.QuranVersesEntity
 import com.myapplication.databinding.QuranLinesRecyclerBinding
 
-class QuranPagingAdapter(val context: Context) :
+class QuranPagingAdapter(
+    val context: Context,
+    var onLongClick : (String,String) -> Boolean
+) :
     ListAdapter<QuranPage, QuranPagingAdapter.QuranAyaViewHolder>(DiffCallBack) {
 
 
@@ -122,8 +126,11 @@ class QuranPagingAdapter(val context: Context) :
                     var longClick = "0"
                     if (filteredByLine?.isNotEmpty()!!) {
                         val linesAdapter: QuranLinesAdapter = QuranLinesAdapter(context, emptyLines , longClick,{type ->
-                            when (type){
-                                Constants.ONCLICK-> recursiveOnClick(filteredByLine,emptyLines,"0",linesList)
+                            when (type) {
+                                Constants.ONCLICK -> {
+//                                    onLongClick.invoke("Y","Y")
+                                    recursiveOnClick(filteredByLine, emptyLines, "0", linesList)
+                                }
                             }
                         })
                         {
@@ -132,6 +139,7 @@ class QuranPagingAdapter(val context: Context) :
                                     Constants.LONGCLICK -> {
                                         longClick = data
 //                                        Log.d("ClickListener", " $click")
+                                        onLongClick.invoke(Constants.LONGCLICK,"Y")
                                         recursiveOnClick(filteredByLine,emptyLines,longClick,linesList)
                                     }
                                 }
@@ -179,6 +187,7 @@ class QuranPagingAdapter(val context: Context) :
                         Constants.LONGCLICK -> {
                             Log.d("ClickListener", " $longClick")
                             recursiveOnClick(filteredByLine,emptyLines,data,linesList)
+                            onLongClick.invoke(Constants.LONGCLICK,"Y")
                         }
 
                     }

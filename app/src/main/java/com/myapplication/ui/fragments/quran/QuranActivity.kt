@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.myapplication.R
+import com.myapplication.common.Constants
 import com.myapplication.databinding.ActivityQuranBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -34,7 +35,17 @@ class QuranActivity : AppCompatActivity() {
 
         var pageNumber = intent.getIntExtra("pageNumber",1)
         Log.d("pageNumber", pageNumber.toString())
-        adapter = QuranPagingAdapter(this@QuranActivity)
+        adapter = QuranPagingAdapter(this@QuranActivity) { type, data ->
+            when (type) {
+                Constants.LONGCLICK -> {
+                    val filterDocuments = QuranSoundBottomSheet()
+                    filterDocuments.show(supportFragmentManager, "a")
+                    return@QuranPagingAdapter true
+                }
+
+                else -> false
+            }
+        }
 
         binding.quranRecycler.adapter = adapter
 
@@ -87,7 +98,7 @@ class QuranActivity : AppCompatActivity() {
                 {
                     Log.e("swiped", "onSwiped: right :$position", )
 
-                    viewModel.getPagingData(position+1)
+                    viewModel.getPagingData(position-1)
                     // binding.quranRecycler.scrollToPosition(position)
                 }
 

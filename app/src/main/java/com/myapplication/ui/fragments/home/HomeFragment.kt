@@ -69,7 +69,7 @@ import java.io.IOException
 import java.lang.reflect.InvocationTargetException
 
 
-class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener {
+class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener ,SensorEventListener{
 
     lateinit var binding: FragmentHomeBinding
 
@@ -715,110 +715,130 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
         userLocation?.longitude = longitude
         Log.d("getLatitude", " : " + latitude + " , " + longitude)
         if (context != null) {
-
-//            initSensorManager(context!!)
-
-                sensorManager?.registerListener(object : SensorEventListener {
-                    override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
-
-                    }
-
-                    @SuppressLint("SetTextI18n")
-                    override fun onSensorChanged(sensorEvent: SensorEvent?) {
-                        val degree: Float = sensorEvent?.values?.get(0)?.roundToInt()?.toFloat()!!
-                        var head: Float = sensorEvent.values?.get(0)?.roundToInt()?.toFloat()!!
-
-                        val destLocation = Location("Destination Location")
-                        destLocation.latitude = QIBLA_LATITUDE
-                        destLocation.longitude = QIBLA_LONGITUDE
-
-                        var bearTo = userLocation?.bearingTo(destLocation)
-
-                        val geoField = userLocation?.latitude?.let {
-                            userLocation?.longitude?.let { it1 ->
-                                userLocation?.altitude?.let { it2 ->
-                                    GeomagneticField(
-                                        it.toFloat(),
-                                        it1.toFloat(),
-                                        it2.toFloat(),
-                                        System.currentTimeMillis()
-                                    )
-                                }
-                            }
-                        }
-
-                        head -= geoField?.declination!!
-
-                        if (bearTo != null) {
-                            if (bearTo < 0) {
-                                bearTo += 360
-                            }
-                        }
-
-
-                        var direction = bearTo?.minus(head)
-
-                        if (direction != null) {
-                            if (direction < 0) {
-                                direction += 360
-                            }
-                        }
-
-                        tvHeading.text = "Heading : $degree + degrees"
-
-                        Log.d(
-                            TAG,
-                            "Needle Degree : $currentNeedleDegree, Direction : $direction"
-                        )
-                        binding.qiblahDirection.text = currentNeedleDegree.toString()
-
-                        needleAnimation = direction?.let {
-                            RotateAnimation(
-                                currentNeedleDegree,
-                                it,
-                                Animation.RELATIVE_TO_SELF,
-                                .5f,
-                                Animation.RELATIVE_TO_SELF,
-                                .5f
-                            )
-                        }
-                        needleAnimation?.fillAfter = true
-                        needleAnimation?.duration = 200
-
-                        binding.ivQiblaDirection.startAnimation(needleAnimation)
-                        if (direction != null) {
-                            currentNeedleDegree = direction
-                        }
-                        currentDegree = -degree
-
-                        if (currentNeedleDegree <= 10 || currentNeedleDegree >= 350) {
-                            context?.resources?.let {
-                                binding.ivQiblaDirection.setColorFilter(
-                                    it?.getColor(
-                                        R.color.logoOrangeColor
-                                    )
-                                )
-                            }
-
-                        } else {
-                            context?.resources?.getColor(R.color.backgroundGreen)?.let {
-                                binding.ivQiblaDirection.setColorFilter(
-                                    it
-                                )
-                            }
-
-                        }
-
-                    }
-                }, sensor, SensorManager.SENSOR_DELAY_GAME)
-
+            sensorManager?.registerListener(
+                this,
+                sensor,
+                SensorManager.SENSOR_DELAY_NORMAL
+            )
         }
     }
-    override fun onResume() {
+        override fun onSensorChanged(event: SensorEvent?) {
+            val degree: Float = event?.values?.get(0)?.roundToInt()?.toFloat()!!
+            var head: Float = event.values?.get(0)?.roundToInt()?.toFloat()!!
+
+            val destLocation = Location("Destination Location")
+            destLocation.latitude = HomeFragment.QIBLA_LATITUDE
+            destLocation.longitude = HomeFragment.QIBLA_LONGITUDE
+
+            var bearTo = userLocation?.bearingTo(destLocation)
+
+            val geoField = userLocation?.latitude?.let {
+                userLocation?.longitude?.let { it1 ->
+                    userLocation?.altitude?.let { it2 ->
+                        GeomagneticField(
+                            it.toFloat(),
+                            it1.toFloat(),
+                            it2.toFloat(),
+                            System.currentTimeMillis()
+                        )
+                    }
+                }
+            }
+
+            head -= geoField?.declination!!
+
+            if (bearTo != null) {
+                if (bearTo < 0) {
+                    bearTo += 360
+                }
+            }
+
+
+            var direction = bearTo?.minus(head)
+
+            if (direction != null) {
+                if (direction < 0) {
+                    direction += 360
+                }
+            }
+
+            binding.qiblahDirection.text = "Heading : $degree + degrees"
+
+            Log.d(
+                HomeFragment.TAG,
+                "Needle Degree : $currentNeedleDegree, Direction : $direction"
+            )
+            binding.qiblahDirection.text = currentNeedleDegree.toString()
+
+            needleAnimation = direction?.let {
+                RotateAnimation(
+                    currentNeedleDegree,
+                    it,
+                    Animation.RELATIVE_TO_SELF,
+                    .5f,
+                    Animation.RELATIVE_TO_SELF,
+                    .5f
+                )
+            }
+            needleAnimation?.fillAfter = true
+            needleAnimation?.duration = 200
+
+            binding.ivQiblaDirection.startAnimation(needleAnimation)
+            if (direction != null) {
+                currentNeedleDegree = direction
+            }
+            currentDegree = -degree
+
+            if (currentNeedleDegree <= 10 || currentNeedleDegree >= 350) {
+                context?.getColor(R.color.logoOrangeColor)?.let {
+                    binding.ivQiblaDirection.setColorFilter(
+                        it
+                    )
+                }
+                context?.getColor(R.color.logoOrangeColor)?.let {
+                    binding.qiblahDirection.setTextColor(
+                        it
+                    )
+                }
+            } else {
+
+                context?.getColor(R.color.backgroundGreen)?.let {
+                    binding.ivQiblaDirection.setColorFilter(
+                        it
+                    )
+                }
+
+                context?.getColor(R.color.textColorQiblahDegrees)?.let {
+                    binding.qiblahDirection.setTextColor(
+                        it
+                    )
+                }
+
+
+            }
+
+
+        }
+        override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        }
+
+        override fun onResume() {
         super.onResume()
         binding.remainingTimeForNextPrayerValue.text = ""
         getUserLocation()
         renderLoading(true)
+        sensorManager?.registerListener(
+            this,
+            sensor,
+            SensorManager.SENSOR_DELAY_NORMAL
+        )
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        sensorManager?.unregisterListener(this)
+
     }
 
     @SuppressLint("MissingPermission")

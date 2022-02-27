@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import com.myapplication.QiblahActivity
 import com.myapplication.R
 import com.myapplication.databinding.FragmentSideMenuBinding
 import com.myapplication.ui.QiblahActivityNewLogic
@@ -51,7 +52,7 @@ class SideMenuFragment : Fragment() {
         }
 
         binding.linearQiblah.setOnClickListener {
-            val intent = Intent(context, QiblahActivityNewLogic::class.java)
+            val intent = Intent(context, QiblahActivity::class.java)
             context?.startActivity(intent)
         }
 
