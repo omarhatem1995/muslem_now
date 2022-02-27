@@ -89,11 +89,11 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
 
-    lateinit var sensorManager: SensorManager
-    lateinit var sensor: Sensor
-    lateinit var userLocation: Location
+    var sensorManager: SensorManager? = null
+    var sensor: Sensor? = null
+    var userLocation: Location? = null
     lateinit var tvHeading: TextView
-    lateinit var needleAnimation: RotateAnimation
+    var needleAnimation: RotateAnimation? = null
     var fusedLocationClient: FusedLocationProviderClient? = null
     lateinit var linearLayoutManager: LinearLayoutManager
     lateinit var currentTime: TextView
@@ -113,7 +113,9 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-
+        sensorManager =
+            requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        sensor = sensorManager?.getDefaultSensor(Sensor.TYPE_ORIENTATION)
     }
 
     override fun onCreateView(
@@ -499,7 +501,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                     )
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                        initQiblaDirection(it.latitude, it.longitude)
+                        initQiblaDirection(it.latitude, it.longitude)
                     initPrayerTimes(it.latitude, it.longitude)
                 }
             }
@@ -554,7 +556,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
 //                    fusedLocationClient.removeLocationUpdates(locationCallback);
 
 
-//                    initQiblaDirection(latitude, longitude)
+                    initQiblaDirection(latitude, longitude)
                     binding.deviceCurrentLocation.text =
                         getAndSetCurrentCityFromLatLon(latitude.toString(), longitude.toString())
                 }
@@ -709,96 +711,109 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initQiblaDirection(latitude: Double, longitude: Double) {
-        userLocation.latitude = latitude
-        userLocation.longitude = longitude
+        userLocation?.latitude = latitude
+        userLocation?.longitude = longitude
         Log.d("getLatitude", " : " + latitude + " , " + longitude)
         if (context != null) {
 
 //            initSensorManager(context!!)
-            sensorManager =
-                requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
-            sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
-            sensorManager.registerListener(object : SensorEventListener {
-                override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
 
-                }
+                sensorManager?.registerListener(object : SensorEventListener {
+                    override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
 
-                @SuppressLint("SetTextI18n")
-                override fun onSensorChanged(sensorEvent: SensorEvent?) {
-                    val degree: Float = sensorEvent?.values?.get(0)?.roundToInt()?.toFloat()!!
-                    var head: Float = sensorEvent.values?.get(0)?.roundToInt()?.toFloat()!!
-
-                    val destLocation = Location("Destination Location")
-                    destLocation.latitude = QIBLA_LATITUDE
-                    destLocation.longitude = QIBLA_LONGITUDE
-
-                    var bearTo = userLocation.bearingTo(destLocation)
-
-                    val geoField = GeomagneticField(
-                        userLocation.latitude.toFloat(),
-                        userLocation.longitude.toFloat(),
-                        userLocation.altitude.toFloat(),
-                        System.currentTimeMillis()
-                    )
-
-                    head -= geoField.declination
-
-                    if (bearTo < 0) {
-                        bearTo += 360
                     }
 
-                    var direction = bearTo - head
+                    @SuppressLint("SetTextI18n")
+                    override fun onSensorChanged(sensorEvent: SensorEvent?) {
+                        val degree: Float = sensorEvent?.values?.get(0)?.roundToInt()?.toFloat()!!
+                        var head: Float = sensorEvent.values?.get(0)?.roundToInt()?.toFloat()!!
 
-                    if (direction < 0) {
-                        direction += 360
-                    }
+                        val destLocation = Location("Destination Location")
+                        destLocation.latitude = QIBLA_LATITUDE
+                        destLocation.longitude = QIBLA_LONGITUDE
 
-                    tvHeading.text = "Heading : $degree + degrees"
+                        var bearTo = userLocation?.bearingTo(destLocation)
 
-                    Log.d(
-                        TAG,
-                        "Needle Degree : $currentNeedleDegree, Direction : $direction"
-                    )
-                    binding.qiblahDirection.text = currentNeedleDegree.toString()
+                        val geoField = userLocation?.latitude?.let {
+                            userLocation?.longitude?.let { it1 ->
+                                userLocation?.altitude?.let { it2 ->
+                                    GeomagneticField(
+                                        it.toFloat(),
+                                        it1.toFloat(),
+                                        it2.toFloat(),
+                                        System.currentTimeMillis()
+                                    )
+                                }
+                            }
+                        }
 
-                    needleAnimation = RotateAnimation(
-                        currentNeedleDegree,
-                        direction,
-                        Animation.RELATIVE_TO_SELF,
-                        .5f,
-                        Animation.RELATIVE_TO_SELF,
-                        .5f
-                    )
-                    needleAnimation.fillAfter = true
-                    needleAnimation.duration = 200
+                        head -= geoField?.declination!!
 
-                    binding.ivQiblaDirection.startAnimation(needleAnimation)
-                    currentNeedleDegree = direction
-                    currentDegree = -degree
+                        if (bearTo != null) {
+                            if (bearTo < 0) {
+                                bearTo += 360
+                            }
+                        }
 
-                    if (currentNeedleDegree <= 10 || currentNeedleDegree >= 350) {
-                        context?.resources?.let {
-                            binding.ivQiblaDirection.setColorFilter(
-                                it?.getColor(
-                                    R.color.logoOrangeColor
+
+                        var direction = bearTo?.minus(head)
+
+                        if (direction != null) {
+                            if (direction < 0) {
+                                direction += 360
+                            }
+                        }
+
+                        tvHeading.text = "Heading : $degree + degrees"
+
+                        Log.d(
+                            TAG,
+                            "Needle Degree : $currentNeedleDegree, Direction : $direction"
+                        )
+                        binding.qiblahDirection.text = currentNeedleDegree.toString()
+
+                        needleAnimation = direction?.let {
+                            RotateAnimation(
+                                currentNeedleDegree,
+                                it,
+                                Animation.RELATIVE_TO_SELF,
+                                .5f,
+                                Animation.RELATIVE_TO_SELF,
+                                .5f
+                            )
+                        }
+                        needleAnimation?.fillAfter = true
+                        needleAnimation?.duration = 200
+
+                        binding.ivQiblaDirection.startAnimation(needleAnimation)
+                        if (direction != null) {
+                            currentNeedleDegree = direction
+                        }
+                        currentDegree = -degree
+
+                        if (currentNeedleDegree <= 10 || currentNeedleDegree >= 350) {
+                            context?.resources?.let {
+                                binding.ivQiblaDirection.setColorFilter(
+                                    it?.getColor(
+                                        R.color.logoOrangeColor
+                                    )
                                 )
-                            )
-                        }
+                            }
 
-                    } else {
-                        context?.resources?.getColor(R.color.backgroundGreen)?.let {
-                            binding.ivQiblaDirection.setColorFilter(
-                                it
-                            )
+                        } else {
+                            context?.resources?.getColor(R.color.backgroundGreen)?.let {
+                                binding.ivQiblaDirection.setColorFilter(
+                                    it
+                                )
+                            }
+
                         }
 
                     }
+                }, sensor, SensorManager.SENSOR_DELAY_GAME)
 
-                }
-            }, sensor, SensorManager.SENSOR_DELAY_GAME)
         }
     }
-
     override fun onResume() {
         super.onResume()
         binding.remainingTimeForNextPrayerValue.text = ""

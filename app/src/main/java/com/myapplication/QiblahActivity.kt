@@ -31,7 +31,7 @@ import android.hardware.SensorEventListener
 
 
 
-class QiblahActivity : AppCompatActivity() {
+class QiblahActivity : AppCompatActivity() , SensorEventListener{
     companion object {
         const val TAG = "MainActivity"
         const val MARSHMALLOW = 23
@@ -49,11 +49,11 @@ class QiblahActivity : AppCompatActivity() {
     var currentNeedleDegree: Float = 0f
 
     //    var sensorManager: SensorManager
-    lateinit var sensorManager : SensorManager
-    lateinit var sensor: Sensor
-    lateinit var userLocation: Location
-    lateinit var qiblahDirectionImageView: ImageView
-    lateinit var needleAnimation: RotateAnimation
+    var sensorManager : SensorManager? = null
+    var sensor: Sensor? = null
+    var userLocation: Location? = null
+    var qiblahDirectionImageView: ImageView? = null
+    var needleAnimation: RotateAnimation? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,21 +69,25 @@ class QiblahActivity : AppCompatActivity() {
             Animation.RELATIVE_TO_SELF,
             .5f
         )
-        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
+        sensor = sensorManager?.getDefaultSensor(Sensor.TYPE_ORIENTATION)
+        userLocation = Location("User Location")
 
         initLocationPermissions()
     }
 
     override fun onResume() {
         super.onResume()
-/*
-        sensorManager.registerListener(
-            this as SensorEventListener,
+        sensorManager?.registerListener(
+            this,
             sensor,
             SensorManager.SENSOR_DELAY_NORMAL
         )
-*/
 
+    }
+
+    override fun onStop() {
+        super.onStop()
+        sensorManager?.unregisterListener(this)
     }
 
     override fun onRequestPermissionsResult(
@@ -164,81 +168,107 @@ class QiblahActivity : AppCompatActivity() {
     private fun initQiblaDirection(latitude: Double, longitude: Double) {
         userLocation = Location("User Location")
 
-        userLocation.latitude = latitude
-        userLocation.longitude = longitude
-
-        sensorManager.registerListener(object : SensorEventListener {
+        userLocation?.latitude = latitude
+        userLocation?.longitude = longitude
+        sensorManager?.registerListener(
+            this,
+            sensor,
+            SensorManager.SENSOR_DELAY_NORMAL
+        )
+      /*  sensorManager?.registerListener(object : SensorEventListener {
             override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
 
-            }
+            }*/
 
-            @SuppressLint("SetTextI18n")
+       /*     @SuppressLint("SetTextI18n")
             override fun onSensorChanged(sensorEvent: SensorEvent?) {
-                val degree: Float = sensorEvent?.values?.get(0)?.roundToInt()?.toFloat()!!
-                var head: Float = sensorEvent.values?.get(0)?.roundToInt()?.toFloat()!!
-
-                val destLocation = Location("Destination Location")
-                destLocation.latitude = HomeFragment.QIBLA_LATITUDE
-                destLocation.longitude = HomeFragment.QIBLA_LONGITUDE
-
-                var bearTo = userLocation.bearingTo(destLocation)
-
-                val geoField = GeomagneticField(
-                    userLocation.latitude.toFloat(),
-                    userLocation.longitude.toFloat(),
-                    userLocation.altitude.toFloat(),
-                    System.currentTimeMillis()
-                )
-
-                head -= geoField.declination
-
-                if (bearTo < 0) {
-                    bearTo += 360
-                }
-
-                var direction = bearTo - head
-
-                if (direction < 0) {
-                    direction += 360
-                }
-
-                binding.tvQiblahDegrees.text = "Heading : $degree + degrees"
-
-                Log.d(
-                    HomeFragment.TAG,
-                    "Needle Degree : $currentNeedleDegree, Direction : $direction"
-                )
-                binding.tvQiblahDegrees.text = currentNeedleDegree.toString()
-
-                needleAnimation = RotateAnimation(
-                    currentNeedleDegree,
-                    direction,
-                    Animation.RELATIVE_TO_SELF,
-                    .5f,
-                    Animation.RELATIVE_TO_SELF,
-                    .5f
-                )
-                needleAnimation.fillAfter = true
-                needleAnimation.duration = 200
-
-                binding.qiblahDirectionImageView.startAnimation(needleAnimation)
-                currentNeedleDegree = direction
-                currentDegree = -degree
-
-                if (currentNeedleDegree <= 10 || currentNeedleDegree >= 350) {
-                    binding.qiblahDirectionImageView.setColorFilter(getColor(R.color.logoOrangeColor))
-                    binding.tvQiblahDegrees.setTextColor(getColor(R.color.logoOrangeColor))
-                } else {
-
-                    binding.qiblahDirectionImageView.setColorFilter(getColor(R.color.backgroundGreen))
-
-                    binding.tvQiblahDegrees.setTextColor(getColor(R.color.textColorQiblahDegrees))
-
-
-                }
-
             }
-        }, sensor, SensorManager.SENSOR_DELAY_GAME)
+        }, sensor, SensorManager.SENSOR_DELAY_GAME)*/
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        val degree: Float = event?.values?.get(0)?.roundToInt()?.toFloat()!!
+        var head: Float = event.values?.get(0)?.roundToInt()?.toFloat()!!
+
+        val destLocation = Location("Destination Location")
+        destLocation.latitude = HomeFragment.QIBLA_LATITUDE
+        destLocation.longitude = HomeFragment.QIBLA_LONGITUDE
+
+        var bearTo = userLocation?.bearingTo(destLocation)
+
+        val geoField = userLocation?.latitude?.let {
+            userLocation?.longitude?.let { it1 ->
+                userLocation?.altitude?.let { it2 ->
+                    GeomagneticField(
+                        it.toFloat(),
+                        it1.toFloat(),
+                        it2.toFloat(),
+                        System.currentTimeMillis()
+                    )
+                }
+            }
+        }
+
+        head -= geoField?.declination!!
+
+        if (bearTo != null) {
+            if (bearTo < 0) {
+                bearTo += 360
+            }
+        }
+
+
+        var direction = bearTo?.minus(head)
+
+        if (direction != null) {
+            if (direction < 0) {
+                direction += 360
+            }
+        }
+
+        binding.tvQiblahDegrees.text = "Heading : $degree + degrees"
+
+        Log.d(
+            HomeFragment.TAG,
+            "Needle Degree : $currentNeedleDegree, Direction : $direction"
+        )
+        binding.tvQiblahDegrees.text = currentNeedleDegree.toString()
+
+        needleAnimation = direction?.let {
+            RotateAnimation(
+                currentNeedleDegree,
+                it,
+                Animation.RELATIVE_TO_SELF,
+                .5f,
+                Animation.RELATIVE_TO_SELF,
+                .5f
+            )
+        }
+        needleAnimation?.fillAfter = true
+        needleAnimation?.duration = 200
+
+        binding.qiblahDirectionImageView.startAnimation(needleAnimation)
+        if (direction != null) {
+            currentNeedleDegree = direction
+        }
+        currentDegree = -degree
+
+        if (currentNeedleDegree <= 10 || currentNeedleDegree >= 350) {
+            binding.qiblahDirectionImageView.setColorFilter(getColor(R.color.logoOrangeColor))
+            binding.tvQiblahDegrees.setTextColor(getColor(R.color.logoOrangeColor))
+        } else {
+
+            binding.qiblahDirectionImageView.setColorFilter(getColor(R.color.backgroundGreen))
+
+            binding.tvQiblahDegrees.setTextColor(getColor(R.color.textColorQiblahDegrees))
+
+
+        }
+
+
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
     }
 
 
