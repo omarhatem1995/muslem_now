@@ -51,7 +51,7 @@ class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>, val c
                 val text = TextView(context)
                 var pageNumber = it.page
                 var suraNumber = it.sura
-                text.contentDescription = "${it.aya}"
+                text.contentDescription = "${it.quranAya}"
 //                if (it.page == 1)
 //                {
                 /*}else if (it.page == 2)

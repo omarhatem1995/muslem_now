@@ -95,7 +95,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
     lateinit var tvHeading: TextView
     var needleAnimation: RotateAnimation? = null
     var fusedLocationClient: FusedLocationProviderClient? = null
-    lateinit var linearLayoutManager: LinearLayoutManager
+//    lateinit var linearLayoutManager: LinearLayoutManager
     lateinit var currentTime: TextView
     lateinit var localTime: String
     var monthOfTheYear = "null"
@@ -411,7 +411,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
 
         }
 
-        binding.prayerTimesList.layoutManager = linearLayoutManager
+//        binding.prayerTimesList.layoutManager = linearLayoutManager
         binding.prayerTimesList.isNestedScrollingEnabled = false
 
     }
@@ -518,12 +518,12 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initPrayerTimes(latitude: Double, longitude: Double) {
-        linearLayoutManager = LinearLayoutManager(requireContext())
+//        linearLayoutManager = LinearLayoutManager(requireContext())
         vm.getPrayerTimesForSpecificDate(localTime, requireContext())
             .observe(requireActivity(), androidx.lifecycle.Observer { prayer ->
                 if (!prayer.isNullOrEmpty() && !apiCall && context != null) {
                     getPrayerTimesFromDatabase(prayer)
-                    binding.prayerTimesList.layoutManager = linearLayoutManager
+//                    binding.prayerTimesList.layoutManager = linearLayoutManager
                     binding.prayerTimesList.isNestedScrollingEnabled = false
                     renderLoading(false)
 

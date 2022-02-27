@@ -139,7 +139,7 @@ class QuranPagingAdapter(
                                     Constants.LONGCLICK -> {
                                         longClick = data
 //                                        Log.d("ClickListener", " $click")
-                                        onLongClick.invoke(Constants.LONGCLICK,"Y")
+                                        onLongClick.invoke(Constants.LONGCLICK,longClick)
                                         recursiveOnClick(filteredByLine,emptyLines,longClick,linesList)
                                     }
                                 }
@@ -187,7 +187,7 @@ class QuranPagingAdapter(
                         Constants.LONGCLICK -> {
                             Log.d("ClickListener", " $longClick")
                             recursiveOnClick(filteredByLine,emptyLines,data,linesList)
-                            onLongClick.invoke(Constants.LONGCLICK,"Y")
+                            onLongClick.invoke(Constants.LONGCLICK,data)
                         }
 
                     }
