@@ -2,7 +2,6 @@ package com.myapplication.ui.fragments.quran
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.AbsListView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -39,9 +38,12 @@ class QuranActivity : AppCompatActivity() {
         adapter = QuranPagingAdapter(this@QuranActivity) { type, data ->
             when (type) {
                 Constants.LONGCLICK -> {
-                    val filterDocuments = QuranSoundBottomSheet()
-                    filterDocuments.show(supportFragmentManager, "a")
-                    Toast.makeText(this," get String $data",Toast.LENGTH_LONG).show()
+                    val quranBottomSheet = QuranSoundBottomSheet()
+                    val bundle = Bundle()
+                    bundle.putString("pageNumber",data)
+                    quranBottomSheet.arguments = bundle
+                    quranBottomSheet.show(supportFragmentManager, "a")
+//                    Toast.makeText(this," get String $data",Toast.LENGTH_LONG).show()
                     return@QuranPagingAdapter true
                 }
 

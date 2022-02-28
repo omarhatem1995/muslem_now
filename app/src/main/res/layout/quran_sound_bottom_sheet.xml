@@ -43,19 +43,19 @@
             app:layout_constraintTop_toBottomOf="@+id/filterReportsTitleTV" />
 
         <TextView
-            android:id="@+id/filterRoutesTitleTV"
+            android:id="@+id/mesharyTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="8dp"
-            android:drawableStart="@drawable/quran_fragment_icon"
+            android:drawableEnd="@drawable/ic_baseline_check_24"
             android:drawablePadding="10dp"
             android:fontFamily="@font/tajawalregular"
             android:lineSpacingExtra="3dp"
             android:padding="5dp"
             android:text="مشاري راشد العفاسي"
             android:textAlignment="viewStart"
-            android:textColor="@color/black"
+            android:textColor="@color/logoOrangeColor"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -69,16 +69,15 @@
             android:background="@color/backgroundGrey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/filterRoutesTitleTV" />
+            app:layout_constraintTop_toBottomOf="@+id/mesharyTv" />
 
 
         <TextView
-            android:id="@+id/filterTypeTitleTV"
+            android:id="@+id/abdelbasetTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="9dp"
             android:layout_marginTop="8dp"
-            android:drawableStart="@drawable/quran_fragment_icon"
             android:drawablePadding="10dp"
             android:fontFamily="@font/tajawalregular"
             android:lineSpacingExtra="3dp"
@@ -100,10 +99,10 @@
             android:background="@color/backgroundGrey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/filterTypeTitleTV" />
+            app:layout_constraintTop_toBottomOf="@+id/abdelbasetTv" />
 
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/showResults_BTN"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -111,7 +110,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:background="@color/backgroundGrey"
+            android:background="@color/backgroundGreen"
             android:text="show_results"
             android:textAllCaps="false"
             android:textColor="#fff"
