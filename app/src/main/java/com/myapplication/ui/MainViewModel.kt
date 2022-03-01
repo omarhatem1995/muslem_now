@@ -17,12 +17,16 @@ import com.myapplication.data.core.workmanager.AlarmService
 import com.myapplication.data.core.workmanager.MuslemApp
 import com.myapplication.data.gateways.dao.MuslemNowDataBase
 import com.myapplication.data.repositories.SharedPreferencesRepository
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
+@DelicateCoroutinesApi
+@InternalCoroutinesApi
 class MainViewModel(app:MuslemApp): AndroidViewModel(app) {
 
     val preferences = SharedPreferencesRepository(app)
@@ -126,5 +130,11 @@ class MainViewModel(app:MuslemApp): AndroidViewModel(app) {
             }
             throw IllegalArgumentException("Unable to construct viewmodel")
         }
+    }
+
+
+    fun getAlarmState():Boolean
+    {
+        return preferences.getAlarmState()
     }
 }

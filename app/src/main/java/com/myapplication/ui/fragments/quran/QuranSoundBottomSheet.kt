@@ -1,8 +1,10 @@
 package com.myapplication.ui.fragments.quran
 
-import android.app.Dialog
+import android.annotation.SuppressLint
 import android.media.AudioManager
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,15 +14,7 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.myapplication.R
 import com.myapplication.databinding.QuranSoundBottomSheetBinding
-import android.media.MediaPlayer
-import android.net.Uri
-import android.widget.Toast
 import java.io.IOException
-import android.graphics.drawable.Drawable
-import android.util.Log
-import com.google.android.exoplayer2.DefaultRenderersFactory
-import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 
 
 class QuranSoundBottomSheet : BottomSheetDialogFragment()
@@ -189,6 +183,7 @@ class QuranSoundBottomSheet : BottomSheetDialogFragment()
 
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun mesharyClickListener() {
         viewModel.preference.setQuranSheikh(MESHARY)
         selectedSheikh = MESHARY
@@ -240,6 +235,7 @@ class QuranSoundBottomSheet : BottomSheetDialogFragment()
     }
 
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun menshawyClickListener() {
         viewModel.preference.setQuranSheikh(MENSHAWY)
         selectedSheikh = MENSHAWY
@@ -290,6 +286,7 @@ class QuranSoundBottomSheet : BottomSheetDialogFragment()
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun abdelbasetClickListener() {
         viewModel.preference.setQuranSheikh(ABDELBASET)
         selectedSheikh = ABDELBASET
@@ -341,6 +338,7 @@ class QuranSoundBottomSheet : BottomSheetDialogFragment()
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun ajamiClickListener() {
         viewModel.preference.setQuranSheikh(AJAMI)
         selectedSheikh = AJAMI

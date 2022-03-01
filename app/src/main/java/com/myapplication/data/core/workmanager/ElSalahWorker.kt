@@ -1,6 +1,7 @@
 package com.myapplication.data.core.workmanager
 
 import android.app.AlarmManager
+import android.app.Application
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -17,6 +18,7 @@ import com.myapplication.MyNotificationPublisher
 import com.myapplication.data.entities.model.PrayerTimeModel
 import com.myapplication.data.gateways.dao.MuslemNowDataBase
 import com.myapplication.data.gateways.dao.aladahangateway.AlAdahanDao
+import com.myapplication.data.repositories.SharedPreferencesRepository
 
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -25,16 +27,20 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.util.*
-
+@DelicateCoroutinesApi
 class ElSalahWorker(appContext: Context, params: WorkerParameters):
     CoroutineWorker(appContext, params) {
+
+    private val sharedPreferencesRepository:SharedPreferencesRepository = SharedPreferencesRepository(
+        appContext as Application
+    )
     @RequiresApi(Build.VERSION_CODES.O)
-    @DelicateCoroutinesApi
     override suspend fun doWork(): Result {
 
         return try {
             setSalahAlarm()
             Log.e(null, "doWork: success", )
+            sharedPreferencesRepository.setAlarmState(true)
             Result.success()
         }catch (e:Exception)
         {

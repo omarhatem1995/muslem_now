@@ -9,7 +9,8 @@ import com.myapplication.data.gateways.dao.MuslemNowDataBase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 
-
+@InternalCoroutinesApi
+@DelicateCoroutinesApi
 class MuslemApp : Application() {
 
     companion object {
@@ -23,7 +24,7 @@ class MuslemApp : Application() {
 
     private var quranJob:Job? = null
 
-    @InternalCoroutinesApi
+
     override fun onCreate() {
        // createNotificationChannels()
 
@@ -36,7 +37,7 @@ class MuslemApp : Application() {
                 if (it.isEmpty())
                 {
                     val quran =getLocalQuranResponse(this@MuslemApp).onEach { entity->
-                       var oldUniCode =entity.unicode
+                       val oldUniCode =entity.unicode
                         entity.unicode = "\\u$oldUniCode"
                     }
 
@@ -73,6 +74,7 @@ class MuslemApp : Application() {
         .setRequiresCharging(false)
         .build()
 
+    @DelicateCoroutinesApi
     private val request = PeriodicWorkRequestBuilder<ElSalahWorker>(
         3,
         java.util.concurrent.TimeUnit.HOURS

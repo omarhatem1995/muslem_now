@@ -33,6 +33,8 @@ import com.myapplication.ui.MainViewModel
 import com.myapplication.ui.azkar.AzkarFragment
 import com.myapplication.ui.fragments.home.HomeFragment
 import com.myapplication.ui.fragments.quran.QuranFragment
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -41,6 +43,8 @@ class MainActivity : AppCompatActivity() {
     var quranFragment = QuranFragment()
     var azkarFragment = AzkarFragment()
 
+    @InternalCoroutinesApi
+    @DelicateCoroutinesApi
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(
             this,
@@ -51,6 +55,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
+    @InternalCoroutinesApi
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,8 +75,13 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
+
         lifecycleScope.launch {
-            viewModel.setSalahAlarm()
+            if (!viewModel.getAlarmState())
+            {
+                viewModel.setSalahAlarm()
+            }
+
         }
 //viewModel.workState.observe(this) {
 //

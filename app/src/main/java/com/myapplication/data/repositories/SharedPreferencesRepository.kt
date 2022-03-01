@@ -143,4 +143,14 @@ class SharedPreferencesRepository(application: Application) {
             .putBoolean("Aya", it).apply()
     }
 
+    fun setAlarmState(state:Boolean)
+    {
+        preference.edit().putBoolean("AlarmState",state).apply()
+    }
+
+    fun getAlarmState():Boolean
+    {
+        return preference.getBoolean("AlarmState",false)
+    }
+
 }
