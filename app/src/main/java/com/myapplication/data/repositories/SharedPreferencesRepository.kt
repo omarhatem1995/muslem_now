@@ -131,4 +131,9 @@ class SharedPreferencesRepository(application: Application) {
 
     fun getIsha() = preference.getBoolean("Isha", true)
 
+    fun setQuranSheikh(quranSheikk:String?) = preference.edit()
+        .putString("quranSheikk", quranSheikk).apply()
+
+    fun getQuranSheikh() = preference.getString("quranSheikk", "meshary")
+
 }

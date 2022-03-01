@@ -35,12 +35,13 @@ class QuranActivity : AppCompatActivity() {
 
         var pageNumber = intent.getIntExtra("pageNumber",1)
         Log.d("pageNumber", pageNumber.toString())
-        adapter = QuranPagingAdapter(this@QuranActivity) { type, data ->
+        adapter = QuranPagingAdapter(this@QuranActivity) { type, data ,sura ->
             when (type) {
                 Constants.LONGCLICK -> {
                     val quranBottomSheet = QuranSoundBottomSheet()
                     val bundle = Bundle()
                     bundle.putString("pageNumber",data)
+                    bundle.putString("suraNumberAndAyaInSuraNumber",sura)
                     quranBottomSheet.arguments = bundle
                     quranBottomSheet.show(supportFragmentManager, "a")
 //                    Toast.makeText(this," get String $data",Toast.LENGTH_LONG).show()

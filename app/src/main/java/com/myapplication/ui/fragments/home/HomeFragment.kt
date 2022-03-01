@@ -535,7 +535,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                         monthOfTheYear,
                         currentYear
                     )
-
                     vm.viewStateAlAdahan.observe(this, { viewState ->
                         when (viewState) {
                             is AlAdahanViewState.Loading -> {

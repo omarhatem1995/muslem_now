@@ -17,7 +17,7 @@ import com.myapplication.databinding.QuranLinesRecyclerBinding
 
 class QuranPagingAdapter(
     val context: Context,
-    var onLongClick : (String,String) -> Boolean
+    var onLongClick : (String,String,String) -> Boolean
 ) :
     ListAdapter<QuranPage, QuranPagingAdapter.QuranAyaViewHolder>(DiffCallBack) {
 
@@ -134,12 +134,12 @@ class QuranPagingAdapter(
                             }
                         })
                         {
-                            type , data ->
+                            type , data , sura->
                                 when (type) {
                                     Constants.LONGCLICK -> {
                                         longClick = data
 //                                        Log.d("ClickListener", " $click")
-                                        onLongClick.invoke(Constants.LONGCLICK,longClick)
+                                        onLongClick.invoke(Constants.LONGCLICK,longClick,sura)
                                         recursiveOnClick(filteredByLine,emptyLines,longClick,linesList)
                                     }
                                 }
@@ -182,12 +182,12 @@ class QuranPagingAdapter(
                         Constants.ONCLICK-> recursiveOnClick(filteredByLine,emptyLines,"0",linesList)
                     }
                     }){
-                        type , data ->
+                        type , data ,sura->
                     when (type) {
                         Constants.LONGCLICK -> {
                             Log.d("ClickListener", " $longClick")
                             recursiveOnClick(filteredByLine,emptyLines,data,linesList)
-                            onLongClick.invoke(Constants.LONGCLICK,data)
+                            onLongClick.invoke(Constants.LONGCLICK,data,sura)
                         }
 
                     }

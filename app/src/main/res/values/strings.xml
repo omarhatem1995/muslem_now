@@ -114,4 +114,6 @@
     <string name="indexing">Indexing</string>
     <string name="u">\\u</string>
     <string name="choose_the_reader">Choose The Reader</string>
+    <string name="play">Play</string>
+    <string name="stop">Stop</string>
 </resources>

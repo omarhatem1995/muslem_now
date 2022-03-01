@@ -23,7 +23,7 @@ import com.myapplication.domain.core.Constants
 
 class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>, val click:String,
                         var onClick: (String) -> Unit,
-                        var onLongClick : (String,String) -> Boolean
+                        var onLongClick : (String,String,String) -> Boolean
 ) :
     ListAdapter<List<QuranVersesEntity>, QuranLinesAdapter.QuranLinesViewHolder>(DiffCallBack) {
 
@@ -51,6 +51,7 @@ class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>, val c
                 val text = TextView(context)
                 var pageNumber = it.page
                 var suraNumber = it.sura
+                var ayahNumberInSura = it.aya
                 text.contentDescription = "${it.quranAya}"
 //                if (it.page == 1)
 //                {
@@ -91,7 +92,8 @@ class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>, val c
                     text.background = context.getDrawable(R.color.backgroundGreen)
                 }
                 text.setOnLongClickListener {
-                    onLongClick.invoke(com.myapplication.common.Constants.LONGCLICK,text.contentDescription.toString())
+                    onLongClick.invoke(com.myapplication.common.Constants.LONGCLICK,text.contentDescription.toString(),
+                        "${suraNumber.toString()}+${ayahNumberInSura.toString()}")
 
                 }
                 text.setOnClickListener {
