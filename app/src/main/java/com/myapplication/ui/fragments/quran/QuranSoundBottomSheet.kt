@@ -68,35 +68,69 @@ class QuranSoundBottomSheet : BottomSheetDialogFragment()
         }
 
         binding.showResultsBTN.setOnClickListener {
+            if (mediaPlayer.isPlaying) {
+                mediaPlayer.stop()
+            }
             mediaPlayer = MediaPlayer()
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
             try {
                 this.dismiss()
                 when (selectedSheikh) {
                     MESHARY -> {
-                        mediaPlayer.setDataSource("https://cdn.islamic.network/quran/audio/128/ar.alafasy/$ayahNumber.mp3")
-                        mediaPlayer.prepare()
-                        mediaPlayer.start()
+                        if (viewModel.preference.getQuranAya()) {
+                            mediaPlayer.setDataSource("https://everyayah.com/data/Alafasy_128kbps/$suraNumber$ayaInSura.mp3")
+                            mediaPlayer.prepare()
+                            mediaPlayer.start()
+                        } else {
+                            mediaPlayer.setDataSource("https://everyayah.com/data/Alafasy_128kbps/PageMp3s/Page$pageInQuran.mp3")
+                            mediaPlayer.prepare()
+                            mediaPlayer.start()
+
+                        }
                     }
                     ABDELBASET -> {
-                        mediaPlayer.setDataSource("https://everyayah.com/data/Abdul_Basit_Mujawwad_128kbps/$suraNumber$ayaInSura.mp3")
-                        mediaPlayer.prepare()
-                        mediaPlayer.start()
+                        if (viewModel.preference.getQuranAya()) {
+                            mediaPlayer.setDataSource("https://everyayah.com/data/Abdul_Basit_Mujawwad_128kbps/$suraNumber$ayaInSura.mp3")
+                            mediaPlayer.prepare()
+                            mediaPlayer.start()
+                        } else {
+                            mediaPlayer.setDataSource("https://everyayah.com/data/Abdul_Basit_Mujawwad_128kbps/PageMp3s/Page$pageInQuran.mp3")
+                            mediaPlayer.prepare()
+                            mediaPlayer.start()
+                        }
                     }
                     AJAMI -> {
-                        mediaPlayer.setDataSource("https://everyayah.com/data/ahmed_ibn_ali_al_ajamy_128kbps/$suraNumber$ayaInSura.mp3")
-                        mediaPlayer.prepare()
-                        mediaPlayer.start()
+                        if (viewModel.preference.getQuranAya()) {
+                            mediaPlayer.setDataSource("https://everyayah.com/data/ahmed_ibn_ali_al_ajamy_128kbps/$suraNumber$ayaInSura.mp3")
+                            mediaPlayer.prepare()
+                            mediaPlayer.start()
+                        } else {
+                            mediaPlayer.setDataSource("https://everyayah.com/data/Ahmed_ibn_Ali_al-Ajamy_64kbps_QuranExplorer.Com/PageMp3s/Page$pageInQuran.mp3")
+                            mediaPlayer.prepare()
+                            mediaPlayer.start()
+                        }
                     }
                     MENSHAWY -> {
-                        mediaPlayer.setDataSource("https://everyayah.com/data/Minshawy_Mujawwad_192kbps/$suraNumber$ayaInSura.mp3")
-                        mediaPlayer.prepare()
-                        mediaPlayer.start()
+                        if (viewModel.preference.getQuranAya()) {
+                            mediaPlayer.setDataSource("https://everyayah.com/data/Minshawy_Mujawwad_192kbps/$suraNumber$ayaInSura.mp3")
+                            mediaPlayer.prepare()
+                            mediaPlayer.start()
+                        } else {
+                            mediaPlayer.setDataSource("https://everyayah.com/data/Minshawy_Murattal_128kbps/PageMp3s/Page$pageInQuran.mp3")
+                            mediaPlayer.prepare()
+                            mediaPlayer.start()
+                        }
                     }
                     else -> {
-                        mediaPlayer.setDataSource("https://cdn.islamic.network/quran/audio/128/ar.alafasy/$ayahNumber.mp3")
-                        mediaPlayer.prepare()
-                        mediaPlayer.start()
+                        if (viewModel.preference.getQuranAya()) {
+                            mediaPlayer.setDataSource("https://everyayah.com/data/Alafasy_128kbps/$suraNumber$ayaInSura.mp3")
+                            mediaPlayer.prepare()
+                            mediaPlayer.start()
+                        } else {
+                            mediaPlayer.setDataSource("https://everyayah.com/data/Alafasy_128kbps/PageMp3s/Page$pageInQuran.mp3")
+                            mediaPlayer.prepare()
+                            mediaPlayer.start()
+                        }
                     }
                 }
             } catch (e: IOException) {
@@ -104,6 +138,17 @@ class QuranSoundBottomSheet : BottomSheetDialogFragment()
             }
 //            this.dismiss()
             Log.v("TAG", "Music is streaming")
+        }
+        if(viewModel.preference.getQuranAya())
+            ayaClickListener()
+        else
+            pageClickListener()
+
+        binding.ayaRB.setOnClickListener {
+            ayaClickListener()
+        }
+        binding.pageRB.setOnClickListener {
+            pageClickListener()
         }
         binding.stopBTN.setOnClickListener {
             if (mediaPlayer.isPlaying) {
@@ -125,6 +170,23 @@ class QuranSoundBottomSheet : BottomSheetDialogFragment()
         }
 
         return binding.root
+    }
+
+    private fun pageClickListener() {
+        viewModel.preference.setQuranAya(false)
+        context?.getColor(R.color.blueToggle)?.let { binding.ayaRB.setBackgroundColor(it) }
+        context?.getColor(R.color.white)?.let { binding.pageRB.setBackgroundColor(it) }
+        context?.getColor(R.color.white)?.let { it1 -> binding.ayaRB.setTextColor(it1) }
+        context?.getColor(R.color.blueToggle)?.let { it1 -> binding.pageRB.setTextColor(it1) }
+    }
+
+    private fun ayaClickListener() {
+        viewModel.preference.setQuranAya(true)
+        context?.getColor(R.color.white)?.let { binding.ayaRB.setBackgroundColor(it) }
+        context?.getColor(R.color.blueToggle)?.let { binding.pageRB.setBackgroundColor(it) }
+        context?.getColor(R.color.blueToggle)?.let { it1 -> binding.ayaRB.setTextColor(it1) }
+        context?.getColor(R.color.white)?.let { it1 -> binding.pageRB.setTextColor(it1) }
+
     }
 
     private fun mesharyClickListener() {
@@ -336,13 +398,15 @@ class QuranSoundBottomSheet : BottomSheetDialogFragment()
     var suraNumberAndAyaInSura: String? = null
     var suraNumber: String? = null
     var ayaInSura: String? = null
+    var pageInQuran: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.AppBottomSheetDialogTheme)
         ayahNumber = arguments?.getString("pageNumber").toString()
         suraNumberAndAyaInSura = arguments?.getString("suraNumberAndAyaInSuraNumber").toString()
         suraNumber = suraNumberAndAyaInSura?.substringBefore("+")
-        ayaInSura = suraNumberAndAyaInSura?.substringAfter("+")
+        ayaInSura = suraNumberAndAyaInSura?.substringAfter("+")!!.substringBefore("-")
+        pageInQuran = suraNumberAndAyaInSura?.substringAfter("-")
 
         Log.d("getValuesOfIntent", " ${suraNumber?.length} , ${ayaInSura?.length}")
 //        Toast.makeText(context,"$suraNumber , $ayaInSura",Toast.LENGTH_LONG).show()
@@ -356,6 +420,12 @@ class QuranSoundBottomSheet : BottomSheetDialogFragment()
         } else if (ayaInSura?.length == 1) {
             ayaInSura = "00$ayaInSura"
         }
+        if(pageInQuran?.length == 2){
+            pageInQuran = "0$pageInQuran"
+        }else if(pageInQuran?.length == 1){
+            pageInQuran = "00$pageInQuran"
+        }
+
     }
 
 }

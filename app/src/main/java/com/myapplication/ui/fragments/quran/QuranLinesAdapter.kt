@@ -93,7 +93,7 @@ class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>, val c
                 }
                 text.setOnLongClickListener {
                     onLongClick.invoke(com.myapplication.common.Constants.LONGCLICK,text.contentDescription.toString(),
-                        "${suraNumber.toString()}+${ayahNumberInSura.toString()}")
+                        "${suraNumber.toString()}+${ayahNumberInSura.toString()}-${pageNumber.toString()}")
 
                 }
                 text.setOnClickListener {

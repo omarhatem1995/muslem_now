@@ -136,4 +136,11 @@ class SharedPreferencesRepository(application: Application) {
 
     fun getQuranSheikh() = preference.getString("quranSheikk", "meshary")
 
+    fun getQuranAya() = preference.getBoolean("Aya", true)
+
+    fun setQuranAya(aya:Boolean?) = aya?.let {
+        preference.edit()
+            .putBoolean("Aya", it).apply()
+    }
+
 }
