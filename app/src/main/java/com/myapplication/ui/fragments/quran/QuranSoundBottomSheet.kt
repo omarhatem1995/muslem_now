@@ -29,8 +29,8 @@ class QuranSoundBottomSheet : BottomSheetDialogFragment()
     lateinit var binding: QuranSoundBottomSheetBinding
     private val viewModel: QuranViewModel by viewModels()
     var ayahNumber: String? = null
-    lateinit var mediaPlayer: MediaPlayer
-    lateinit var selectedSheikh: String
+    var mediaPlayer: MediaPlayer? = null
+    var selectedSheikh: String? = null
     val MESHARY = "Meshary"
     val ABDELBASET = "AbdelBaset"
     val AJAMI = "Ajami"
@@ -68,68 +68,68 @@ class QuranSoundBottomSheet : BottomSheetDialogFragment()
         }
 
         binding.showResultsBTN.setOnClickListener {
-            if (mediaPlayer.isPlaying) {
-                mediaPlayer.stop()
+            if (mediaPlayer?.isPlaying == true) {
+                mediaPlayer?.stop()
             }
             mediaPlayer = MediaPlayer()
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
+            mediaPlayer?.setAudioStreamType(AudioManager.STREAM_MUSIC)
             try {
                 this.dismiss()
                 when (selectedSheikh) {
                     MESHARY -> {
                         if (viewModel.preference.getQuranAya()) {
-                            mediaPlayer.setDataSource("https://everyayah.com/data/Alafasy_128kbps/$suraNumber$ayaInSura.mp3")
-                            mediaPlayer.prepare()
-                            mediaPlayer.start()
+                            mediaPlayer?.setDataSource("https://everyayah.com/data/Alafasy_128kbps/$suraNumber$ayaInSura.mp3")
+                            mediaPlayer?.prepare()
+                            mediaPlayer?.start()
                         } else {
-                            mediaPlayer.setDataSource("https://everyayah.com/data/Alafasy_128kbps/PageMp3s/Page$pageInQuran.mp3")
-                            mediaPlayer.prepare()
-                            mediaPlayer.start()
+                            mediaPlayer?.setDataSource("https://everyayah.com/data/Alafasy_128kbps/PageMp3s/Page$pageInQuran.mp3")
+                            mediaPlayer?.prepare()
+                            mediaPlayer?.start()
 
                         }
                     }
                     ABDELBASET -> {
                         if (viewModel.preference.getQuranAya()) {
-                            mediaPlayer.setDataSource("https://everyayah.com/data/Abdul_Basit_Mujawwad_128kbps/$suraNumber$ayaInSura.mp3")
-                            mediaPlayer.prepare()
-                            mediaPlayer.start()
+                            mediaPlayer?.setDataSource("https://everyayah.com/data/Abdul_Basit_Mujawwad_128kbps/$suraNumber$ayaInSura.mp3")
+                            mediaPlayer?.prepare()
+                            mediaPlayer?.start()
                         } else {
-                            mediaPlayer.setDataSource("https://everyayah.com/data/Abdul_Basit_Mujawwad_128kbps/PageMp3s/Page$pageInQuran.mp3")
-                            mediaPlayer.prepare()
-                            mediaPlayer.start()
+                            mediaPlayer?.setDataSource("https://everyayah.com/data/Abdul_Basit_Mujawwad_128kbps/PageMp3s/Page$pageInQuran.mp3")
+                            mediaPlayer?.prepare()
+                            mediaPlayer?.start()
                         }
                     }
                     AJAMI -> {
                         if (viewModel.preference.getQuranAya()) {
-                            mediaPlayer.setDataSource("https://everyayah.com/data/ahmed_ibn_ali_al_ajamy_128kbps/$suraNumber$ayaInSura.mp3")
-                            mediaPlayer.prepare()
-                            mediaPlayer.start()
+                            mediaPlayer?.setDataSource("https://everyayah.com/data/ahmed_ibn_ali_al_ajamy_128kbps/$suraNumber$ayaInSura.mp3")
+                            mediaPlayer?.prepare()
+                            mediaPlayer?.start()
                         } else {
-                            mediaPlayer.setDataSource("https://everyayah.com/data/Ahmed_ibn_Ali_al-Ajamy_64kbps_QuranExplorer.Com/PageMp3s/Page$pageInQuran.mp3")
-                            mediaPlayer.prepare()
-                            mediaPlayer.start()
+                            mediaPlayer?.setDataSource("https://everyayah.com/data/Ahmed_ibn_Ali_al-Ajamy_64kbps_QuranExplorer.Com/PageMp3s/Page$pageInQuran.mp3")
+                            mediaPlayer?.prepare()
+                            mediaPlayer?.start()
                         }
                     }
                     MENSHAWY -> {
                         if (viewModel.preference.getQuranAya()) {
-                            mediaPlayer.setDataSource("https://everyayah.com/data/Minshawy_Mujawwad_192kbps/$suraNumber$ayaInSura.mp3")
-                            mediaPlayer.prepare()
-                            mediaPlayer.start()
+                            mediaPlayer?.setDataSource("https://everyayah.com/data/Minshawy_Mujawwad_192kbps/$suraNumber$ayaInSura.mp3")
+                            mediaPlayer?.prepare()
+                            mediaPlayer?.start()
                         } else {
-                            mediaPlayer.setDataSource("https://everyayah.com/data/Minshawy_Murattal_128kbps/PageMp3s/Page$pageInQuran.mp3")
-                            mediaPlayer.prepare()
-                            mediaPlayer.start()
+                            mediaPlayer?.setDataSource("https://everyayah.com/data/Minshawy_Murattal_128kbps/PageMp3s/Page$pageInQuran.mp3")
+                            mediaPlayer?.prepare()
+                            mediaPlayer?.start()
                         }
                     }
                     else -> {
                         if (viewModel.preference.getQuranAya()) {
-                            mediaPlayer.setDataSource("https://everyayah.com/data/Alafasy_128kbps/$suraNumber$ayaInSura.mp3")
-                            mediaPlayer.prepare()
-                            mediaPlayer.start()
+                            mediaPlayer?.setDataSource("https://everyayah.com/data/Alafasy_128kbps/$suraNumber$ayaInSura.mp3")
+                            mediaPlayer?.prepare()
+                            mediaPlayer?.start()
                         } else {
-                            mediaPlayer.setDataSource("https://everyayah.com/data/Alafasy_128kbps/PageMp3s/Page$pageInQuran.mp3")
-                            mediaPlayer.prepare()
-                            mediaPlayer.start()
+                            mediaPlayer?.setDataSource("https://everyayah.com/data/Alafasy_128kbps/PageMp3s/Page$pageInQuran.mp3")
+                            mediaPlayer?.prepare()
+                            mediaPlayer?.start()
                         }
                     }
                 }
@@ -151,8 +151,8 @@ class QuranSoundBottomSheet : BottomSheetDialogFragment()
             pageClickListener()
         }
         binding.stopBTN.setOnClickListener {
-            if (mediaPlayer.isPlaying) {
-                mediaPlayer.pause()
+            if (mediaPlayer?.isPlaying == true) {
+                mediaPlayer?.pause()
             }
 
         }
