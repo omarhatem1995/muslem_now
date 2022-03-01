@@ -36,7 +36,8 @@ import com.myapplication.ui.fragments.quran.QuranFragment
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
-
+@DelicateCoroutinesApi
+@InternalCoroutinesApi
 class MainActivity : AppCompatActivity() {
     lateinit var bottomNavigationView: BottomNavigationView
     var firstFragment = HomeFragment()
@@ -55,7 +56,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    @InternalCoroutinesApi
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

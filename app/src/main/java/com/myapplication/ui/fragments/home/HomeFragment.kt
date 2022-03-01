@@ -1,6 +1,7 @@
 package com.myapplication.ui.fragments.home
 
 import android.annotation.SuppressLint
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
@@ -45,13 +46,9 @@ import java.util.concurrent.TimeUnit
 
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.tasks.Task
-import android.app.AlarmManager
-import android.app.Dialog
-import android.app.Notification
 
 import android.os.SystemClock
 
-import android.app.PendingIntent
 import androidx.core.app.NotificationCompat
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -63,6 +60,7 @@ import com.myapplication.LocaleUtil.Companion.applyLocalizedContext
 import com.myapplication.MyNotificationPublisher
 import com.myapplication.QiblahActivity
 import com.myapplication.R
+import com.myapplication.data.repositories.SharedPreferencesRepository
 import com.myapplication.ui.ViewUtils
 import com.myapplication.widgets.sensorManager
 import java.io.IOException
@@ -88,6 +86,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
 
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
+    private lateinit var preferences:SharedPreferencesRepository
 
     var sensorManager: SensorManager? = null
     var sensor: Sensor? = null
@@ -145,6 +144,8 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
 
         binding.lifecycleOwner = this
         initViews()
+
+
         return binding.root
     }
 
@@ -501,6 +502,8 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                     )
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    vm.preference.setLat(it.latitude.toString())
+                    vm.preference.setLong(it.longitude.toString())
                         initQiblaDirection(it.latitude, it.longitude)
                     initPrayerTimes(it.latitude, it.longitude)
                 }

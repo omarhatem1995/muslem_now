@@ -8,6 +8,7 @@ import com.myapplication.data.entities.model.getLocalQuranResponse
 import com.myapplication.data.gateways.dao.MuslemNowDataBase
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
+import java.util.concurrent.TimeUnit
 
 @InternalCoroutinesApi
 @DelicateCoroutinesApi
@@ -60,6 +61,8 @@ class MuslemApp : Application() {
             Log.e(null, "onCreate: ${e.message}")
         }
 
+        initMonthlyWorker()
+
         super.onCreate()
     }
 
@@ -73,22 +76,49 @@ class MuslemApp : Application() {
         }
         .setRequiresCharging(false)
         .build()
+    private val monthlyConstraints = Constraints.Builder()
+        .setRequiresBatteryNotLow(false)
+        .apply {
 
+            setRequiresDeviceIdle(false)
+
+        }
+        .setRequiresCharging(false)
+        .setRequiredNetworkType(NetworkType.CONNECTED)
+        .build()
     @DelicateCoroutinesApi
     private val request = PeriodicWorkRequestBuilder<ElSalahWorker>(
         3,
-        java.util.concurrent.TimeUnit.HOURS
+        TimeUnit.HOURS
     )
         .setConstraints(constraints)
         .setBackoffCriteria(
             BackoffPolicy.LINEAR, PeriodicWorkRequest.DEFAULT_BACKOFF_DELAY_MILLIS,
-            java.util.concurrent.TimeUnit.MILLISECONDS
+            TimeUnit.MILLISECONDS
         )
         .addTag("settingAlarm")
         .build()
 
 
 
+    private val monthlyRequest = PeriodicWorkRequestBuilder<MonthlyAlarmWorker>(12, TimeUnit.HOURS)
+        .setConstraints(monthlyConstraints)
+        .setBackoffCriteria(BackoffPolicy.LINEAR,PeriodicWorkRequest.DEFAULT_BACKOFF_DELAY_MILLIS,TimeUnit.MILLISECONDS).build()
+
+
+    fun initMonthlyWorker()
+    {
+        try {
+            WorkManager.getInstance(applicationContext)
+                .enqueueUniquePeriodicWork(
+                    "MonthlyWorker",
+                    ExistingPeriodicWorkPolicy.REPLACE,
+                    monthlyRequest
+                )
+        } catch (e: Exception) {
+            Log.e(null, "onCreate: ${e.message}")
+        }
+    }
 
 
 }

@@ -86,7 +86,7 @@ class QuranActivity : AppCompatActivity() {
 
 
 
-                    binding.quranRecycler.scrollToPosition(pageNumber)
+                    binding.quranRecycler.scrollToPosition(pageNumber-1)
                 }
 
             }

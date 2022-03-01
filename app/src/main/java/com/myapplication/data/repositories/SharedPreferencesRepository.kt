@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SharedPreferencesRepository(application: Application) {
     var preference: SharedPreferences = application.getSharedPreferences("", Context.MODE_PRIVATE)
@@ -145,12 +147,22 @@ class SharedPreferencesRepository(application: Application) {
 
     fun setAlarmState(state:Boolean)
     {
-        preference.edit().putBoolean("AlarmState",state).apply()
+        val c: Date = Calendar.getInstance().time
+        println("Current time => $c")
+
+        val df = SimpleDateFormat("dd-MM-yyyy", Locale("en"))
+        val date = df.format(c)
+        preference.edit().putBoolean(date,state).apply()
     }
 
     fun getAlarmState():Boolean
     {
-        return preference.getBoolean("AlarmState",false)
+        val c: Date = Calendar.getInstance().time
+        println("Current time => $c")
+
+        val df = SimpleDateFormat("dd-MM-yyyy", Locale("en"))
+        val date = df.format(c)
+        return preference.getBoolean(date,false)
     }
 
 }
