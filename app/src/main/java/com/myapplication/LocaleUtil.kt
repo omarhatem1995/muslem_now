@@ -138,6 +138,16 @@ class LocaleUtil {
                 else -> context.getString(R.string.isha)
             }
         }
+        fun getNameOfPrayer(id: Int): String {
+            return when (id) {
+                0 -> "الفجر"
+                1 -> "الشروق"
+                2 -> "الظهر"
+                3 -> "العصر"
+                4 -> "المغرب"
+                else -> "العشاء"
+            }
+        }
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun nextPrayer(prayerList: MutableList<PrayerTimeModel>, currentTime: String): Int {

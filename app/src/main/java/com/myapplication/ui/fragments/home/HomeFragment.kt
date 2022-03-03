@@ -22,7 +22,6 @@ import androidx.databinding.DataBindingUtil
 import com.myapplication.databinding.FragmentHomeBinding
 import kotlin.math.roundToInt
 
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.location.*
 import com.myapplication.data.entities.model.Datum
 import com.myapplication.data.entities.model.PrayerTimeModel
@@ -47,22 +46,16 @@ import java.util.concurrent.TimeUnit
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.tasks.Task
 
-import android.os.SystemClock
-
-import androidx.core.app.NotificationCompat
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import com.bumptech.glide.Glide
 import com.myapplication.LocaleUtil.Companion.applyLocalizedContext
 //import com.myapplication.LocaleUtil.Companion.initSensorManager
 //import com.myapplication.LocaleUtil.Companion.sensor
 //import com.myapplication.LocaleUtil.Companion.sensorManager
-import com.myapplication.MyNotificationPublisher
 import com.myapplication.QiblahActivity
 import com.myapplication.R
 import com.myapplication.data.repositories.SharedPreferencesRepository
 import com.myapplication.ui.ViewUtils
-import com.myapplication.widgets.sensorManager
 import java.io.IOException
 import java.lang.reflect.InvocationTargetException
 
@@ -258,7 +251,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
     }
 
     var prayerList: MutableList<PrayerTimeModel> = ArrayList()
-    var nextPrayerIs: Int = 0
+    var nextPrayersId: Int = 0
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun renderParentTimings(data: List<Datum>) {
@@ -269,9 +262,9 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
         val currentHour = currentHourDateFormat.format(cal.time)
         val currentDateForChecking = dateFormatForChecking.format(cal.time)
 
-        for (i in 0..data.size - 1) {
+        for (i in data.indices) {
 
-            var date = data.get(i).date.gregorian.date
+            var date = data[i].date.gregorian.date
 
             var hijriDate = data[i].date.hijri.day + " " + data[i].date.hijri.month.ar +
                     " " + data[i].date.hijri.year
@@ -345,9 +338,9 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                     data[i].date.hijri.day + " " + data[i].date.hijri.month.ar +
                             " " + data[i].date.hijri.year
 
-                nextPrayerIs = nextPrayer(prayerList, currentHour)
+                nextPrayersId = nextPrayer(prayerList, currentHour)
                 for (i in 0..prayerList.size - 1) {
-                    if (nextPrayerIs == prayerList[i].prayerId) {
+                    if (nextPrayersId == prayerList[i].prayerId) {
 
                         val nextPrayerTime = prayerList[i].time + " " + prayerList[i].date
                         val remainingTimeForNextPrayer =
@@ -367,7 +360,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                                 PrayerAdapter(
                                     requireContext(),
                                     prayerList,
-                                    nextPrayerIs,
+                                    nextPrayersId,
                                     this,
                                     arrayList,
                                     it
@@ -399,7 +392,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                                         PrayerAdapter(
                                             requireContext(),
                                             prayerList,
-                                            nextPrayerIs,
+                                            nextPrayersId,
                                             this,
                                             arrayList,
                                             it
@@ -574,23 +567,23 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
         val currentHour = currentHourDateFormat.format(cal.time)
         val dateFormatForChecking: DateFormat = SimpleDateFormat("HH:mm dd-MM-yyyy",Locale("en"))
         val currentDateForChecking = dateFormatForChecking.format(cal.time)
-        nextPrayerIs = nextPrayer(prayer.toMutableList(), currentHour)
-        if (nextPrayerIs != 300) {
+        nextPrayersId = nextPrayer(prayer.toMutableList(), currentHour)
+        if (nextPrayersId != 300) {
 
             val nextPrayerTime =
-                prayer[nextPrayerIs].time + " " + prayer[nextPrayerIs].date
+                prayer[nextPrayersId].time + " " + prayer[nextPrayersId].date
             val remainingTimeForNextPrayer =
                 remainingTimeForNextPrayer(currentDateForChecking, nextPrayerTime)
             binding.remainingTimeForNextPrayer.text =
                 getString(R.string.remaining_time_for) + getNameOfPrayer(
-                    requireContext(), nextPrayerIs
+                    requireContext(), nextPrayersId
                 )
 
             counterForNextPrayer(remainingTimeForNextPrayer)
 
             binding.prayerTimesList.adapter =
                 vm.preference.getLanguage()?.let {
-                    PrayerAdapter(requireContext(), prayer, nextPrayerIs, this, arrayList ,
+                    PrayerAdapter(requireContext(), prayer, nextPrayersId, this, arrayList ,
                         it
                     )
                 }
@@ -614,7 +607,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                         Log.d("remainingTime 3", remainingTimeForNextPrayer)
                         binding.prayerTimesList.adapter =
                             vm.preference.getLanguage()?.let {
-                                PrayerAdapter(requireContext(), prayer, nextPrayerIs, this, arrayList,
+                                PrayerAdapter(requireContext(), prayer, nextPrayersId, this, arrayList,
                                     it
                                 )
                             }

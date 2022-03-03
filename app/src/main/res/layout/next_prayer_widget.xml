@@ -1,0 +1,78 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.MuslemNow.AppWidget.Container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/view_background_buttons_green_gradient_rounded"
+    android:theme="@style/Theme.MuslemNow.AppWidgetContainer">
+
+    <TextView
+        android:id="@+id/currentCityTv"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text=" "
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"/>
+
+    <TextView
+        android:id="@+id/currentPrayerTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text=""
+        android:textColor="@color/white"
+        android:fontFamily="@font/tajawalregular"
+        android:layout_alignStart="@id/currentCityTv"/>
+    <TextView
+        android:id="@+id/currentPrayerTimeTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:text=""
+        android:textColor="@color/white"
+        android:fontFamily="@font/tajawalregular"
+        android:layout_alignStart="@id/currentPrayerTv"/>
+
+    <TextView
+        android:id="@+id/nextPrayerTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:text="@string/remaining_time_for"
+        android:textColor="@color/white"
+        android:fontFamily="@font/tajawallight"
+        android:layout_alignStart="@id/currentPrayerTv"/>
+    <TextView
+        android:id="@+id/nextPrayerNameTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:text=""
+        android:textColor="@color/white"
+        android:fontFamily="@font/tajawalregular"
+        android:layout_alignStart="@id/currentPrayerTv"/>
+
+    <ImageView
+        android:id="@+id/currentPrayerIv"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="60dp"
+        android:layout_alignStart="@id/currentCityTv"
+        android:layout_alignTop="@id/currentCityTv"/>
+
+    <TextView
+        android:id="@+id/remainingTimeForNextPrayerWidget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" "
+        android:textColor="@color/white"
+        android:fontFamily="@font/tajawalmedium"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="80dp"
+        android:layout_alignStart="@id/currentCityTv"
+        android:layout_alignTop="@id/currentCityTv"/>
+
+</RelativeLayout>

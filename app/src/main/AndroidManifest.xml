@@ -21,13 +21,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MuslemNow"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".ui.fragments.quran.QuranActivity"
-            android:exported="true">
-
-
-        </activity>
-
         <receiver
             android:name=".widgets.QiblaWidget"
             android:exported="true">
@@ -41,6 +34,27 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/qibla_widget_info" />
         </receiver>
+
+        <receiver
+            android:name=".widgets.NextPrayerWidget"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.appwidget.action.APPWIDGET_ENABLED" />
+                <action android:name="android.intent.action.DATE_CHANGED" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="com.android.FirstWidget.arrow_left" />
+                <action android:name="com.android.FirstWidget.arrow_right" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/next_prayer_widget_info" />
+        </receiver>
+
         <receiver
             android:name=".widgets.PrayerTimesWidget"
             android:exported="true">
@@ -69,6 +83,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/azkar_widget_info" />
         </receiver>
+
         <receiver
             android:name=".MyNotificationPublisher"
             android:enabled="true"
@@ -88,32 +103,44 @@
         </receiver>
 
         <activity
+            android:name=".ui.fragments.quran.QuranActivity"
+            android:exported="true"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".ui.settings.SettingsActivity"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.QiblahActivityNewLogic"
             android:exported="false"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.settings.SettingsInAppActivity"
             android:exported="false"
             android:launchMode="singleTop"
-            android:theme="@style/AppFullScreenTheme" />
+            android:theme="@style/AppFullScreenTheme"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.azkar.AzkarActivity"
             android:exported="true"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".QiblahActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.splash.SplashActivity"
             android:exported="true"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

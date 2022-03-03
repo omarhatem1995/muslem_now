@@ -24,6 +24,7 @@ import com.myapplication.databinding.ActivitySettingsBinding
 import com.myapplication.ui.splash.SplashActivity
 import android.widget.CompoundButton
 import android.widget.Toast
+import kotlinx.coroutines.InternalCoroutinesApi
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -34,6 +35,7 @@ class SettingsActivity : AppCompatActivity() {
     var azanType = Constants.FULL_AZAN
     var setAzkarAfterAzan = false
     var setAzkarSabahAndMasaa = false
+    @InternalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)

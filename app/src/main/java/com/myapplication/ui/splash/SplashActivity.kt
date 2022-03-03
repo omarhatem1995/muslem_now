@@ -24,6 +24,7 @@ import com.myapplication.ui.settings.SettingsViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.InternalCoroutinesApi
 
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -40,6 +41,7 @@ class SplashActivity : AppCompatActivity() {
     lateinit var binding: ActivitySplashBinding
     private val splashViewModel: SettingsViewModel by viewModels()
 
+    @InternalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
@@ -83,6 +85,7 @@ class SplashActivity : AppCompatActivity() {
         splashViewModel.preference.getLanguage()?.let { LocaleUtil.applyLocalizedContext(this, it) }
     }
 
+    @InternalCoroutinesApi
     private fun checkPermissions() {
         val missingPermissions: MutableList<String> = ArrayList()
         // check all required dynamic permissions
@@ -106,6 +109,7 @@ class SplashActivity : AppCompatActivity() {
         }
     }
 
+    @InternalCoroutinesApi
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<String>,
         grantResults: IntArray
@@ -130,6 +134,7 @@ class SplashActivity : AppCompatActivity() {
 
     }
 
+    @InternalCoroutinesApi
     @SuppressLint("CheckResult")
     fun initSplash() {
         Observable.timer(2, TimeUnit.SECONDS)

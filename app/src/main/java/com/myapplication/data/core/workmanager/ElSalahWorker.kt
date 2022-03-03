@@ -22,6 +22,7 @@ import com.myapplication.data.repositories.SharedPreferencesRepository
 
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -34,6 +35,7 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
     private val sharedPreferencesRepository:SharedPreferencesRepository = SharedPreferencesRepository(
         appContext as Application
     )
+    @InternalCoroutinesApi
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun doWork(): Result {
 
@@ -53,6 +55,7 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
 
 
 
+     @InternalCoroutinesApi
      @RequiresApi(Build.VERSION_CODES.O)
      @DelicateCoroutinesApi
     // @RequiresApi(Build.VERSION_CODES.S)

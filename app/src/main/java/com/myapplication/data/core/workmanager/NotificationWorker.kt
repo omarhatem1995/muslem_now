@@ -14,6 +14,7 @@ import com.myapplication.data.core.workmanager.MuslemApp.Companion.CHANNEL_FULL_
 import com.myapplication.data.core.workmanager.MuslemApp.Companion.CHANNEL_FULL_AZAN_HOSARY
 import com.myapplication.data.core.workmanager.MuslemApp.Companion.CHANNEL_TAKBIRAT_AZAN_HOSARY
 import com.myapplication.data.repositories.SharedPreferencesRepository
+import kotlinx.coroutines.InternalCoroutinesApi
 
 class NotificationWorker(context: Context, params: WorkerParameters) :
     CoroutineWorker(context, params) {
@@ -31,6 +32,7 @@ class NotificationWorker(context: Context, params: WorkerParameters) :
     }
 
 
+    @InternalCoroutinesApi
     override suspend fun doWork(): Result {
         try {
             val salahName: String? = inputData.getString(YOUR_PARAM)
@@ -46,6 +48,7 @@ class NotificationWorker(context: Context, params: WorkerParameters) :
     }
 
 
+    @InternalCoroutinesApi
     private fun createForegroundInfo(title: String): ForegroundInfo {
         // generate a random id for each notification
         val notificationId = 1001
@@ -53,6 +56,7 @@ class NotificationWorker(context: Context, params: WorkerParameters) :
     }
 
 
+    @InternalCoroutinesApi
     private fun createNotification(title: String): Notification {
         val intent = WorkManager.getInstance(applicationContext).createCancelPendingIntent(id)
         val app: MuslemApp = applicationContext as MuslemApp

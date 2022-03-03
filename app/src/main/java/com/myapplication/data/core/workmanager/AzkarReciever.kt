@@ -21,9 +21,11 @@ import android.app.PendingIntent
 import android.os.Build
 import com.myapplication.ui.azkar.AzkarActivity
 import com.myapplication.ui.settings.AzkarSettingsFragment
+import kotlinx.coroutines.InternalCoroutinesApi
 
 
 class AzkarReciever : BroadcastReceiver() {
+    @InternalCoroutinesApi
     override fun onReceive(context: Context, intent: Intent?) {
         if (intent != null) {
             Log.d("onRecieveSIasdlk" , " is called Sabah")

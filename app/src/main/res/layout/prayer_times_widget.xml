@@ -7,7 +7,7 @@
     android:theme="@style/Theme.MuslemNow.AppWidgetContainer">
 
     <ImageView
-        android:id="@+id/ivCalendar"
+        android:id="@+id/currentCityTv"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginStart="20dp"
@@ -24,8 +24,8 @@
         android:textColor="@color/white"
         android:fontFamily="@font/tajawalmedium"
         android:layout_marginStart="40dp"
-        android:layout_alignStart="@id/ivCalendar"
-        android:layout_alignTop="@id/ivCalendar"/>
+        android:layout_alignStart="@id/currentCityTv"
+        android:layout_alignTop="@id/currentCityTv"/>
 
     <TextView
         android:id="@+id/tvFajr"
@@ -36,7 +36,7 @@
         android:textColor="@color/white"
         android:layout_marginTop="40dp"
         android:layout_marginStart="20dp"
-        android:layout_alignTop="@id/ivCalendar"/>
+        android:layout_alignTop="@id/currentCityTv"/>
 
     <ImageView
         android:id="@+id/ivFajr"

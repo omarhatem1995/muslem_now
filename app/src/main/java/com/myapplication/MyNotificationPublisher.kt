@@ -15,7 +15,6 @@ import android.provider.AlarmClock
 import android.util.Log
 import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkManager
-import com.myapplication.data.core.workmanager.AlarmService
 import com.myapplication.data.core.workmanager.NotificationWorker
 import com.myapplication.data.entities.model.PrayerTimeModel
 import com.myapplication.domain.core.Constants

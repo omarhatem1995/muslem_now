@@ -21,6 +21,7 @@ import com.myapplication.data.entities.model.PrayerTimeModel
 import com.myapplication.data.repositories.SharedPreferencesRepository
 import com.myapplication.ui.azkar.AzkarActivity
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
@@ -34,6 +35,7 @@ class AlarmService : LifecycleService() {
 
 
 
+    @InternalCoroutinesApi
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
 
@@ -131,7 +133,8 @@ class AlarmService : LifecycleService() {
 
 
     //
-    private fun createSalahNotification(title: String,preference:SharedPreferencesRepository): Notification {
+    @InternalCoroutinesApi
+    private fun createSalahNotification(title: String, preference:SharedPreferencesRepository): Notification {
         val calendar: Calendar = Calendar.getInstance()
         val manager = getSystemService(
             NotificationManager::class.java

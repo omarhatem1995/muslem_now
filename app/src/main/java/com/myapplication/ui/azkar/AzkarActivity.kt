@@ -13,6 +13,7 @@ import com.myapplication.MainActivity
 import com.myapplication.common.Constants
 import com.myapplication.data.entities.model.AzkarModel
 import com.myapplication.databinding.ActivityZekrBinding
+import kotlinx.coroutines.InternalCoroutinesApi
 import java.io.*
 import java.text.DateFormat
 import java.text.SimpleDateFormat
@@ -125,6 +126,7 @@ class AzkarActivity : AppCompatActivity() {
         }
     }
 
+    @InternalCoroutinesApi
     override fun onBackPressed() {
         super.onBackPressed()
         if(isTaskRoot) {
