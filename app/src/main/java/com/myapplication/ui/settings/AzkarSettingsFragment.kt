@@ -12,7 +12,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import com.myapplication.R
 import com.myapplication.databinding.FragmentAzkarSettingsBinding
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import android.app.AlarmManager
@@ -20,12 +19,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import android.util.Log
-import com.myapplication.MainActivity
-import com.myapplication.data.core.workmanager.AlarmService
 import com.myapplication.data.core.workmanager.AzkarReciever
-import com.myapplication.data.core.workmanager.MuslemApp
 
 
 class AzkarSettingsFragment : Fragment() {
@@ -171,7 +165,6 @@ class AzkarSettingsFragment : Fragment() {
         if (System.currentTimeMillis() > startUpTime) {
             startUpTime = startUpTime + 24 * 60 * 60 * 1000
         }
-        Log.d("currentHour" , " " + azkarTime)
         intent.action = azkarType
         var notificationId = 0
         if (azkarType.equals("AzkarSabah")) {

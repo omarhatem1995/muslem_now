@@ -116,4 +116,6 @@
     <string name="choose_the_reader">Choose The Reader</string>
     <string name="play">Play</string>
     <string name="stop">Stop</string>
+    <string name="clear_counter">Clear counter</string>
+    <string name="electronic_sebha">Electronic Sebha</string>
 </resources>

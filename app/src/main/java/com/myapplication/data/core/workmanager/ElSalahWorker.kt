@@ -7,17 +7,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.myapplication.LocaleUtil.Companion.prayerFilter
 import com.myapplication.MainActivity
-import com.myapplication.MyNotificationPublisher
 
-import com.myapplication.data.entities.model.PrayerTimeModel
 import com.myapplication.data.gateways.dao.MuslemNowDataBase
-import com.myapplication.data.gateways.dao.aladahangateway.AlAdahanDao
 import com.myapplication.data.repositories.SharedPreferencesRepository
 
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -26,7 +22,6 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.LocalTime
 import java.util.*
 @DelicateCoroutinesApi
 class ElSalahWorker(appContext: Context, params: WorkerParameters):
@@ -41,12 +36,10 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
 
         return try {
             setSalahAlarm()
-            Log.e(null, "doWork: success", )
             sharedPreferencesRepository.setAlarmState(true)
             Result.success()
         }catch (e:Exception)
         {
-            Log.e(null, "doWork: failed", )
             Result.retry()
 
         }
@@ -66,7 +59,6 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
 
         val df = SimpleDateFormat("dd-MM-yyyy", Locale("en"))
         val currentHourDateFormat = SimpleDateFormat("HH:mm", Locale("en"))
-        Log.e(null, "getCurrentDate: ${df.format(c)} ")
        // df.calendar.timeInMillis
         val formattedDate: String = df.format(c)
         val formattedDate2:String = currentHourDateFormat.format(c)
@@ -102,12 +94,11 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),
                         calendar.get(Calendar.DAY_OF_MONTH),
-                        separatenumbers(prayerTime.time)[0],
-                        separatenumbers(prayerTime.time)[1],
+                        separateNumbers(prayerTime.time)[0],
+                        separateNumbers(prayerTime.time)[1],
                         0
                     )
 
-                    Log.e(null, "setSalahAlarm: ${calendar.time} ", )
                     val bundle: Bundle = Bundle()
                     bundle.putParcelable("prayerTime",prayerTime)
                     intent2.putExtra("prayerObject",bundle)
@@ -134,6 +125,7 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
     }
 
 
+/*
     fun separateNumbers(time:String):ArrayList<Int>
     {
        val editedTime = time.dropWhile {
@@ -151,8 +143,9 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
         return timeArray
 
     }
+*/
 
-    fun separatenumbers(time:String):ArrayList<Int>
+    private fun separateNumbers(time:String):ArrayList<Int>
     {
        val hour = time.substringBefore(':').toInt()
         val min = time.substringAfter(':').toInt()

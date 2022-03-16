@@ -2,7 +2,6 @@ package com.myapplication.ui.fragments.home
 
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,7 @@ import androidx.core.graphics.drawable.DrawableCompat
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import com.myapplication.LocaleUtil.Companion.convertToArabic
-import com.myapplication.LocaleUtil.Companion.getNameOfPrayer
+import com.myapplication.LocaleUtil.Companion.getNameOfPrayerInArabic
 import com.myapplication.LocaleUtil.Companion.getTimeAMandPM
 import com.myapplication.LocaleUtil.Companion.setDrawable
 
@@ -131,7 +130,6 @@ list: MutableList<Boolean> , language:String) :
                 )
             }
         }
-        Log.d("lasdklasdklwe", " ${holder.imageStatus.tag}")
 
         holder.imageStatus.setOnClickListener {
             if (prayerItem != null) {
@@ -189,10 +187,9 @@ list: MutableList<Boolean> , language:String) :
         if (prayerItem?.time != null) {
             holder.timePrayer.text =
                 convertToArabic(prayerItem?.time,language)?.let { getTimeAMandPM(it, mContext) }
-            Log.d("asdlsakdasdww" , getTimeAMandPM(prayerItem?.time, mContext).toString())
         }
         if (prayerItem?.prayerId != null)
-            holder.namePrayer.text = getNameOfPrayer(mContext, prayerItem?.prayerId)
+            holder.namePrayer.text = getNameOfPrayerInArabic(mContext, prayerItem?.prayerId)
     }
 
 

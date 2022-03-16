@@ -2,7 +2,6 @@ package com.myapplication.data.core.workmanager
 
 
 import android.app.Application
-import android.util.Log
 import androidx.work.*
 import com.myapplication.data.entities.model.getLocalQuranResponse
 import com.myapplication.data.gateways.dao.MuslemNowDataBase
@@ -58,7 +57,6 @@ class MuslemApp : Application() {
                     request
                 )
         } catch (e: Exception) {
-            Log.e(null, "onCreate: ${e.message}")
         }
 
         initMonthlyWorker()
@@ -116,7 +114,6 @@ class MuslemApp : Application() {
                     monthlyRequest
                 )
         } catch (e: Exception) {
-            Log.e(null, "onCreate: ${e.message}")
         }
     }
 

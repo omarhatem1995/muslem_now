@@ -7,13 +7,9 @@ import android.content.Intent
 import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
-import android.os.IBinder
-import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.myapplication.MainActivity
 import com.myapplication.R
 import com.myapplication.common.Constants
@@ -31,16 +27,11 @@ class AlarmService : LifecycleService() {
 
     val notificationId = 1001
 
-
-
-
-
     @InternalCoroutinesApi
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
 
         if (intent != null) {
-            Log.e("foregroundService", "onStartCommand:${intent.action} ")
         }
         if (intent != null) {
             if (intent.action == "Trigger") {
@@ -169,16 +160,7 @@ class AlarmService : LifecycleService() {
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
             .build()
 
-
-
-
-
-
-
-        Log.d("getElMoazen", " is : " + preference.getMoazen().toString())
-
         //preference.getAzanType().equals(Constants.FULL_AZAN) &&
-        Log.e(null, "createNotification: ${preference.getMoazen()}  ", )
         if ( preference.getAzanType().equals(Constants.FULL_AZAN) &&preference.getMoazen()
                 .equals(Constants.AZANELHOSARY)
         ) {
@@ -196,7 +178,6 @@ class AlarmService : LifecycleService() {
                 Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.azan)
 
         } else {
-            Log.e(null, "createNotification: else", )
             sound =
                 Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + applicationContext.packageName + "/" + R.raw.elhosary)
         }

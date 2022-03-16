@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +16,6 @@ import androidx.databinding.DataBindingUtil
 import com.myapplication.LocaleUtil
 import com.myapplication.MainActivity
 import com.myapplication.R
-import com.myapplication.databinding.ActivitySettingsBinding
 import com.myapplication.databinding.ActivitySplashBinding
 import com.myapplication.ui.settings.SettingsActivity
 import com.myapplication.ui.settings.SettingsViewModel
@@ -79,9 +77,6 @@ class SplashActivity : AppCompatActivity() {
         method.setAccessible(true); // Make the method callable
 
         mobileDataEnabled = method.invoke(connMgr) as Boolean
-        Log.d("mobileDataEnabled : ", "" + mobileDataEnabled)
-        Log.d(Companion.DEBUG_TAG, "Wifi connected: $isWifiConn")
-        Log.d(Companion.DEBUG_TAG, "Mobile connected: $isMobileConn")
         splashViewModel.preference.getLanguage()?.let { LocaleUtil.applyLocalizedContext(this, it) }
     }
 

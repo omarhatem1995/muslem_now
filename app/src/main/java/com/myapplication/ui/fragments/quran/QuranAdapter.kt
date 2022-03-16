@@ -2,23 +2,15 @@ package com.myapplication.ui.fragments.quran
 
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
-import android.graphics.Paint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.myapplication.LocaleUtil.Companion.getMakkiyahOrMaddaniyah
+import com.myapplication.LocaleUtil.Companion.getSuraMakkiyahOrMaddaniyah
 import com.myapplication.R
 import com.myapplication.data.entities.model.QuranIndexModel
 import com.myapplication.databinding.IndexSouraItemBinding
-import com.myapplication.databinding.QuranJuzItemBinding
 import com.myapplication.utils.common.DataBoundListAdapter
 
 
@@ -67,7 +59,7 @@ class QuranAdapter(
         binding.suraNumber.text = item.index?.toInt().toString()
 
         binding.metadata.text =
-            "${item.type?.let { getMakkiyahOrMaddaniyah(context, it) }} - ${item.count.toString()} " + context.getString(R.string.aya)
+            "${item.type?.let { getSuraMakkiyahOrMaddaniyah(context, it) }} - ${item.count.toString()} " + context.getString(R.string.aya)
 
         binding.pageNumber.text = item.page + " " +context.getString(R.string.page)
 

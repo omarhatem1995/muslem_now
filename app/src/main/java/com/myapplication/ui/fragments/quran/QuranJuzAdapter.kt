@@ -1,21 +1,13 @@
 package com.myapplication.ui.fragments.quran
 
 import android.content.Context
-import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
-import com.myapplication.LocaleUtil.Companion.getJuzName
+import com.myapplication.LocaleUtil.Companion.getJuzNameFromNumber
 import com.myapplication.R
-import com.myapplication.common.Constants
 import com.myapplication.data.entities.model.QuranIndexModel
-import com.myapplication.databinding.IndexSouraItemBinding
 import com.myapplication.databinding.QuranJuzItemBinding
 import com.myapplication.utils.common.DataBoundListAdapter
 
@@ -52,7 +44,7 @@ class QuranJuzAdapter(
         position: Int,
         adapterPosition: Int
     ) {
-        binding.quranJuzNumberText.text = item.indexOut?.let { getJuzName(it,context) }
+        binding.quranJuzNumberText.text = item.indexOut?.let { getJuzNameFromNumber(it,context) }
         val quranAdapter = QuranAdapter(language) { item, data ->
         }
         var x : MutableList<QuranIndexModel> = ArrayList()

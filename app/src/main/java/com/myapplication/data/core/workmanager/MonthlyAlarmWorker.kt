@@ -2,8 +2,6 @@ package com.myapplication.data.core.workmanager
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
-import androidx.lifecycle.viewModelScope
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.myapplication.R
@@ -13,11 +11,7 @@ import com.myapplication.data.entities.model.PrayerTimeModel
 import com.myapplication.data.gateways.dao.MuslemNowDataBase
 import com.myapplication.data.gateways.remote.aladahangateway.AlAdahanGatewayProvider
 import com.myapplication.data.repositories.SharedPreferencesRepository
-import com.myapplication.ui.entities.AlAdahanViewState
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.time.Duration.Companion.days
 
 class MonthlyAlarmWorker(appContext: Context, params: WorkerParameters):
     CoroutineWorker(appContext, params) {
@@ -69,21 +63,9 @@ class MonthlyAlarmWorker(appContext: Context, params: WorkerParameters):
 
     private fun savePrayerTimes(applicationContext: Context,prayerTimesList: List<PrayerTimeModel>){
         val db = MuslemNowDataBase.getDataBase(applicationContext)
-
         val savePrayerDao = db.alAdahanDao()
-        Log.d("prayerTimesList", " al "+ prayerTimesList.size)
-
-
         for(x in prayerTimesList) {
-            Log.d("prayerTimesList", " al "+ x.prayerId + " , "+ x.name + " Adahan " + x.date + " x : " + x.time)
-
-            val alAdahan = savePrayerDao.addPrayerTimes(x)
-            Log.d(
-                "PrayerTimes", "alAdahan : " + prayerTimesList.size + " " +
-                        prayerTimesList.get(prayerTimesList.size - 2).date
-            )
-            /* val getAlAdahan : LiveData<List<PrayerTimeModel>> = savePrayerDao.getCurrentPrayerTimes()
-        Log.d("getPrayerTimes","data " +  getAlAdahan.value)*/
+            savePrayerDao.addPrayerTimes(x)
         }
     }
 

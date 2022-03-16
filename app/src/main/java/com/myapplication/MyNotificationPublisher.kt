@@ -1,8 +1,5 @@
 package com.myapplication
 
-import android.app.AlarmManager
-import android.app.Notification
-import android.app.NotificationChannel
 
 import android.app.NotificationManager
 
@@ -10,21 +7,12 @@ import android.content.Intent
 
 import android.content.BroadcastReceiver
 import android.content.Context
-import android.os.Build
-import android.provider.AlarmClock
-import android.util.Log
-import androidx.work.ExistingWorkPolicy
-import androidx.work.WorkManager
-import com.myapplication.data.core.workmanager.NotificationWorker
-import com.myapplication.data.entities.model.PrayerTimeModel
-import com.myapplication.domain.core.Constants
 
 
 class MyNotificationPublisher : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        Log.e(null, "onReceive1: ${intent.action} ", )
 //        val workManager = WorkManager.getInstance(context)
 //        val intentData = intent.getBundleExtra("prayerObject")?.get("prayerTime")
 //        var name: String = ""

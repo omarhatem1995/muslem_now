@@ -4,7 +4,6 @@ import android.app.Notification
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE
 import androidx.work.*
@@ -34,16 +33,14 @@ class NotificationWorker(context: Context, params: WorkerParameters) :
 
     @InternalCoroutinesApi
     override suspend fun doWork(): Result {
-        try {
+        return try {
             val salahName: String? = inputData.getString(YOUR_PARAM)
             // code to be executed
             setForegroundAsync(createForegroundInfo(salahName!!))
-            Log.e(null, "doWork: notification ")
-            return Result.success()
+            Result.success()
         } catch (throwable: Throwable) {
             // clean up and log
-            Log.e(null, "doWork: notification failed ")
-            return Result.failure()
+            Result.failure()
         }
     }
 

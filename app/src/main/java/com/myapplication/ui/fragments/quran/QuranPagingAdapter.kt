@@ -2,15 +2,12 @@ package com.myapplication.ui.fragments.quran
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.*
 import com.myapplication.SuraNameUtil
 import com.myapplication.common.Constants
-import com.myapplication.data.entities.model.QuranIndexModel
 import com.myapplication.data.entities.model.QuranPage
 import com.myapplication.data.entities.model.QuranVersesEntity
 import com.myapplication.databinding.QuranLinesRecyclerBinding
@@ -51,11 +48,7 @@ class QuranPagingAdapter(
 
             var page: QuranPage? = currentList[position]
 
-            Log.d("totalList", "onBind: $currentList")
-
             //val list = currentList
-
-
             var lineNum = 1
 //           var pageData: List<QuranVersesEntity?> = listOf()
 //           if (list.isNotEmpty()) {
@@ -76,28 +69,27 @@ class QuranPagingAdapter(
 //            }
 
 
-            Log.e("page", "onBindViewHolder:position :$position , $page ,")
             if (page != null && page.versesList.isNotEmpty() && page.lines != null) {
                 lineNum = page.lines!!
 
                 binding.pageNumber.text = page.page.toString()
                 if (page.versesList[0] != null && page.versesList.isNotEmpty()) {
                     binding.suraName.text = page.versesList[0]?.sura?.let {
-                        SuraNameUtil.getSuraName(
+                        SuraNameUtil.getSuraNameByUnicodeFromSuraNumber(
                             it
                         )
                     }
                     binding.suraJuz.text = page.versesList[0]?.juz.toString()
                 } else if (page.versesList[1] != null) {
                     binding.suraName.text = page.versesList[1]?.sura?.let {
-                        SuraNameUtil.getSuraName(
+                        SuraNameUtil.getSuraNameByUnicodeFromSuraNumber(
                             it
                         )
                     }
                     binding.suraJuz.text = page.versesList[1]?.juz.toString()
                 } else {
                     binding.suraName.text = page.versesList[2]?.sura?.let {
-                        SuraNameUtil.getSuraName(
+                        SuraNameUtil.getSuraNameByUnicodeFromSuraNumber(
                             it
                         )
                     }
@@ -121,8 +113,6 @@ class QuranPagingAdapter(
                         /*         if(filteredByLine[number-1]!=null)
                                  suraNumber = filteredByLine[number-1]?.sura!!*/
                     }
-                    Log.e("QuranPagingAdapter", "onBind: $filteredByLine")
-                    Log.e("emptyAdapterList", "$emptyLinesForChecking onBind: $emptyLines")
                     var longClick = "0"
                     if (filteredByLine?.isNotEmpty()!!) {
                         val linesAdapter: QuranLinesAdapter = QuranLinesAdapter(context, emptyLines , longClick,{type ->
@@ -138,7 +128,6 @@ class QuranPagingAdapter(
                                 when (type) {
                                     Constants.LONGCLICK -> {
                                         longClick = data
-//                                        Log.d("ClickListener", " $click")
                                         onLongClick.invoke(Constants.LONGCLICK,longClick,sura)
                                         recursiveOnClick(filteredByLine,emptyLines,longClick,linesList)
                                     }
@@ -146,7 +135,6 @@ class QuranPagingAdapter(
                             return@QuranLinesAdapter true
 
                         }
-//                        Log.d("getLinesList", " $linesList")
                         binding.lineRecycler.adapter = linesAdapter
                         if (filteredByLine.first()?.line == 1) {
                             emptyLines.clear()
@@ -159,12 +147,10 @@ class QuranPagingAdapter(
                     }
                     binding.linesContainer.setOnClickListener {
                         recursiveOnClick(filteredByLine,emptyLines,"0",linesList)
-                        Log.d("getLogcatClick", " is lineContainer")
                     }
 
                     binding.lineRecycler.setOnClickListener {
                         recursiveOnClick(filteredByLine,emptyLines,"0",linesList)
-                        Log.d("getLogcatClick", " is lineRecycler")
                     }
 
 
@@ -185,7 +171,6 @@ class QuranPagingAdapter(
                         type , data ,sura->
                     when (type) {
                         Constants.LONGCLICK -> {
-                            Log.d("ClickListener", " $longClick")
                             recursiveOnClick(filteredByLine,emptyLines,data,linesList)
                             onLongClick.invoke(Constants.LONGCLICK,data,sura)
                         }

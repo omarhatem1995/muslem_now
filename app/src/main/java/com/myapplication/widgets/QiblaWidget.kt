@@ -1,21 +1,23 @@
 package com.myapplication.widgets
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.location.Location
 import android.widget.RemoteViews
-import android.util.Log
 import android.app.PendingIntent
 
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.hardware.*
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.LocationServices
 import com.myapplication.R
 import kotlin.math.roundToInt
@@ -35,7 +37,6 @@ open class QiblaWidget : AppWidgetProvider() {
     var widgetCurrentId = 0
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
-        Log.d("laksdlsakdlasd" ,"getWidget ID $intent")
 
         if (intent!!.action != null) {
             val extras = intent!!.extras
@@ -47,7 +48,6 @@ open class QiblaWidget : AppWidgetProvider() {
                 )
                 val intent = Intent(context, QiblaWidget::class.java)
                 intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
-                Log.d("laksdlsakdlasd" ,"getWidget ID " +widgetId + " $widgetCurrentId")
                 val sharedPrefFile = "kotlinsharedpreference"
 
                 val sharedPreferences: SharedPreferences? = context?.getSharedPreferences(sharedPrefFile,
@@ -59,6 +59,16 @@ open class QiblaWidget : AppWidgetProvider() {
                     override fun onLocationResult(locationResult: LocationResult) {
                         super.onLocationResult(locationResult)
 
+                        if (ActivityCompat.checkSelfPermission(
+                                context,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                context,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED
+                        ) {
+                            return
+                        }
                         if (!fusedLocationClient.lastLocation.equals(null)) {
                             fusedLocationClient.lastLocation.addOnSuccessListener {
                             }
@@ -77,6 +87,17 @@ open class QiblaWidget : AppWidgetProvider() {
                     override fun onLocationResult(locationResult: LocationResult) {
                         super.onLocationResult(locationResult)
 
+                        if (ActivityCompat.checkSelfPermission(
+                                context,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                context,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED
+                        ) {
+
+                            return
+                        }
                         fusedLocationClient.lastLocation.addOnSuccessListener {
                             val editor: SharedPreferences.Editor? = sharedPreferences?.edit()
                             editor?.putString("latitude", it.latitude.toString())
@@ -125,7 +146,6 @@ open class QiblaWidget : AppWidgetProvider() {
                         Toast.LENGTH_SHORT
                     ).show()
                 // do something for the widget that has appWidgetId = widgetId
-                Log.d("laksdlsakdlasd", "getWidget ID " + widgetId.toString())
                 val appWidgetManager = AppWidgetManager.getInstance(context)
                 appWidgetManager.updateAppWidget(widgetId, views)
 
@@ -133,7 +153,6 @@ open class QiblaWidget : AppWidgetProvider() {
             }
 
         } else {
-            Log.d("laksdlsakdlasd" ,"getWidget ID " + "null")
         }
     }
 
@@ -168,6 +187,16 @@ open class QiblaWidget : AppWidgetProvider() {
                 override fun onLocationResult(locationResult: LocationResult) {
                     super.onLocationResult(locationResult)
 
+                    if (ActivityCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        return
+                    }
                     if (!fusedLocationClient.lastLocation.equals(null)) {
                         fusedLocationClient.lastLocation.addOnSuccessListener {
                         }
@@ -185,6 +214,16 @@ open class QiblaWidget : AppWidgetProvider() {
                 override fun onLocationResult(locationResult: LocationResult) {
                     super.onLocationResult(locationResult)
 
+                    if (ActivityCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                        ) != PackageManager.PERMISSION_GRANTED
+                    ) {
+                        return
+                    }
                     fusedLocationClient.lastLocation.addOnSuccessListener {
                         val editor: SharedPreferences.Editor = sharedPreferences.edit()
                         editor.putString("latitude", it.latitude.toString())
@@ -253,7 +292,6 @@ private fun initQiblaDirection(context: Context, latitude: Double, longitude: Do
     userLocation = Location("User Location")
     userLocation.latitude = latitude
     userLocation.longitude = longitude
-    Log.d("asdlaskdasd", userLocation.latitude.toString())
     sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
     sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
     sensorManager.registerListener(object : SensorEventListener {

@@ -1,7 +1,6 @@
 package com.myapplication.ui.settings
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,7 +32,6 @@ class MoazenAdapter(context: Context, moazen: ArrayList<MoazenModel>) : BaseAdap
 //        var imageView : ImageView = rootView.findViewById(R.id.languageImage)
 
         textView.text = moazen[p0].name
-        Log.d("textView.text" , textView.text.toString())
 //        imageView.setImageResource(languages[p0].image)
 
         return rootView

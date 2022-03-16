@@ -2,17 +2,14 @@ package com.myapplication.ui.azkar
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import com.myapplication.R
 import com.myapplication.common.Constants
 import com.myapplication.data.entities.model.AzkarModel
-import com.myapplication.databinding.ActivityZekrBinding
 import com.myapplication.databinding.AzkarListItemBinding
 import com.myapplication.utils.common.DataBoundListAdapter
 
@@ -53,14 +50,12 @@ class AzkarListAdapter (
         var actualCount: Int
         var counter : Int
         var zekrItemId = item.id
-        Log.d("getItemCount" , " "  + item.count)
         if(item.count!! == 0){
             counter = 0
             actualCount = 0
         }else {
             actualCount = item.count.toInt() - counterPressed
             if (actualCount < 1) {
-                Log.d("azkarCircle" , " is not called $actualCount")
                 binding.azkarCircle.setImageResource(R.drawable.finished_zekr_count)
                 binding.azkarCount.visibility = View.GONE
             }
@@ -73,10 +68,8 @@ class AzkarListAdapter (
             else {
                 counter -= 1
                 counterPressed += 1
-                Log.d("azkarCircle" , " is pressed $counterPressed")
                 binding.azkarCount.text = counter.toString()
                 if (item.count <= counterPressed) {
-                    Log.d("azkarCircle" , "if item.count is pressed $counterPressed")
                     binding.azkarCircle.setImageResource(R.drawable.finished_zekr_count)
                     binding.azkarCount.visibility = View.GONE
                 }
@@ -92,10 +85,8 @@ class AzkarListAdapter (
             else {
                 counter -= 1
                 counterPressed += 1
-            Log.d("azkarCircle" , " is pressed $counterPressed")
                 binding.azkarCount.text = counter.toString()
                 if (item.count <= counterPressed) {
-                    Log.d("azkarCircle" , "if item.count is pressed $counterPressed")
                     binding.azkarCircle.setImageResource(R.drawable.finished_zekr_count)
                     binding.azkarCount.visibility = View.GONE
                 }

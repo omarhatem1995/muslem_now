@@ -105,4 +105,6 @@
     <string name="choose_the_reader">اختار المقرئ</string>
     <string name="play">تشغيل</string>
     <string name="stop">ايقاف</string>
+    <string name="clear_counter">محو العداد</string>
+    <string name="electronic_sebha">السبحة الالكترونية</string>
 </resources>

@@ -1,22 +1,16 @@
 package com.myapplication.ui.fragments.quran
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.myapplication.LocaleUtil
 import com.myapplication.R
 import com.myapplication.data.entities.model.QuranIndexModel
-import com.myapplication.databinding.FragmentAzkarBinding
 import com.myapplication.databinding.FragmentQuranBinding
-import com.myapplication.ui.azkar.AzkarAdapter
-import com.myapplication.ui.azkar.AzkarViewModel
 import org.json.JSONArray
 import java.io.IOException
 import java.io.InputStream
@@ -90,7 +84,6 @@ class QuranFragment : Fragment() {
 
         } catch (ex: IOException) {
             ex.printStackTrace()
-            Log.d("jsonText", "error " + ex.message)
 
         }
     }

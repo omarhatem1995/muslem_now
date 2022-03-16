@@ -1,7 +1,6 @@
 package com.myapplication.ui.fragments.quran
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -64,7 +63,6 @@ class QuranViewModel(application: Application): AndroidViewModel(application)  {
             val pages = pagesReset()
 
 
-            Log.e("verses", "getPagingData: ${pages.size}", )
 
             val quranPages = preparePages(verses!!,if (page == 604)page else page+10,initialPage)
             if (quranPages.isNotEmpty())
@@ -76,7 +74,6 @@ class QuranViewModel(application: Application): AndroidViewModel(application)  {
             }
 
 
-            Log.e("pages", "getPagingData: $pages", )
 
             quranFlow.emit(pages)
             }
@@ -89,28 +86,22 @@ class QuranViewModel(application: Application): AndroidViewModel(application)  {
    {
        var pages:MutableList<QuranPage> = mutableListOf()
        if (list.isNotEmpty()) {
-           Log.e("compare", "preparePages: $start , $end", )
            var pageData: List<QuranVersesEntity> = listOf()
 
            var quranPage:QuranPage? = null
 
            for (page in end..start)
            {
-               Log.e("pageNumber", "preparePages: $page ", )
                pageData=  list.filter {
 
 
                    it.page == page
-
-
-
 
                }
                if (pageData.isNotEmpty())
                {
 
                    quranPage = QuranPage(pageData,pageData.last()?.page,pageData.last()?.line)
-                   Log.e("perPage", "preparePages: $quranPage", )
                    //pageData = listOf()
                }
 
@@ -122,7 +113,6 @@ class QuranViewModel(application: Application): AndroidViewModel(application)  {
 
 
        }
-       Log.e("toPages", "preparePages: $pages", )
        return pages.toList()
    }
 

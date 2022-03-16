@@ -8,17 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.myapplication.R
 import com.myapplication.SuraNameUtil
-import com.myapplication.data.entities.model.AzkarModel
 import com.myapplication.data.entities.model.QuranVersesEntity
 import com.myapplication.databinding.QuranItemBinding
-import com.myapplication.domain.core.Constants
 
 
 class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>, val click:String,
@@ -80,7 +76,7 @@ class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>, val c
                     binding.linearLayoutHeader.visibility = View.VISIBLE
                     Log.d("suraNumber", suraNumber.toString())
                     binding.headerNameQuran.text = "${suraNumber?.let { it1 ->
-                        SuraNameUtil.getSuraName(
+                        SuraNameUtil.getSuraNameByUnicodeFromSuraNumber(
                             it1
                         )
                     }}"

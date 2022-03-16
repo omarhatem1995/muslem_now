@@ -1,20 +1,15 @@
 package com.myapplication.ui.azkar
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.myapplication.LocaleUtil
 import com.myapplication.R
 import com.myapplication.databinding.FragmentAzkarBinding
-import com.myapplication.databinding.FragmentHomeBinding
-import com.myapplication.ui.fragments.home.HomeViewModel
 import org.json.JSONArray
 import java.io.IOException
 import java.io.InputStream
@@ -73,7 +68,6 @@ class AzkarFragment : Fragment() {
             }
         } catch (ex: IOException) {
             ex.printStackTrace()
-            Log.d("jsonText", "error " + ex.message)
 
         }
     }

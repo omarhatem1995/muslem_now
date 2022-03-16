@@ -21,6 +21,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MuslemNow"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ui.SebhaActivity"
+            android:exported="false" />
+
         <receiver
             android:name=".widgets.QiblaWidget"
             android:exported="true">
@@ -34,7 +38,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/qibla_widget_info" />
         </receiver>
-
         <receiver
             android:name=".widgets.NextPrayerWidget"
             android:enabled="true"
@@ -54,7 +57,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/next_prayer_widget_info" />
         </receiver>
-
         <receiver
             android:name=".widgets.PrayerTimesWidget"
             android:exported="true">
@@ -83,7 +85,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/azkar_widget_info" />
         </receiver>
-
         <receiver
             android:name=".MyNotificationPublisher"
             android:enabled="true"
@@ -105,8 +106,7 @@
         <activity
             android:name=".ui.fragments.quran.QuranActivity"
             android:exported="true"
-            android:screenOrientation="portrait" >
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:exported="false"
@@ -121,8 +121,8 @@
             android:name=".ui.settings.SettingsInAppActivity"
             android:exported="false"
             android:launchMode="singleTop"
-            android:theme="@style/AppFullScreenTheme"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppFullScreenTheme" />
         <activity
             android:name=".ui.azkar.AzkarActivity"
             android:exported="true"
@@ -140,14 +140,13 @@
             android:name=".ui.splash.SplashActivity"
             android:exported="true"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
 
         <service
             android:name=".data.core.workmanager.AlarmService"

@@ -2,17 +2,12 @@ package com.myapplication.ui.azkar
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.myapplication.data.entities.model.AzkarModel
-import com.myapplication.data.entities.model.PrayerTimeModel
 import com.myapplication.data.gateways.dao.MuslemNowDataBase
 import com.myapplication.data.repositories.SharedPreferencesRepository
-import com.myapplication.ui.entities.AlAdahanViewState
-import com.myapplication.ui.entities.AzkarRoomViewState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -37,15 +32,12 @@ class AzkarViewModel (application: Application): AndroidViewModel(application) {
         val db = MuslemNowDataBase.getDataBase(getApplication())
 
         val updateAzkarCountDao = db.alAzkarDao()
-        Log.d("asldksalad" , userPressedCount.toString() + " , " + id.toString())
 
         viewModelScope.launch(Dispatchers.IO) {
-//            updateAzkarCountDao.updateAzkarCount(userPressedCount,id)
             updateAzkarCountDao.updateAzkar(listItems)
         }
     }
     var preference = SharedPreferencesRepository(application)
-//: LiveData<List<AzkarModel>>
     fun getSpecificDayAzkar(category: String){
         val db = MuslemNowDataBase.getDataBase(getApplication())
 
@@ -55,6 +47,5 @@ class AzkarViewModel (application: Application): AndroidViewModel(application) {
             viewStateAzkar.postValue(getAzkar)
         }
 
-//        return getAzkar
     }
 }

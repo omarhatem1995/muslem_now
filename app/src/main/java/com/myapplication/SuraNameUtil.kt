@@ -2,7 +2,7 @@ package com.myapplication
 
 class SuraNameUtil {
     companion object{
-        fun getSuraName(suraNumber:Int):String{
+        fun getSuraNameByUnicodeFromSuraNumber(suraNumber:Int):String{
             return when(suraNumber){
                 1 -> "\u005D"
                 2 -> "\u005E"

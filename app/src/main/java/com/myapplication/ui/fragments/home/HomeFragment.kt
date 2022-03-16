@@ -9,7 +9,6 @@ import android.hardware.*
 import android.location.Address
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -38,7 +37,7 @@ import android.os.CountDownTimer
 import android.os.Looper
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
-import com.myapplication.LocaleUtil.Companion.getNameOfPrayer
+import com.myapplication.LocaleUtil.Companion.getNameOfPrayerInArabic
 import com.myapplication.LocaleUtil.Companion.nextPrayer
 import com.myapplication.LocaleUtil.Companion.remainingTimeForNextPrayer
 import java.util.concurrent.TimeUnit
@@ -65,7 +64,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
     lateinit var binding: FragmentHomeBinding
 
     companion object {
-        const val TAG = "HomeFragmentLog"
         const val MARSHMALLOW = 23
 
         const val ACCESS_FINE_LOCATION_REQ_CODE = 35
@@ -176,7 +174,8 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
             val transaction: FragmentTransaction = fragmentManager.beginTransaction()
             transaction.setCustomAnimations(
                 R.anim.fragment_sidemenu_enter_animation,
-                R.anim.fragment_sidemenu_exit_animation, R.anim.fragment_sidemenu_enter_animation,
+                R.anim.fragment_sidemenu_exit_animation,
+                R.anim.fragment_sidemenu_enter_animation,
                 R.anim.fragment_sidemenu_exit_animation
             )
             transaction.addToBackStack(null)
@@ -346,7 +345,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                         val remainingTimeForNextPrayer =
                             remainingTimeForNextPrayer(currentDateForChecking, nextPrayerTime)
                         binding.remainingTimeForNextPrayer.text =
-                            getString(R.string.remaining_time_for) + " " + getNameOfPrayer(
+                            getString(R.string.remaining_time_for) + " " + getNameOfPrayerInArabic(
                                 requireContext(), i
                             )
 //                        binding.remainingTimeForNextPrayerValue.text = remainingTimeForNextPrayer
@@ -373,7 +372,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                         .observe(requireActivity(), androidx.lifecycle.Observer { prayer ->
                             if (!prayer.isNullOrEmpty() && context!=null) {
                                 binding.remainingTimeForNextPrayer.text =
-                                    getString(R.string.remaining_time_for) + getNameOfPrayer(
+                                    getString(R.string.remaining_time_for) + getNameOfPrayerInArabic(
                                         requireContext(),
                                         prayer[0].prayerId
                                     )
@@ -386,7 +385,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                                 /*binding.remainingTimeForNextPrayerValue.text =
                                     remainingTimeForNextPrayer*/
                                 counterForNextPrayer(remainingTimeForNextPrayer)
-                                Log.d("remainingTime", remainingTimeForNextPrayer)
                                 binding.prayerTimesList.adapter =
                                     vm.preference.getLanguage()?.let {
                                         PrayerAdapter(
@@ -413,7 +411,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
     fun counterForNextPrayer(time: String) {
         val remainingHours = time.substring(0, 2).toLong()
         var totalConvertedMinutes = 0L
-        Log.d("counterForNext", " " + time)
         if (!remainingHours.equals(0)) {
             totalConvertedMinutes = remainingHours * 60
         }
@@ -466,7 +463,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
     }
 
     override fun renderNetworkFailure() {
-        Log.d("renderData", "data")
         apiCall = false
         initLocationListener()
     }
@@ -575,7 +571,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
             val remainingTimeForNextPrayer =
                 remainingTimeForNextPrayer(currentDateForChecking, nextPrayerTime)
             binding.remainingTimeForNextPrayer.text =
-                getString(R.string.remaining_time_for) + getNameOfPrayer(
+                getString(R.string.remaining_time_for) + getNameOfPrayerInArabic(
                     requireContext(), nextPrayersId
                 )
 
@@ -593,7 +589,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                 .observe(requireActivity(), androidx.lifecycle.Observer { prayer ->
                     if (!prayer.isNullOrEmpty() && context != null) {
                         binding.remainingTimeForNextPrayer.text =
-                            getString(R.string.remaining_time_for) + getNameOfPrayer(
+                            getString(R.string.remaining_time_for) + getNameOfPrayerInArabic(
                                 requireContext(),
                                 prayer[0].prayerId
                             )
@@ -604,7 +600,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                         /*  binding.remainingTimeForNextPrayerValue.text =
                               remainingTimeForNextPrayer*/
                         counterForNextPrayer(remainingTimeForNextPrayer)
-                        Log.d("remainingTime 3", remainingTimeForNextPrayer)
                         binding.prayerTimesList.adapter =
                             vm.preference.getLanguage()?.let {
                                 PrayerAdapter(requireContext(), prayer, nextPrayersId, this, arrayList,
@@ -621,14 +616,12 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
             val addresses: List<Address>
             val geocoder = Geocoder(requireContext(), Locale(vm.preference.getLanguage()))
             try {
-                Log.d("currentLat", " $latitude , $longitude")
 
                 addresses = geocoder.getFromLocation(
                     latitude.toDouble(),
                     longitude.toDouble(),
                     1
                 ) // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                Log.d("currentLat", " $latitude , $addresses")
 
 
                 if (!addresses.isNullOrEmpty()) {
@@ -647,9 +640,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                     return currentCity
                 }
             } catch (ex: InvocationTargetException) {
-                Log.d("exceptionFound", "${ex.message}")
             } catch (ex: IOException) {
-                Log.d("exceptionFound", "${ex.message}")
             }
 
         }
@@ -708,7 +699,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
     private fun initQiblaDirection(latitude: Double, longitude: Double) {
         userLocation?.latitude = latitude
         userLocation?.longitude = longitude
-        Log.d("getLatitude", " : " + latitude + " , " + longitude)
         if (context != null) {
             sensorManager?.registerListener(
                 this,
@@ -759,10 +749,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
 
             binding.qiblahDirection.text = "Heading : $degree + degrees"
 
-            Log.d(
-                HomeFragment.TAG,
-                "Needle Degree : $currentNeedleDegree, Direction : $direction"
-            )
             binding.qiblahDirection.text = currentNeedleDegree.toString()
 
             needleAnimation = direction?.let {
@@ -844,7 +830,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
             fastestInterval = 5000
             smallestDisplacement = 100f
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            Log.d("getuserlocation", " getuserlocation: entered1")
         }
 
         val builder = LocationSettingsRequest.Builder()
@@ -859,7 +844,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                     override fun onLocationResult(locationResult: LocationResult) {
                         val location = locationResult.lastLocation
                         location?.let {
-                            Log.e("onLocationResult", " onLocationResult: $location")
                             initLocationListener()
                         }
 
@@ -871,7 +855,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                     Looper.getMainLooper()
                 )
             } else {
-                Log.e("flagLocation", " is calse")
             }
 
         }
@@ -880,7 +863,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
             if (exception is ResolvableApiException) {
                 // Location settings are not satisfied, but this can be fixed
                 // by showing the user a dialog.
-                Log.d(null, "setuserlocation: location failure")
                 try {
                     // Show the dialog by calling startResolutionForResult(),
                     // and check the result in onActivityResult().
@@ -919,10 +901,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
             vm.preference.setIsha(false)
         else if (id == 5 && !vm.preference.getIsha())
             vm.preference.setIsha(true)
-//        Glide.with(this).load(R.drawable.app_widget_background).into()
-        Log.d("ldksldksd", " ${vm.preference.getFajr()} prayer  Fajr")
-        Log.d("ldksldksd", " ${vm.preference.getDuhr()} prayer  Duhr")
-        Log.d("ldksldksd", " ${vm.preference.getAsr()} prayer  Asr")
-        Log.d("ldksldksd", " ${vm.preference.getMaghrib()} prayer  Maghrib")
+
     }
 }

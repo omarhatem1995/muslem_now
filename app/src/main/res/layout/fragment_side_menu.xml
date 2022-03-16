@@ -149,6 +149,55 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintSebha"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:visibility="gone"
+                android:background="@drawable/view_background_sidemenu_green_rounded"
+                app:layout_constraintTop_toBottomOf="@id/linearSettings"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <ImageView
+                    android:id="@+id/sebhaImage"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/rosary"
+                    android:backgroundTint="@color/white"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <TextView
+                    android:id="@+id/sebhaTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/electronic_sebha"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/tajawalmedium"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintStart_toEndOf="@id/sebhaImage"
+                    app:layout_constraintTop_toTopOf="@id/sebhaImage"
+                    app:layout_constraintBottom_toBottomOf="@id/sebhaImage" />
+
+                <ImageView
+                    android:id="@+id/arrowSebha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/sebhaImage"
+                    app:layout_constraintBottom_toBottomOf="@id/sebhaImage" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

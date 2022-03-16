@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -131,7 +130,6 @@ class QuranSoundBottomSheet : BottomSheetDialogFragment()
                 e.printStackTrace()
             }
 //            this.dismiss()
-            Log.v("TAG", "Music is streaming")
         }
         if(viewModel.preference.getQuranAya())
             ayaClickListener()
@@ -406,7 +404,6 @@ class QuranSoundBottomSheet : BottomSheetDialogFragment()
         ayaInSura = suraNumberAndAyaInSura?.substringAfter("+")!!.substringBefore("-")
         pageInQuran = suraNumberAndAyaInSura?.substringAfter("-")
 
-        Log.d("getValuesOfIntent", " ${suraNumber?.length} , ${ayaInSura?.length}")
 //        Toast.makeText(context,"$suraNumber , $ayaInSura",Toast.LENGTH_LONG).show()
         if (suraNumber?.length == 2) {
             suraNumber = "0$suraNumber"

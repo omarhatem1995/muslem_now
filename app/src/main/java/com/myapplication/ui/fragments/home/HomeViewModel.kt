@@ -2,7 +2,6 @@ package com.myapplication.ui.fragments.home
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.*
 import com.myapplication.data.entities.base.ApiResponse
 import com.myapplication.data.entities.model.PrayerTimeModel
@@ -27,19 +26,11 @@ class HomeViewModel (application: Application):AndroidViewModel(application) {
         val db = MuslemNowDataBase.getDataBase(applicationContext)
 
         val savePrayerDao = db.alAdahanDao()
-        Log.d("prayerTimesList", " al "+ prayerTimesList.size)
 
         viewModelScope.launch(Dispatchers.IO){
         for(x in prayerTimesList) {
-            Log.d("prayerTimesList", " al "+ x.prayerId + " , "+ x.name + " Adahan " + x.date + " x : " + x.time)
 
-            val alAdahan = savePrayerDao.addPrayerTimes(x)
-                Log.d(
-                    "PrayerTimes", "alAdahan : " + prayerTimesList.size + " " +
-                            prayerTimesList.get(prayerTimesList.size - 2).date
-                )
-                /* val getAlAdahan : LiveData<List<PrayerTimeModel>> = savePrayerDao.getCurrentPrayerTimes()
-            Log.d("getPrayerTimes","data " +  getAlAdahan.value)*/
+            savePrayerDao.addPrayerTimes(x)
         }
 
         }
@@ -50,11 +41,8 @@ class HomeViewModel (application: Application):AndroidViewModel(application) {
 
         val savePrayerDao = db.alAdahanDao()
 
-            /*val alAdahan = savePrayerDao.addPrayerTimes(prayerTimesList)
-            Log.d("PrayerTimes","alAdahan : "+ alAdahan)*/
 
             val getAlAdahan : LiveData<List<PrayerTimeModel>> = savePrayerDao.getCurrentPrayerTimes()
-            Log.d("getPrayerTimes","data " +  getAlAdahan.value)
 
         return getAlAdahan
 
@@ -64,11 +52,8 @@ class HomeViewModel (application: Application):AndroidViewModel(application) {
 
         val getPrayerDao = db.alAdahanDao()
 
-            /*val alAdahan = savePrayerDao.addPrayerTimes(prayerTimesList)
-            Log.d("PrayerTimes","alAdahan : "+ alAdahan)*/
 
             val getAlAdahan : LiveData<List<PrayerTimeModel>> = getPrayerDao.getSpecificDayPrayerTimes(date).asLiveData(context = Dispatchers.IO)
-            Log.d("getPrayerTimes","data " +  getAlAdahan.value)
 
         return getAlAdahan
 

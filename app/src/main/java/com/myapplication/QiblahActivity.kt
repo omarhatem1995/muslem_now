@@ -8,7 +8,6 @@ import android.hardware.*
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
 import android.widget.ImageView
@@ -33,13 +32,8 @@ import android.hardware.SensorEventListener
 
 class QiblahActivity : AppCompatActivity() , SensorEventListener{
     companion object {
-        const val TAG = "MainActivity"
         const val MARSHMALLOW = 23
-
         const val ACCESS_FINE_LOCATION_REQ_CODE = 35
-
-        const val QIBLA_LATITUDE = 21.3891
-        const val QIBLA_LONGITUDE = 39.8579
     }
 
     lateinit var binding: ActivityQiblahBinding
@@ -48,7 +42,6 @@ class QiblahActivity : AppCompatActivity() , SensorEventListener{
     var currentDegree: Float = 0f
     var currentNeedleDegree: Float = 0f
 
-    //    var sensorManager: SensorManager
     var sensorManager : SensorManager? = null
     var sensor: Sensor? = null
     var userLocation: Location? = null
@@ -123,7 +116,6 @@ class QiblahActivity : AppCompatActivity() , SensorEventListener{
     private fun initLocationListener() {
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         fusedLocationClient.lastLocation.addOnSuccessListener {
-            Log.d(TAG, "User Location : Lat : ${it.latitude} Long : ${it.longitude}")
             initQiblaDirection(it.latitude, it.longitude)
         }
         fusedLocationClient.lastLocation.addOnFailureListener {
@@ -175,15 +167,6 @@ class QiblahActivity : AppCompatActivity() , SensorEventListener{
             sensor,
             SensorManager.SENSOR_DELAY_NORMAL
         )
-      /*  sensorManager?.registerListener(object : SensorEventListener {
-            override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
-
-            }*/
-
-       /*     @SuppressLint("SetTextI18n")
-            override fun onSensorChanged(sensorEvent: SensorEvent?) {
-            }
-        }, sensor, SensorManager.SENSOR_DELAY_GAME)*/
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
@@ -228,10 +211,6 @@ class QiblahActivity : AppCompatActivity() , SensorEventListener{
 
         binding.tvQiblahDegrees.text = "Heading : $degree + degrees"
 
-        Log.d(
-            HomeFragment.TAG,
-            "Needle Degree : $currentNeedleDegree, Direction : $direction"
-        )
         binding.tvQiblahDegrees.text = currentNeedleDegree.toString()
 
         needleAnimation = direction?.let {
@@ -262,9 +241,7 @@ class QiblahActivity : AppCompatActivity() , SensorEventListener{
 
             binding.tvQiblahDegrees.setTextColor(getColor(R.color.textColorQiblahDegrees))
 
-
         }
-
 
     }
 

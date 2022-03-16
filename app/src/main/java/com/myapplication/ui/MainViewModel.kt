@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
 import androidx.work.WorkInfo
@@ -44,9 +43,7 @@ class MainViewModel(app:MuslemApp): AndroidViewModel(app) {
         {
             val c: Date = Calendar.getInstance().time
             println("Current time => $c")
-            Log.e(null, "setSalahAlarm: ", )
             val df = SimpleDateFormat("dd-MM-yyyy", Locale("en"))
-            Log.e(null, "getCurrentDate: ${df.format(c)} ")
             val currentHourDateFormat = SimpleDateFormat("HH:mm", Locale("en"))
             val formattedDate2:String = currentHourDateFormat.format(c)
             // df.calendar.timeInMillis
@@ -96,7 +93,6 @@ class MainViewModel(app:MuslemApp): AndroidViewModel(app) {
                     val alarmInfo = AlarmManager.AlarmClockInfo(calendar.timeInMillis,alarmPendingIntent)
                     if (hasPermission == true)
                     {
-                        Log.e(null, "setSalahAlarm: ${calendar.timeInMillis} ", )
                         alarmManager.setAlarmClock(alarmInfo,goOffPendingIntent)
                     }
 

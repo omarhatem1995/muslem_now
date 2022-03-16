@@ -1,8 +1,6 @@
 package com.myapplication.ui.fragments.quran
 
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -34,7 +32,6 @@ class QuranActivity : AppCompatActivity() {
         pager.attachToRecyclerView(binding.quranRecycler)
 
         var pageNumber = intent.getIntExtra("pageNumber",1)
-        Log.d("pageNumber", pageNumber.toString())
         adapter = QuranPagingAdapter(this@QuranActivity) { type, data ,sura ->
             when (type) {
                 Constants.LONGCLICK -> {
@@ -44,7 +41,6 @@ class QuranActivity : AppCompatActivity() {
                     bundle.putString("suraNumberAndAyaInSuraNumber",sura)
                     quranBottomSheet.arguments = bundle
                     quranBottomSheet.show(supportFragmentManager, "a")
-//                    Toast.makeText(this," get String $data",Toast.LENGTH_LONG).show()
                     return@QuranPagingAdapter true
                 }
 
@@ -62,7 +58,6 @@ class QuranActivity : AppCompatActivity() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                Log.e("dx", "onScrolled: $dx ", )
                 if (pageNumber  > 604)
                 {
 
@@ -77,14 +72,9 @@ class QuranActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.quranFlow.flowWithLifecycle(lifecycle,Lifecycle.State.STARTED).collectLatest {
 
-                Log.e("submit", "onCreate: $pageNumber ", )
-
-
                 if (it != null) {
 
                     adapter!!.submitList(it)
-
-
 
                     binding.quranRecycler.scrollToPosition(pageNumber-1)
                 }
@@ -101,10 +91,7 @@ class QuranActivity : AppCompatActivity() {
 
                 if (position in 1..603 && position%5 ==0)
                 {
-                    Log.e("swiped", "onSwiped: right :$position", )
-
                     viewModel.getPagingData(position-1)
-                    // binding.quranRecycler.scrollToPosition(position)
                 }
 
 

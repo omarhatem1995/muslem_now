@@ -1,15 +1,12 @@
 package com.myapplication.widgets
 
 import android.app.AlarmManager
-import android.app.Application
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.os.SystemClock
-import android.util.Log
 import android.widget.RemoteViews
 import com.myapplication.LocaleUtil
 import com.myapplication.LocaleUtil.Companion.nextPrayer
@@ -23,9 +20,7 @@ import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
-import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import com.myapplication.data.repositories.SharedPreferencesRepository
 
 
 class NextPrayerWidget : AppWidgetProvider() {
@@ -86,9 +81,7 @@ class NextPrayerWidget : AppWidgetProvider() {
         ) != null
 
         if (alarmUp) {
-            Log.d("myTag", "Alarm is already active")
         }else{
-            Log.d("myTag", "Alarm is Not active")
 
         }
 /*        if (intent!!.action != null) {
@@ -104,7 +97,6 @@ class NextPrayerWidget : AppWidgetProvider() {
                 c.set(Calendar.MINUTE, 0)
                 c.set(Calendar.SECOND, 20)
                 c.set(Calendar.MILLISECOND, 1)*/
-                Log.d("setAlaramIs", " is called ")
                 val alarmMgr = context!!.getSystemService(Context.ALARM_SERVICE) as AlarmManager
                 alarmMgr.setInexactRepeating(
                     AlarmManager.RTC,
@@ -117,13 +109,11 @@ class NextPrayerWidget : AppWidgetProvider() {
                     AppWidgetManager.INVALID_APPWIDGET_ID
                 )
                 intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
-                Log.d("NextPrayerWidget", " From Widget" )
 
                 val viewsPrayer = RemoteViews(context.packageName, R.layout.next_prayer_widget)
                 var currentDayHijri = " "
 
                 if (AppWidgetManager.ACTION_APPWIDGET_UPDATE.equals(intent.getAction())) {
-                    Log.d("getUpdateIs" , "is called")
                     // do something useful here
                     val cal = Calendar.getInstance()
                     val georgianDateFormatForInsertion: DateFormat =
@@ -145,7 +135,6 @@ class NextPrayerWidget : AppWidgetProvider() {
                             it.map { prayerTime ->
 
                                  var currentPrayerId = nextPrayer(it.toMutableList(),currentHour)
-                                Log.d("NextPrayerWidget", " From Widget $currentPrayerId" )
 
                                 if (currentPrayerId != 300) {
                                     prayerTime.prayerId
@@ -166,12 +155,12 @@ class NextPrayerWidget : AppWidgetProvider() {
                                     viewsPrayer.setTextViewText(R.id.currentCityTv,
                                         city)
                                     viewsPrayer.setTextViewText(R.id.nextPrayerNameTv,
-                                        LocaleUtil.getNameOfPrayer(
+                                        LocaleUtil.getNameOfPrayerInArabic(
                                             currentPrayerId
                                         )
                                     )
                                     viewsPrayer.setTextViewText(R.id.currentPrayerTv,
-                                        LocaleUtil.getNameOfPrayer(
+                                        LocaleUtil.getNameOfPrayerInArabic(
                                             currentPrayerId-1
                                         )
                                     )
@@ -191,7 +180,6 @@ class NextPrayerWidget : AppWidgetProvider() {
                         }
                     }
                 }else{
-                    Log.d("getUpdateIs" , "is not called")
 
                 }
             }
