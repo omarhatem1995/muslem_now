@@ -143,12 +143,13 @@ class NextPrayerWidget : AppWidgetProvider() {
                             prayerDao.getSpecificDayPrayerTimes(localTime)
                         val y = x.collect {
                             it.map { prayerTime ->
-                                prayerTime.prayerId
-                                currentDayHijri = it[0].hijriDate
+
                                  var currentPrayerId = nextPrayer(it.toMutableList(),currentHour)
                                 Log.d("NextPrayerWidget", " From Widget $currentPrayerId" )
 
                                 if (currentPrayerId != 300) {
+                                    prayerTime.prayerId
+                                    currentDayHijri = it[0].hijriDate
                                     val prefs =  PreferenceManager.getDefaultSharedPreferences(context)
                                     var city = prefs.getString("city","Cairo")
 
