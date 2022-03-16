@@ -42,7 +42,7 @@
                 android:id="@+id/backgroundTint"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:background="@color/transGreenBackground"
+                android:background="@color/transGreenBackground3"
                 android:elevation="2dp"
                 app:layout_constraintBottom_toBottomOf="@id/background"
                 app:layout_constraintEnd_toEndOf="@id/background"
