@@ -1,13 +1,11 @@
-package com.myapplication.ui
+package com.myapplication.ui.sidemenu
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
 import com.myapplication.R
 import com.myapplication.databinding.ActivitySebhaBinding
-import com.myapplication.databinding.FragmentSideMenuBinding
 import com.myapplication.ui.fragments.home.HomeViewModel
 
 class SebhaActivity : AppCompatActivity() {

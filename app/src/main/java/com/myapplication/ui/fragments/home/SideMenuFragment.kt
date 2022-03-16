@@ -8,12 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import com.myapplication.QiblahActivity
+import com.myapplication.ui.sidemenu.QiblahActivity
 import com.myapplication.R
 import com.myapplication.databinding.FragmentSideMenuBinding
 import com.myapplication.ui.NamesOfAllahActivity
-import com.myapplication.ui.SebhaActivity
+import com.myapplication.ui.sidemenu.SebhaActivity
 import com.myapplication.ui.settings.SettingsInAppActivity
+import com.myapplication.ui.sidemenu.NearByMosquesActivity
 
 
 class SideMenuFragment : Fragment() {
@@ -43,6 +44,8 @@ class SideMenuFragment : Fragment() {
             binding.arrowSettings.setImageResource(R.drawable.ic_baseline_arrow_back_ios_24)
             binding.arrowSebha.setImageResource(R.drawable.ic_baseline_arrow_back_ios_24)
             binding.arrowNamesOfAllah.setImageResource(R.drawable.ic_baseline_arrow_back_ios_24)
+            binding.arrowNearByMosques.setImageResource(R.drawable.ic_baseline_arrow_back_ios_24)
+            binding.arrowRadio.setImageResource(R.drawable.ic_baseline_arrow_back_ios_24)
 
         }else if (vm.preference.getLanguage().equals("en")){
             binding.backFragmentButton.setImageResource(R.drawable.ic_baseline_arrow_back_24)
@@ -50,6 +53,8 @@ class SideMenuFragment : Fragment() {
             binding.arrowSettings.setImageResource(R.drawable.ic_baseline_arrow_forward_ios_24)
             binding.arrowSebha.setImageResource(R.drawable.ic_baseline_arrow_forward_ios_24)
             binding.arrowNamesOfAllah.setImageResource(R.drawable.ic_baseline_arrow_forward_ios_24)
+            binding.arrowNearByMosques.setImageResource(R.drawable.ic_baseline_arrow_forward_ios_24)
+            binding.arrowRadio.setImageResource(R.drawable.ic_baseline_arrow_forward_ios_24)
         }
 
         binding.backFragmentButton.setOnClickListener {
@@ -72,6 +77,14 @@ class SideMenuFragment : Fragment() {
         }
         binding.constraintNamesOfAllah.setOnClickListener {
             val intent = Intent(context, NamesOfAllahActivity::class.java)
+            context?.startActivity(intent)
+        }
+        binding.constraintNearByMosques.setOnClickListener {
+            val intent = Intent(context, NearByMosquesActivity::class.java)
+            context?.startActivity(intent)
+        }
+        binding.constraintRadio.setOnClickListener {
+            val intent = Intent(context, NearByMosquesActivity::class.java)
             context?.startActivity(intent)
         }
 

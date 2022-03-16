@@ -35,6 +35,7 @@ import android.location.Geocoder
 import android.os.Build
 import android.os.CountDownTimer
 import android.os.Looper
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import com.myapplication.LocaleUtil.Companion.getNameOfPrayerInArabic
@@ -51,7 +52,7 @@ import com.myapplication.LocaleUtil.Companion.applyLocalizedContext
 //import com.myapplication.LocaleUtil.Companion.initSensorManager
 //import com.myapplication.LocaleUtil.Companion.sensor
 //import com.myapplication.LocaleUtil.Companion.sensorManager
-import com.myapplication.QiblahActivity
+import com.myapplication.ui.sidemenu.QiblahActivity
 import com.myapplication.R
 import com.myapplication.data.repositories.SharedPreferencesRepository
 import com.myapplication.ui.ViewUtils
@@ -699,6 +700,8 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
     private fun initQiblaDirection(latitude: Double, longitude: Double) {
         userLocation?.latitude = latitude
         userLocation?.longitude = longitude
+        Log.d("getLat", " $latitude , $longitude")
+
         if (context != null) {
             sensorManager?.registerListener(
                 this,

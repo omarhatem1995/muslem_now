@@ -1,4 +1,4 @@
-package com.myapplication
+package com.myapplication.ui.sidemenu
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -25,9 +25,7 @@ import com.myapplication.ui.fragments.home.HomeViewModel
 import kotlin.math.roundToInt
 import android.hardware.SensorManager
 import android.hardware.SensorEventListener
-
-
-
+import com.myapplication.R
 
 
 class QiblahActivity : AppCompatActivity() , SensorEventListener{

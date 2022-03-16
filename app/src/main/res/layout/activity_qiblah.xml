@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="@dimen/box_inset_layout_padding"
-            tools:context=".QiblahActivity">
+            tools:context=".ui.sidemenu.QiblahActivity">
 
                 <ImageView
                     android:id="@+id/ivQiblaDirection"

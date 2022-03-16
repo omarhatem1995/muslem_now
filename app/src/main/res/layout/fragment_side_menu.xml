@@ -242,6 +242,98 @@
                     app:layout_constraintBottom_toBottomOf="@id/namesOfAllahImage" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintNearByMosques"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/view_background_sidemenu_green_rounded"
+                app:layout_constraintTop_toBottomOf="@id/constraintNamesOfAllah"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <ImageView
+                    android:id="@+id/nearByMosquesImage"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/ic_mosque_svg"
+                    android:backgroundTint="@color/white"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <TextView
+                    android:id="@+id/nearByMosquesTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nearby_mosques"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/tajawalmedium"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintStart_toEndOf="@id/nearByMosquesImage"
+                    app:layout_constraintTop_toTopOf="@id/nearByMosquesImage"
+                    app:layout_constraintBottom_toBottomOf="@id/nearByMosquesImage" />
+
+                <ImageView
+                    android:id="@+id/arrowNearByMosques"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/nearByMosquesImage"
+                    app:layout_constraintBottom_toBottomOf="@id/nearByMosquesImage" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintRadio"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/view_background_sidemenu_green_rounded"
+                app:layout_constraintTop_toBottomOf="@id/constraintNearByMosques"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <ImageView
+                    android:id="@+id/radioImage"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/ic_radio_svg"
+                    android:backgroundTint="@color/white"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <TextView
+                    android:id="@+id/radioTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/radio"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/tajawalmedium"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintStart_toEndOf="@id/radioImage"
+                    app:layout_constraintTop_toTopOf="@id/radioImage"
+                    app:layout_constraintBottom_toBottomOf="@id/radioImage" />
+
+                <ImageView
+                    android:id="@+id/arrowRadio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/radioImage"
+                    app:layout_constraintBottom_toBottomOf="@id/radioImage" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

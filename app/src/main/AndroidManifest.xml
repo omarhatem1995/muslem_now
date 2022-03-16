@@ -21,11 +21,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MuslemNow"
         android:usesCleartextTraffic="true">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyB_mbG3vnY5ABJA4Ay9L_yKbtFy5D5gltg" />
         <activity
             android:name=".ui.NamesOfAllahActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.SebhaActivity"
+            android:name=".ui.sidemenu.NearByMosquesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.sidemenu.SebhaActivity"
             android:exported="false" />
 
         <receiver
@@ -132,7 +138,7 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".QiblahActivity"
+            android:name=".ui.sidemenu.QiblahActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
