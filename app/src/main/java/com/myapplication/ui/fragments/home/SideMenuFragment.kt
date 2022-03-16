@@ -11,9 +11,9 @@ import androidx.fragment.app.viewModels
 import com.myapplication.ui.sidemenu.QiblahActivity
 import com.myapplication.R
 import com.myapplication.databinding.FragmentSideMenuBinding
-import com.myapplication.ui.NamesOfAllahActivity
 import com.myapplication.ui.sidemenu.SebhaActivity
 import com.myapplication.ui.settings.SettingsInAppActivity
+import com.myapplication.ui.sidemenu.NamesOfAllahActivity
 import com.myapplication.ui.sidemenu.NearByMosquesActivity
 
 

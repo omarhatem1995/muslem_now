@@ -52,7 +52,7 @@ class QuranActivity : AppCompatActivity() {
 
         viewModel.getPagingData(pageNumber)
 
-        pageNumber -=1
+//        pageNumber -=1
 
         binding.quranRecycler.addOnScrollListener(object: RecyclerView.OnScrollListener() {
 
