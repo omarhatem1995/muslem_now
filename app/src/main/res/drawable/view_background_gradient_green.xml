@@ -1,4 +1,6 @@
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item>
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
 
     <gradient
@@ -6,6 +8,11 @@
         android:endColor="#5CCE93"
         android:angle="135"/>
 
+
+
     <corners android:radius="0dp" />
 
 </shape>
+    </item>
+    <item android:drawable="@drawable/ic_background_pattern_all_green_screens" />
+</layer-list>
