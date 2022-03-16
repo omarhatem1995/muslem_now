@@ -6,7 +6,7 @@
     <data>
         <variable
             name="azkarFragment"
-            type="com.myapplication.ui.azkar.AzkarViewModel" />
+            type="com.myapplication.ui.fragments.azkar.AzkarViewModel" />
 
     </data>
 
@@ -21,7 +21,7 @@
             android:background="@drawable/ic_background_pattern_all_green_screens" />
 
         <ImageView
-            android:background="@color/transGreenBackground2"
+            android:background="@drawable/view_background_gradient_green"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

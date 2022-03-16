@@ -3,24 +3,19 @@ package com.myapplication.data.core.workmanager
 import android.app.Notification
 import android.app.NotificationChannel
 import android.content.BroadcastReceiver
-import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.util.Log
 
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.myapplication.MainActivity
 import com.myapplication.R
-import androidx.core.content.ContextCompat.getSystemService
 
 import android.app.NotificationManager
 import android.app.PendingIntent
 
 import android.os.Build
-import com.myapplication.ui.azkar.AzkarActivity
-import com.myapplication.ui.settings.AzkarSettingsFragment
+import com.myapplication.ui.fragments.azkar.AzkarActivity
 import kotlinx.coroutines.InternalCoroutinesApi
 
 

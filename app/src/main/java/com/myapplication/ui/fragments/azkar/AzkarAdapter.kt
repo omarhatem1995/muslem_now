@@ -1,4 +1,4 @@
-package com.myapplication.ui.azkar
+package com.myapplication.ui.fragments.azkar
 
 import android.content.Context
 import android.content.Intent
@@ -11,17 +11,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.myapplication.R
 
-
-
-
 class AzkarAdapter(mContext: Context, dataItem: List<String>) : RecyclerView.Adapter<AzkarAdapter.AzkarViewHolder>() {
 
     var mContext: Context? = mContext
     var mData: List<String> = dataItem
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AzkarViewHolder {
-        val v: View
-        v = LayoutInflater.from(mContext).inflate(R.layout.azkar_item, parent, false)
+        val v: View = LayoutInflater.from(mContext).inflate(R.layout.azkar_item, parent, false)
         return AzkarViewHolder(v)
     }
 

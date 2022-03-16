@@ -1,4 +1,4 @@
-package com.myapplication.ui.azkar
+package com.myapplication.ui.fragments.azkar
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

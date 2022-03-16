@@ -21,9 +21,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MuslemNow"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".ui.sidemenu.RadioActivity"
+            android:exported="false" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB_mbG3vnY5ABJA4Ay9L_yKbtFy5D5gltg" />
+
         <activity
             android:name=".ui.NamesOfAllahActivity"
             android:exported="false" />
@@ -133,7 +138,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppFullScreenTheme" />
         <activity
-            android:name=".ui.azkar.AzkarActivity"
+            android:name="com.myapplication.ui.fragments.azkar.AzkarActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />

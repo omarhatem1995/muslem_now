@@ -13,4 +13,9 @@
         android:title="@string/azkar"
         android:icon="@drawable/ic_azkar"/>
 
+    <item
+        android:id="@+id/radio"
+        android:title="@string/radio"
+        android:icon="@drawable/ic_radio_svg_2"/>
+
 </menu>

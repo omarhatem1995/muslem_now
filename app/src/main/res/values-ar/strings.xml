@@ -109,5 +109,6 @@
     <string name="electronic_sebha">السبحة الالكترونية</string>
     <string name="names_of_allah">اسماء الله الحسنى</string>
     <string name="nearby_mosques">المساجد القريبة</string>
-    <string name="radio">راديو</string>
+    <string name="radio">الراديو</string>
+    <string name="listen_to_our_radio_channels">استمع الى محطات الراديو الاذاعية</string>
 </resources>

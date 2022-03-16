@@ -26,9 +26,10 @@ import com.google.android.gms.location.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.myapplication.data.core.workmanager.MuslemApp
 import com.myapplication.ui.MainViewModel
-import com.myapplication.ui.azkar.AzkarFragment
+import com.myapplication.ui.fragments.azkar.AzkarFragment
 import com.myapplication.ui.fragments.home.HomeFragment
 import com.myapplication.ui.fragments.quran.QuranFragment
+import com.myapplication.ui.fragments.radio.RadioFragment
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -51,6 +52,7 @@ open class MainActivity : AppCompatActivity() {
     var homeFragment = HomeFragment()
     var quranFragment = QuranFragment()
     var azkarFragment = AzkarFragment()
+    var radioFragment = RadioFragment()
 
     @InternalCoroutinesApi
     @DelicateCoroutinesApi
@@ -80,6 +82,7 @@ open class MainActivity : AppCompatActivity() {
                 R.id.home -> replaceFragment(homeFragment)
                 R.id.quran -> replaceFragment(quranFragment)
                 R.id.azkar -> replaceFragment(azkarFragment)
+                R.id.radio -> replaceFragment(radioFragment)
             }
             true
         }

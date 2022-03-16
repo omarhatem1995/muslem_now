@@ -1,4 +1,4 @@
-package com.myapplication.ui.azkar
+package com.myapplication.ui.fragments.azkar
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -22,7 +22,6 @@ import java.io.InputStream
 
 class AzkarFragment : Fragment() {
 
-    lateinit var recyclerViewAzkar : RecyclerView
     private val vm: AzkarViewModel by viewModels()
     lateinit var binding: FragmentAzkarBinding
 
@@ -61,7 +60,7 @@ class AzkarFragment : Fragment() {
             var jsonArray = JSONArray(json)
 
             var strings : MutableList<String> = ArrayList()
-            for (i in 0..jsonArray.length()-1) {
+            for (i in 0 until jsonArray.length()) {
                 var jsonObj = jsonArray.getString(i)
                 strings.add(jsonObj)
                 binding.azkarRecyclerview.adapter = AzkarAdapter(requireContext(),strings)

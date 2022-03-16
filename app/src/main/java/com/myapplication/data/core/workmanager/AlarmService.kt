@@ -15,7 +15,7 @@ import com.myapplication.R
 import com.myapplication.common.Constants
 import com.myapplication.data.entities.model.PrayerTimeModel
 import com.myapplication.data.repositories.SharedPreferencesRepository
-import com.myapplication.ui.azkar.AzkarActivity
+import com.myapplication.ui.fragments.azkar.AzkarActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
