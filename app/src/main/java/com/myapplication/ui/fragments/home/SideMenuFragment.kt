@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import com.myapplication.QiblahActivity
 import com.myapplication.R
 import com.myapplication.databinding.FragmentSideMenuBinding
+import com.myapplication.ui.NamesOfAllahActivity
 import com.myapplication.ui.SebhaActivity
 import com.myapplication.ui.settings.SettingsInAppActivity
 
@@ -41,12 +42,14 @@ class SideMenuFragment : Fragment() {
             binding.arrowQibla.setImageResource(R.drawable.ic_baseline_arrow_back_ios_24)
             binding.arrowSettings.setImageResource(R.drawable.ic_baseline_arrow_back_ios_24)
             binding.arrowSebha.setImageResource(R.drawable.ic_baseline_arrow_back_ios_24)
+            binding.arrowNamesOfAllah.setImageResource(R.drawable.ic_baseline_arrow_back_ios_24)
 
         }else if (vm.preference.getLanguage().equals("en")){
             binding.backFragmentButton.setImageResource(R.drawable.ic_baseline_arrow_back_24)
             binding.arrowQibla.setImageResource(R.drawable.ic_baseline_arrow_forward_ios_24)
             binding.arrowSettings.setImageResource(R.drawable.ic_baseline_arrow_forward_ios_24)
             binding.arrowSebha.setImageResource(R.drawable.ic_baseline_arrow_forward_ios_24)
+            binding.arrowNamesOfAllah.setImageResource(R.drawable.ic_baseline_arrow_forward_ios_24)
         }
 
         binding.backFragmentButton.setOnClickListener {
@@ -65,6 +68,10 @@ class SideMenuFragment : Fragment() {
 
         binding.constraintSebha.setOnClickListener {
             val intent = Intent(context, SebhaActivity::class.java)
+            context?.startActivity(intent)
+        }
+        binding.constraintNamesOfAllah.setOnClickListener {
+            val intent = Intent(context, NamesOfAllahActivity::class.java)
             context?.startActivity(intent)
         }
 

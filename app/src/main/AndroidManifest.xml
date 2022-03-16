@@ -22,6 +22,9 @@
         android:theme="@style/Theme.MuslemNow"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.NamesOfAllahActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.SebhaActivity"
             android:exported="false" />
 
@@ -106,7 +109,7 @@
         <activity
             android:name=".ui.fragments.quran.QuranActivity"
             android:exported="true"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.settings.SettingsActivity"
             android:exported="false"

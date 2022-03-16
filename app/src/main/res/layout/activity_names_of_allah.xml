@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="namesOfAllahViewModel"
+            type="com.myapplication.ui.fragments.home.HomeViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_background_pattern_all_screens"
+        tools:context=".ui.NamesOfAllahActivity">
+        <ImageView
+            android:id="@+id/imageBackground"
+            android:layout_width="match_parent"
+            android:layout_height="148dp"
+            android:background="@drawable/view_background_top_green_rounded"
+            android:layout_marginTop="-30dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:layout_width="600dp"
+            android:layout_height="200dp"
+            android:background="@drawable/background_pattern_small_green"
+            app:layout_constraintTop_toTopOf="@id/imageBackground"
+            app:layout_constraintBottom_toBottomOf="@id/imageBackground"
+            app:layout_constraintStart_toStartOf="@id/imageBackground"
+            app:layout_constraintEnd_toEndOf="@id/imageBackground" />
+
+        <ImageView
+            android:id="@+id/backArrowImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            app:layout_constraintTop_toTopOf="@id/headerTextView"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/headerTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/names_of_allah"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:layout_marginBottom="40dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/imageBackground" />
+
+        <TextView
+            android:id="@+id/firstNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="هو الله الذي لا اله الا هو"
+            android:textSize="16sp"
+            android:fontFamily="@font/tajawalblack"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageBackground"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewNamesOfAllah"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="3"
+            android:layout_marginTop="180dp"
+            app:layout_constraintTop_toBottomOf="@id/firstNameTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:listitem="@layout/name_of_allah_item"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

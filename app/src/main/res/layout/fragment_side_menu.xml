@@ -156,7 +156,6 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:visibility="gone"
                 android:background="@drawable/view_background_sidemenu_green_rounded"
                 app:layout_constraintTop_toBottomOf="@id/linearSettings"
                 app:layout_constraintStart_toStartOf="parent">
@@ -194,6 +193,53 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/sebhaImage"
                     app:layout_constraintBottom_toBottomOf="@id/sebhaImage" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintNamesOfAllah"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/view_background_sidemenu_green_rounded"
+                app:layout_constraintTop_toBottomOf="@id/constraintSebha"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <ImageView
+                    android:id="@+id/namesOfAllahImage"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/ic_allah"
+                    android:backgroundTint="@color/white"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <TextView
+                    android:id="@+id/namesOfAllahTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/names_of_allah"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/tajawalmedium"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintStart_toEndOf="@id/namesOfAllahImage"
+                    app:layout_constraintTop_toTopOf="@id/namesOfAllahImage"
+                    app:layout_constraintBottom_toBottomOf="@id/namesOfAllahImage" />
+
+                <ImageView
+                    android:id="@+id/arrowNamesOfAllah"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/namesOfAllahImage"
+                    app:layout_constraintBottom_toBottomOf="@id/namesOfAllahImage" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
