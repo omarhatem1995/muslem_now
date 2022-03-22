@@ -30,7 +30,7 @@
             android:value="AIzaSyB_mbG3vnY5ABJA4Ay9L_yKbtFy5D5gltg" />
 
         <activity
-            android:name=".ui.NamesOfAllahActivity"
+            android:name=".ui.sidemenu.NamesOfAllahActivity"
             android:exported="false" />
         <activity
             android:name=".ui.sidemenu.NearByMosquesActivity"

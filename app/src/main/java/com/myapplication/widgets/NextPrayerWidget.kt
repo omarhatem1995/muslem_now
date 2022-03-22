@@ -69,8 +69,9 @@ class NextPrayerWidget : AppWidgetProvider() {
     }
     lateinit var localTime: String
     var timeFormat = "k:mm"
+    private lateinit var previousPrayerTime : String
 
-    override fun onReceive(context: Context?, intent: Intent?) {
+        override fun onReceive(context: Context?, intent: Intent?) {
         RemoteViews(context!!.packageName, R.layout.next_prayer_widget).also {
         }
         val extras = intent!!.extras
@@ -132,50 +133,78 @@ class NextPrayerWidget : AppWidgetProvider() {
                         val x: Flow<List<PrayerTimeModel>> =
                             prayerDao.getSpecificDayPrayerTimes(localTime)
                         val y = x.collect {
-                            it.map { prayerTime ->
+                            if(it.size > 0) {
+                                it.map { prayerTime ->
 
-                                 var currentPrayerId = nextPrayer(it.toMutableList(),currentHour)
+                                    var currentPrayerId =
+                                        nextPrayer(it.toMutableList(), currentHour)
 
-                                if (currentPrayerId != 300) {
-                                    prayerTime.prayerId
-                                    currentDayHijri = it[0].hijriDate
-                                    val prefs =  PreferenceManager.getDefaultSharedPreferences(context)
-                                    var city = prefs.getString("city","Cairo")
+                                    if (currentPrayerId != 300) {
+                                        prayerTime.prayerId
+                                        currentDayHijri = it[0].hijriDate
+                                        val prefs =
+                                            PreferenceManager.getDefaultSharedPreferences(context)
+                                        var city = prefs.getString("city", "Cairo")
 
-                                    val nextPrayerTime =
-                                        it[currentPrayerId].time + " " + it[currentPrayerId].date
-                                    val previousPrayerTime = it[currentPrayerId-1].time
-                                    val remainingTimeForNextPrayer =
-                                        LocaleUtil.remainingTimeForNextPrayer(
-                                            currentDateForChecking,
-                                            nextPrayerTime
+                                        val nextPrayerTime =
+                                            it[currentPrayerId].time + " " + it[currentPrayerId].date
+
+                                        if(currentPrayerId!=0) {
+                                            previousPrayerTime = it[currentPrayerId - 1].time
+                                            viewsPrayer.setTextViewText(
+                                                R.id.currentPrayerTv,
+                                                LocaleUtil.getNameOfPrayerInArabic(
+                                                    currentPrayerId - 1
+                                                )
+                                            )
+                                            viewsPrayer.setImageViewResource(
+                                                R.id.currentPrayerIv,
+                                                LocaleUtil.setDrawable(currentPrayerId - 1)
+                                            )
+                                        }else {
+                                            previousPrayerTime = it[5].time
+                                            viewsPrayer.setTextViewText(
+                                                R.id.currentPrayerTv,
+                                                LocaleUtil.getNameOfPrayerInArabic(
+                                                    5
+                                                )
+                                            )
+                                            viewsPrayer.setImageViewResource(
+                                                R.id.currentPrayerIv,
+                                                LocaleUtil.setDrawable(5)
+                                            )
+                                        }
+                                        val remainingTimeForNextPrayer =
+                                            LocaleUtil.remainingTimeForNextPrayer(
+                                                currentDateForChecking,
+                                                nextPrayerTime
+                                            )
+                                        viewsPrayer.setTextViewText(
+                                            R.id.remainingTimeForNextPrayerWidget,
+                                            remainingTimeForNextPrayer
                                         )
-                                    viewsPrayer.setTextViewText(R.id.remainingTimeForNextPrayerWidget,
-                                        remainingTimeForNextPrayer)
-                                    viewsPrayer.setTextViewText(R.id.currentCityTv,
-                                        city)
-                                    viewsPrayer.setTextViewText(R.id.nextPrayerNameTv,
-                                        LocaleUtil.getNameOfPrayerInArabic(
-                                            currentPrayerId
+                                        viewsPrayer.setTextViewText(
+                                            R.id.currentCityTv,
+                                            city
                                         )
-                                    )
-                                    viewsPrayer.setTextViewText(R.id.currentPrayerTv,
-                                        LocaleUtil.getNameOfPrayerInArabic(
-                                            currentPrayerId-1
+                                        viewsPrayer.setTextViewText(
+                                            R.id.nextPrayerNameTv,
+                                            LocaleUtil.getNameOfPrayerInArabic(
+                                                currentPrayerId
+                                            )
                                         )
-                                    )
-                                    viewsPrayer.setTextViewText(R.id.currentPrayerTimeTv,
-                                        previousPrayerTime
-                                    )
-                                    viewsPrayer.setImageViewResource(R.id.currentPrayerIv,
-                                        LocaleUtil.setDrawable(currentPrayerId-1)
-                                    )
+                                        viewsPrayer.setTextViewText(
+                                            R.id.currentPrayerTimeTv,
+                                            previousPrayerTime
+                                        )
 
+
+                                    }
+                                    AppWidgetManager.getInstance(context).updateAppWidget(
+                                        ComponentName(context, NextPrayerWidget::class.java),
+                                        viewsPrayer
+                                    )
                                 }
-                                AppWidgetManager.getInstance(context).updateAppWidget(
-                                    ComponentName(context, NextPrayerWidget::class.java),
-                                    viewsPrayer
-                                )
                             }
                         }
                     }
