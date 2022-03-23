@@ -406,7 +406,7 @@
                     android:id="@+id/the40sTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="The 40s"
+                    android:text="@string/nawawian_s_40s"
                     android:textSize="16sp"
                     android:textColor="@color/white"
                     android:fontFamily="@font/tajawalmedium"
