@@ -334,6 +334,98 @@
                     app:layout_constraintBottom_toBottomOf="@id/radioImage" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintSahihBukhary"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/view_background_sidemenu_green_rounded"
+                app:layout_constraintTop_toBottomOf="@id/constraintRadio"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <ImageView
+                    android:id="@+id/sahihBukharyImage"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/ic_book"
+                    android:backgroundTint="@color/white"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <TextView
+                    android:id="@+id/sahihBukharyTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sahih_al_bukhary_book"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/tajawalmedium"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintStart_toEndOf="@id/sahihBukharyImage"
+                    app:layout_constraintTop_toTopOf="@id/sahihBukharyImage"
+                    app:layout_constraintBottom_toBottomOf="@id/sahihBukharyImage" />
+
+                <ImageView
+                    android:id="@+id/arrowSahihBukharyImage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/sahihBukharyImage"
+                    app:layout_constraintBottom_toBottomOf="@id/sahihBukharyImage" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintThe40s"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/view_background_sidemenu_green_rounded"
+                app:layout_constraintTop_toBottomOf="@id/constraintSahihBukhary"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <ImageView
+                    android:id="@+id/the40sImage"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/ic_book"
+                    android:backgroundTint="@color/white"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <TextView
+                    android:id="@+id/the40sTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="The 40s"
+                    android:textSize="16sp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/tajawalmedium"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintStart_toEndOf="@id/the40sImage"
+                    app:layout_constraintTop_toTopOf="@id/the40sImage"
+                    app:layout_constraintBottom_toBottomOf="@id/the40sImage" />
+
+                <ImageView
+                    android:id="@+id/arrowThe40s"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/the40sImage"
+                    app:layout_constraintBottom_toBottomOf="@id/the40sImage" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

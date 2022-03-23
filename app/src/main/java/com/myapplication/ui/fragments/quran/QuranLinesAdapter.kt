@@ -65,16 +65,13 @@ class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>, val c
                 {
                     typeface = ResourcesCompat.getFont(context, R.font.p5)!!
                 }*/
-                Log.d("emptyList", " is ${emptyList} , ${position}")
                 text.text = kelma
-                Log.d("suraNumber", suraNumber.toString())
                 if(emptyList.contains(position)){
                     binding.headerQuran.text = "\u00F2"
                     binding.headerQuran.visibility = View.VISIBLE
                     binding.headerNameQuran.visibility = View.VISIBLE
                     binding.headerNameQuranTextView.visibility = View.VISIBLE
                     binding.linearLayoutHeader.visibility = View.VISIBLE
-                    Log.d("suraNumber", suraNumber.toString())
                     binding.headerNameQuran.text = "${suraNumber?.let { it1 ->
                         SuraNameUtil.getSuraNameByUnicodeFromSuraNumber(
                             it1

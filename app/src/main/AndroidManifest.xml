@@ -22,6 +22,9 @@
         android:theme="@style/Theme.MuslemNow"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.sidemenu.SahihBukharyActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.sidemenu.RadioActivity"
             android:exported="false" />
 
@@ -138,7 +141,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppFullScreenTheme" />
         <activity
-            android:name="com.myapplication.ui.fragments.azkar.AzkarActivity"
+            android:name=".ui.fragments.azkar.AzkarActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />

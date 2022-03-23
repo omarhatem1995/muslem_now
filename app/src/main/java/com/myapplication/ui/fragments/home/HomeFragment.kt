@@ -455,10 +455,11 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
 
     override fun renderLoading(show: Boolean) {
         if (show) {
-            progressDialog.show()
+       /*     progressDialog.show()
             ViewUtils.showProgressDialog(
                 progressDialog!!
-            )
+            )*/
+            Toast.makeText(context,"Toast",Toast.LENGTH_LONG).show()
         } else
             progressDialog.dismiss()
     }

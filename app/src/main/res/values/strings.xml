@@ -1,10 +1,6 @@
 <resources>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello</string>
-    <string name="title_activity_qiblah">Hello</string>
     <string name="location_permission_message">Location permission is needed to show direction</string>
     <string name="location_permission_title">Permission Required!</string>
-    <string name="hello_world">Hello Square World!</string>
     <string name="gps_network_not_enabled">GPS network not enabled</string>
     <string name="Cancel">Cancel</string>
     <string name="prayer_times">Prayer Times</string>
@@ -54,17 +50,6 @@
     <string name="after_fajr_with_an_hour">After Fajr with an hour</string>
     <string name="after_fajr_with_two_hours">After Fajr with two hours</string>
     <string name="azkar_masaa">Azkar Masaa</string>
-
-    <array name="travelreasons">
-        <item name=" asdasd" />
-        <item name=" asdasd" />
-        <item name=" asdasd" />
-        <item name=" asdasd" />
-        <item name=" asdasd" />
-    </array>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
-    <string name="app_widget_description">This is an app widget description</string>
     <string name="qibla_according_to_your_location_in_degrees">Qibla according to your location in degrees</string>
     <string name="qibla_refreshed">Qibla Refreshed</string>
     <string name="muslem_now">Muslem Now</string>
@@ -122,4 +107,8 @@
     <string name="nearby_mosques">Nearby Mosques</string>
     <string name="radio">Radio</string>
     <string name="listen_to_our_radio_channels">Listen to our radio channels</string>
+    <string name="app_widget_description">This is an app widget description</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="sahih_al_bukhary_book">Sahih Al Bukhary Book</string>
 </resources>

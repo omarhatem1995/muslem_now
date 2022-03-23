@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello_blank_fragment">Hello</string>
     <string name="elevation_degree">درجه اتجاه</string>
     <string name="qiblahs_direction_to_your_position">اتجاه القبلة بالنسبة لموقعك</string>
     <string name="Required_permission_not_granted_exiting">من فضلك أسمح للتطبيق بالحصول على موقعك طوال الوقت</string>
@@ -12,9 +11,7 @@
     <string name="gps_network_not_enabled">فتح خدمة ال GPS</string>
     <string name="location_permission_title">عنوان الحصول على الموقع</string>
     <string name="location_permission_message">رسالة السماح للحصول على الموقع</string>
-    <string name="hello_world">Hello Round World!</string>
-    <string name="title_activity_qiblah">QiblahActivity</string>
-    <string name="app_name">مسلم ناو</string>
+    <string name="app_name">تطبيق المسلم</string>
     <string name="home">الرئيسية</string>
     <string name="quran">القران</string>
     <string name="azkar">الاذكار</string>
@@ -111,4 +108,9 @@
     <string name="nearby_mosques">المساجد القريبة</string>
     <string name="radio">الراديو</string>
     <string name="listen_to_our_radio_channels">استمع الى محطات الراديو الاذاعية</string>
+    <string name="app_widget_description">وصف الودجت الخاصة بالتطبيق</string>
+    <string name="previous">السابق</string>
+    <string name="next">التالي</string>
+    <string name="sahih_al_bukhary_book">كتاب صحيح البخاري</string>
+
 </resources>
