@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
 import android.os.LocaleList
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.os.ConfigurationCompat
 import com.myapplication.data.entities.model.PrayerTimeModel
@@ -107,8 +108,9 @@ class LocaleUtil {
                 "$hours$minutes " + context.getString(R.string.pm)
             }
         }
-        fun convertToArabic(value: String,language:String): String? {
-            return if(language == "ar") {
+
+        fun convertToArabic(value: String, language: String): String? {
+            return if (language == "ar") {
                 (value + "")
                     .replace("1".toRegex(), "١").replace("2".toRegex(), "٢")
                     .replace("3".toRegex(), "٣").replace("4".toRegex(), "٤")
@@ -119,6 +121,7 @@ class LocaleUtil {
             } else
                 value
         }
+
         fun getNameOfPrayerInArabic(context: Context, id: Int): String {
             return when (id) {
                 0 -> context.getString(R.string.fajr)
@@ -129,6 +132,7 @@ class LocaleUtil {
                 else -> context.getString(R.string.isha)
             }
         }
+
         fun getNameOfPrayerInArabic(id: Int): String {
             return when (id) {
                 0 -> "الفجر"
@@ -235,7 +239,7 @@ class LocaleUtil {
             return finalList
         }
 
-        fun getJuzNameFromNumber(number:String, context:Context):String {
+        fun getJuzNameFromNumber(number: String, context: Context): String {
             when (number) {
                 "01" -> {
                     return context.getString(R.string.first_juz)
@@ -327,11 +331,16 @@ class LocaleUtil {
                 else -> return context.getString(R.string.thirty_juz)
             }
         }
-        fun getSuraMakkiyahOrMaddaniyah(context: Context, type:String) : String{
-            return if(type == "Makkiyah"){
+
+        fun getSuraMakkiyahOrMaddaniyah(context: Context, type: String): String {
+            return if (type == "Makkiyah") {
                 context.getString(R.string.makkiyah)
-            }else
+            } else
                 context.getString(R.string.madaniyah)
         }
+
+
     }
+
+
 }

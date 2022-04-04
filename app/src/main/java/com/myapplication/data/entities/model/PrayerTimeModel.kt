@@ -14,5 +14,6 @@ data class PrayerTimeModel(
     val time: String,
     var imageStatus: Int,
     var date:String,
-    var hijriDate:String
+    var hijriDate:String,
+    var hijriDateEn:String
 ) : Parcelable

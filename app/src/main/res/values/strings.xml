@@ -55,7 +55,7 @@
     <string name="muslem_now">Muslem Now</string>
     <string name="please_open_your_gps">Please Open your GPS</string>
     <string name="couldnt_find_your_address">Couldn\'t find your address</string>
-    <string name="are_you_sure_you_want_to_change_language">\"Are you sure you want to change language , \"</string>
+    <string name="are_you_sure_you_want_to_change_language">Are you sure you want to change language</string>
     <string name="this_action_will_require_restart_of_the_application">this action will require restart of the application</string>
     <string name="note">\"Note : \"</string>
     <string name="yes">Yes</string>
@@ -102,7 +102,7 @@
     <string name="play">Play</string>
     <string name="stop">Stop</string>
     <string name="clear_counter">Clear counter</string>
-    <string name="electronic_sebha">Electronic Sebha</string>
+    <string name="electronic_sebha">Electronic Rosary</string>
     <string name="names_of_allah">Names Of ALlah</string>
     <string name="nearby_mosques">Nearby Mosques</string>
     <string name="radio">Radio</string>
@@ -112,4 +112,5 @@
     <string name="next">Next</string>
     <string name="sahih_al_bukhary_book">Sahih Al Bukhary Book</string>
     <string name="nawawian_s_40s">Forty hadiths of the Nawawy</string>
+    <string name="search">Search</string>
 </resources>

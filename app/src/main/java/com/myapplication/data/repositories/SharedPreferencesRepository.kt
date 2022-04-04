@@ -145,6 +145,13 @@ class SharedPreferencesRepository(application: Application) {
             .putBoolean("Aya", it).apply()
     }
 
+    fun setRosary(number:String?) = number?.let {
+        preference.edit()
+            .putString("Rosary", it).apply()
+    }
+
+    fun getRosary() = preference.getString("Rosary", "0")
+
     fun setAlarmState(state:Boolean)
     {
         val c: Date = Calendar.getInstance().time

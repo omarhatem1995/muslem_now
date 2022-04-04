@@ -49,9 +49,6 @@ import com.google.android.gms.tasks.Task
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.myapplication.LocaleUtil.Companion.applyLocalizedContext
-//import com.myapplication.LocaleUtil.Companion.initSensorManager
-//import com.myapplication.LocaleUtil.Companion.sensor
-//import com.myapplication.LocaleUtil.Companion.sensorManager
 import com.myapplication.ui.sidemenu.QiblahActivity
 import com.myapplication.R
 import com.myapplication.data.repositories.SharedPreferencesRepository
@@ -60,9 +57,13 @@ import java.io.IOException
 import java.lang.reflect.InvocationTargetException
 
 
-class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener ,SensorEventListener{
+class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener,
+    SensorEventListener {
 
     lateinit var binding: FragmentHomeBinding
+
+    var prayerList: MutableList<PrayerTimeModel> = ArrayList()
+    var nextPrayersId: Int = 0
 
     companion object {
         const val MARSHMALLOW = 23
@@ -75,10 +76,11 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
 
     var currentDegree: Float = 0f
     var currentNeedleDegree: Float = 0f
+    var countDownTimer: CountDownTimer? = null
 
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
-    private lateinit var preferences:SharedPreferencesRepository
+    private lateinit var preferences: SharedPreferencesRepository
 
     var sensorManager: SensorManager? = null
     var sensor: Sensor? = null
@@ -86,18 +88,18 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
     lateinit var tvHeading: TextView
     var needleAnimation: RotateAnimation? = null
     var fusedLocationClient: FusedLocationProviderClient? = null
-//    lateinit var linearLayoutManager: LinearLayoutManager
     lateinit var currentTime: TextView
     lateinit var localTime: String
     var monthOfTheYear = "null"
     var currentYear = "null"
-    private val vm: HomeViewModel by viewModels()
+    private val homeFragmentViewModel: HomeViewModel by viewModels()
     val NOTIFICATION_CHANNEL_ID = "10001"
     private val default_notification_channel_id = "default"
     val cal = Calendar.getInstance(TimeZone.getTimeZone("GMT+1:00"))
     lateinit var nextDay: String
     lateinit var progressDialog: Dialog
     var arrayList: MutableList<Boolean> = ArrayList()
+    var apiCall = false
 
     lateinit var nextDayForCalculations: String
 
@@ -113,14 +115,14 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        vm.preference.getLanguage()?.let { context?.let { it1 -> applyLocalizedContext(it1, it) } }
+        homeFragmentViewModel.preference.getLanguage()?.let { context?.let { it1 -> applyLocalizedContext(it1, it) } }
         var view: View = inflater.inflate(R.layout.fragment_home, container, false)
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.fragment_home, container, false
         )
-        binding.homeViewmodel = vm
+        binding.homeViewmodel = homeFragmentViewModel
 //        vm.preference.getLanguage()?.let { context?.let { it1 -> applyLocalizedContext(it1, it) } }
 
         tvHeading = view.findViewById<TextView>(R.id.tvHeading)
@@ -141,14 +143,14 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
         return binding.root
     }
 
-    fun initViews(){
+    fun initViews() {
         userLocation = Location("User Location")
-        arrayList.add(0, vm.preference.getFajr())
-        arrayList.add(1, vm.preference.getDuhr())
-        arrayList.add(2, vm.preference.getSunRise())
-        arrayList.add(3, vm.preference.getAsr())
-        arrayList.add(4, vm.preference.getMaghrib())
-        arrayList.add(5, vm.preference.getIsha())
+        arrayList.add(0, homeFragmentViewModel.preference.getFajr())
+        arrayList.add(1, homeFragmentViewModel.preference.getDuhr())
+        arrayList.add(2, homeFragmentViewModel.preference.getSunRise())
+        arrayList.add(3, homeFragmentViewModel.preference.getAsr())
+        arrayList.add(4, homeFragmentViewModel.preference.getMaghrib())
+        arrayList.add(5, homeFragmentViewModel.preference.getIsha())
         getUserLocation()
         getDateAndTime()
         binding.ivQiblaDirection.setOnClickListener {
@@ -189,6 +191,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
 
     private fun getDateAndTime() {
         val georgianFullDateFormat: DateFormat = SimpleDateFormat("EEEE dd MMMM yyyy", Locale("ar"))
+        val georgianFullDateFormatEn: DateFormat = SimpleDateFormat("EEEE dd MMMM yyyy", Locale("en"))
         val georgianDateFormatForInsertion: DateFormat =
             SimpleDateFormat("dd-MM-yyyy", Locale("en"))
         val georgianDateFormatForChecking: DateFormat =
@@ -200,10 +203,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
 
         localTime = georgianDateFormatForInsertion.format(cal.time)
 
-        val year = cal.get(Calendar.YEAR)
-        val month = cal.get(Calendar.MONTH)
-        val day = cal.get(Calendar.DAY_OF_MONTH)
-
         val nextDayCal = Calendar.getInstance(TimeZone.getTimeZone("GMT+1:00"))
         nextDayCal.add(Calendar.DAY_OF_MONTH, 1)
         nextDay = georgianDateFormatForInsertion.format(nextDayCal.time)
@@ -212,35 +211,13 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
         monthOfTheYear = monthOfTheyYearFormat.format(currentLocalTime)
         currentYear = currentYearFormat.format(currentLocalTime)
 
-        binding.dateGeorgian.text = georgianFullDateFormat.format(cal.time).toString()
+        if(homeFragmentViewModel.preference.getLanguage().equals("ar")) {
+            binding.dateGeorgian.text = georgianFullDateFormat.format(cal.time).toString()
+        }else{
+            binding.dateGeorgian.text = georgianFullDateFormatEn.format(cal.time).toString()
 
+        }
     }
-/*
-    private fun scheduleNotification(notification: Notification, delay: Int) {
-        val notificationIntent = Intent(context, MyNotificationPublisher::class.java)
-        notificationIntent.putExtra(MyNotificationPublisher.NOTIFICATION_ID, 1)
-        notificationIntent.putExtra(MyNotificationPublisher.NOTIFICATION, notification)
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            0,
-            notificationIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        val futureInMillis = SystemClock.elapsedRealtime() + delay
-        val alarmManager = (context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager?)!!
-        alarmManager[AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis] = pendingIntent
-    }
-
-    private fun getNotification(content: String): Notification? {
-        val builder: NotificationCompat.Builder? =
-            context?.let { NotificationCompat.Builder(it, default_notification_channel_id) }
-        builder?.setContentTitle("Scheduled Notification")
-        builder?.setContentText(content)
-        builder?.setSmallIcon(R.drawable.ic_side_menu_nav_icon)
-        builder?.setAutoCancel(true)
-        builder?.setChannelId(NOTIFICATION_CHANNEL_ID)
-        return builder?.build()
-    }*/
 
     private fun getTimeOnlyForPrayer(input: String): String {
         var firstFiveChars = ""
@@ -250,15 +227,12 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
         return firstFiveChars
     }
 
-    var prayerList: MutableList<PrayerTimeModel> = ArrayList()
-    var nextPrayersId: Int = 0
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun renderParentTimings(data: List<Datum>) {
         var flagFoundPrayerId = false
 
-        val currentHourDateFormat: DateFormat = SimpleDateFormat("HH:mm",Locale("en"))
-        val dateFormatForChecking: DateFormat = SimpleDateFormat("HH:mm dd-MM-yyyy",Locale("en"))
+        val currentHourDateFormat: DateFormat = SimpleDateFormat("HH:mm", Locale("en"))
+        val dateFormatForChecking: DateFormat = SimpleDateFormat("HH:mm dd-MM-yyyy", Locale("en"))
         val currentHour = currentHourDateFormat.format(cal.time)
         val currentDateForChecking = dateFormatForChecking.format(cal.time)
 
@@ -269,74 +243,63 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
             var hijriDate = data[i].date.hijri.day + " " + data[i].date.hijri.month.ar +
                     " " + data[i].date.hijri.year
 
+            var hijriDateEn = data[i].date.hijri.day + " " + data[i].date.hijri.month.en +
+                    " " + data[i].date.hijri.year
+
             var fajrAdahanModel = PrayerTimeModel(
                 0, R.drawable.ic_elfajr,
                 "Fajr", getTimeOnlyForPrayer(data.get(i).timings.fajr), 1, date,
-                hijriDate
+                hijriDate,hijriDateEn
             )
 
             var sunRiseAdahanModel = PrayerTimeModel(
                 1, R.drawable.ic_sunrise,
                 "Sunrise", getTimeOnlyForPrayer(data.get(i).timings.sunrise), 1, date,
-                hijriDate
+                hijriDate,hijriDateEn
             )
 
             var dhurAdahanModel = PrayerTimeModel(
                 2, R.drawable.ic_eldhur,
                 "Dhur", getTimeOnlyForPrayer(data.get(i).timings.dhuhr), 1, date,
-                hijriDate
+                hijriDate,hijriDateEn
             )
 
             var asrAdahanModel = PrayerTimeModel(
                 3, R.drawable.ic_elasr,
                 "Asr", getTimeOnlyForPrayer(data.get(i).timings.asr), 1, date,
-                hijriDate
+                hijriDate,hijriDateEn
             )
-/*
-            var sunSetAdahanModel = PrayerTimeModel(
-                4, R.drawable.ic_elfajr,
-                "SunSet", data.get(i).timings.sunset, R.drawable.ic_volume_high, date
-            )*/
 
             var maghribAdahanModel = PrayerTimeModel(
                 4, R.drawable.ic_elmaghrib,
                 "Maghrib", getTimeOnlyForPrayer(data.get(i).timings.maghrib), 1, date,
-                hijriDate
+                hijriDate,hijriDateEn
             )
 
             var ishaAdahanModel = PrayerTimeModel(
                 5, R.drawable.ic_elisha,
                 "Isha", getTimeOnlyForPrayer(data.get(i).timings.isha), 1, date,
-                hijriDate
+                hijriDate,hijriDateEn
             )
-/*
-
-            var imsakAdahanModel = PrayerTimeModel(
-                7, R.drawable.ic_elfajr,
-                "Imsak", data.get(i).timings.imsak, R.drawable.ic_volume_high, date
-            )
-*/
-
-            /*           var midnightAdahanModel = PrayerTimeModel(
-                           8, R.drawable.ic_elfajr,
-                           "Midnight", data.get(i).timings.midnight, R.drawable.ic_volume_high, date
-                       )
-           */
             prayerList = ArrayList()
             prayerList.add(0, fajrAdahanModel)
             prayerList.add(1, sunRiseAdahanModel)
             prayerList.add(2, dhurAdahanModel)
             prayerList.add(3, asrAdahanModel)
-//            supplierNames1.add(4, sunSetAdahanModel)
             prayerList.add(4, maghribAdahanModel)
             prayerList.add(5, ishaAdahanModel)
-//            supplierNames1.add(7, imsakAdahanModel)
-//            supplierNames1.add(6, midnightAdahanModel)
-            vm.savePrayerTimes(requireContext(), prayerList)
+
+            homeFragmentViewModel.savePrayerTimes(requireContext(), prayerList)
             if (localTime.equals(date)) {
-                binding.dateHijri.text =
-                    data[i].date.hijri.day + " " + data[i].date.hijri.month.ar +
-                            " " + data[i].date.hijri.year
+                if(homeFragmentViewModel.preference.getLanguage().equals("ar")) {
+                    binding.dateHijri.text =
+                        data[i].date.hijri.day + " " + data[i].date.hijri.month.ar +
+                                " " + data[i].date.hijri.year
+                }else{
+                    binding.dateHijri.text =
+                        data[i].date.hijri.day + " " + data[i].date.hijri.month.en +
+                                " " + data[i].date.hijri.year
+                }
 
                 nextPrayersId = nextPrayer(prayerList, currentHour)
                 for (i in 0..prayerList.size - 1) {
@@ -349,14 +312,12 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                             getString(R.string.remaining_time_for) + " " + getNameOfPrayerInArabic(
                                 requireContext(), i
                             )
-//                        binding.remainingTimeForNextPrayerValue.text = remainingTimeForNextPrayer
 
                         counterForNextPrayer(remainingTimeForNextPrayer)
                         flagFoundPrayerId = true
 
-
                         binding.prayerTimesList.adapter =
-                            vm.preference.getLanguage()?.let {
+                            homeFragmentViewModel.preference.getLanguage()?.let {
                                 PrayerAdapter(
                                     requireContext(),
                                     prayerList,
@@ -369,9 +330,9 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                     }
                 }
                 if (!flagFoundPrayerId) {
-                    vm.getPrayerTimesForSpecificDate(nextDay, requireContext())
+                    homeFragmentViewModel.getPrayerTimesForSpecificDate(nextDay, requireContext())
                         .observe(requireActivity(), androidx.lifecycle.Observer { prayer ->
-                            if (!prayer.isNullOrEmpty() && context!=null) {
+                            if (!prayer.isNullOrEmpty() && context != null) {
                                 binding.remainingTimeForNextPrayer.text =
                                     getString(R.string.remaining_time_for) + getNameOfPrayerInArabic(
                                         requireContext(),
@@ -383,11 +344,9 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                                         currentDateForChecking,
                                         nextPrayerTime
                                     )
-                                /*binding.remainingTimeForNextPrayerValue.text =
-                                    remainingTimeForNextPrayer*/
                                 counterForNextPrayer(remainingTimeForNextPrayer)
                                 binding.prayerTimesList.adapter =
-                                    vm.preference.getLanguage()?.let {
+                                    homeFragmentViewModel.preference.getLanguage()?.let {
                                         PrayerAdapter(
                                             requireContext(),
                                             prayerList,
@@ -404,12 +363,10 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
 
         }
 
-//        binding.prayerTimesList.layoutManager = linearLayoutManager
         binding.prayerTimesList.isNestedScrollingEnabled = false
-
     }
 
-    fun counterForNextPrayer(time: String) {
+    private fun counterForNextPrayer(time: String) {
         val remainingHours = time.substring(0, 2).toLong()
         var totalConvertedMinutes = 0L
         if (!remainingHours.equals(0)) {
@@ -418,8 +375,8 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
 
         if (time.length == 5) {
             val yourMinutes = time.substring(3, 5).toLong()
-
-            val timer = object : CountDownTimer(
+            countDownTimer?.cancel()
+            countDownTimer = object : CountDownTimer(
                 TimeUnit.MINUTES.toMillis(totalConvertedMinutes + yourMinutes),
                 1000
             ) {
@@ -447,7 +404,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
 
                 }
             }
-            timer.start()
+            countDownTimer?.start()
         } else {
             return
         }
@@ -471,64 +428,58 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission")
     private fun initLocationListener() {
-//        if (!fusedLocationClient?.lastLocation?.equals(null)) {
+        fusedLocationClient =
+            activity?.let { LocationServices.getFusedLocationProviderClient(it) }
+        fusedLocationClient?.lastLocation?.addOnSuccessListener {
 
-            fusedLocationClient =
-                activity?.let { LocationServices.getFusedLocationProviderClient(it) }
-            fusedLocationClient?.lastLocation?.addOnSuccessListener {
+            if (getAndSetCurrentCityFromLatLon(
+                    it.latitude.toString(),
+                    it.longitude.toString()
+                ) == "Not Found"
+            ) {
 
-                if (getAndSetCurrentCityFromLatLon(
-                        it.latitude.toString(),
-                        it.longitude.toString()
-                    ) == "Not Found"
-                ) {
-
-                    binding.deviceCurrentLocation.text =
-                        getString(R.string.couldnt_find_your_address)
-                } else {
-                    binding.deviceCurrentLocation.text = getAndSetCurrentCityFromLatLon(
-                        it.latitude.toString(),
-                        it.longitude.toString()
-                    )
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    vm.preference.setLat(it.latitude.toString())
-                    vm.preference.setLong(it.longitude.toString())
-                        initQiblaDirection(it.latitude, it.longitude)
-                    initPrayerTimes(it.latitude, it.longitude)
-                }
+                binding.deviceCurrentLocation.text =
+                    getString(R.string.couldnt_find_your_address)
+            } else {
+                binding.deviceCurrentLocation.text = getAndSetCurrentCityFromLatLon(
+                    it.latitude.toString(),
+                    it.longitude.toString()
+                )
             }
-            fusedLocationClient?.lastLocation?.addOnFailureListener {
-                Toast.makeText(requireContext(), "Err: " + it.localizedMessage, Toast.LENGTH_SHORT)
-                    .show()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                homeFragmentViewModel.preference.setLat(it.latitude.toString())
+                homeFragmentViewModel.preference.setLong(it.longitude.toString())
+                initQiblaDirection(it.latitude, it.longitude)
+                initPrayerTimes(it.latitude, it.longitude)
             }
-
-//        }
+        }
+        fusedLocationClient?.lastLocation?.addOnFailureListener {
+            Toast.makeText(requireContext(), "Err: " + it.localizedMessage, Toast.LENGTH_SHORT)
+                .show()
+        }
 
     }
-
-    var apiCall = false
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initPrayerTimes(latitude: Double, longitude: Double) {
 //        linearLayoutManager = LinearLayoutManager(requireContext())
-        vm.getPrayerTimesForSpecificDate(localTime, requireContext())
+        homeFragmentViewModel.getPrayerTimesForSpecificDate(localTime, requireContext())
             .observe(requireActivity(), androidx.lifecycle.Observer { prayer ->
                 if (!prayer.isNullOrEmpty() && !apiCall && context != null) {
                     getPrayerTimesFromDatabase(prayer)
-//                    binding.prayerTimesList.layoutManager = linearLayoutManager
                     binding.prayerTimesList.isNestedScrollingEnabled = false
                     renderLoading(false)
 
                 } else if (latitude != 0.0 && longitude != 0.0) {
-                    vm.getAlAdahanAPI(
+                    homeFragmentViewModel.getAlAdahanAPI(
                         latitude.toString(),
                         longitude.toString(),
                         "5",
                         monthOfTheYear,
                         currentYear
                     )
-                    vm.viewStateAlAdahan.observe(this, { viewState ->
+
+                    homeFragmentViewModel.viewStateAlAdahan.observe(this) { viewState ->
                         when (viewState) {
                             is AlAdahanViewState.Loading -> {
                                 renderLoading(viewState.show)
@@ -544,25 +495,29 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                             }
                             else -> renderLoading(false)
                         }
-                    })
-//                    fusedLocationClient.removeLocationUpdates(locationCallback);
-
+                    }
 
                     initQiblaDirection(latitude, longitude)
-                    binding.deviceCurrentLocation.text =
-                        getAndSetCurrentCityFromLatLon(latitude.toString(), longitude.toString())
                 }
+                binding.deviceCurrentLocation.text =
+                    getAndSetCurrentCityFromLatLon(latitude.toString(), longitude.toString())
             })
 
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getPrayerTimesFromDatabase(prayer: List<PrayerTimeModel>) {
-        binding.dateHijri.text =
-            prayer[0].hijriDate
-        val currentHourDateFormat: DateFormat = SimpleDateFormat("HH:mm",Locale("en"))
+        val date : String
+        if(homeFragmentViewModel.preference.getLanguage().equals("ar"))
+            date= prayer[0].hijriDate
+        else
+            date = prayer[0].hijriDateEn
+
+        binding.dateHijri.text = date
+
+        val currentHourDateFormat: DateFormat = SimpleDateFormat("HH:mm", Locale("en"))
         val currentHour = currentHourDateFormat.format(cal.time)
-        val dateFormatForChecking: DateFormat = SimpleDateFormat("HH:mm dd-MM-yyyy",Locale("en"))
+        val dateFormatForChecking: DateFormat = SimpleDateFormat("HH:mm dd-MM-yyyy", Locale("en"))
         val currentDateForChecking = dateFormatForChecking.format(cal.time)
         nextPrayersId = nextPrayer(prayer.toMutableList(), currentHour)
         if (nextPrayersId != 300) {
@@ -579,14 +534,15 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
             counterForNextPrayer(remainingTimeForNextPrayer)
 
             binding.prayerTimesList.adapter =
-                vm.preference.getLanguage()?.let {
-                    PrayerAdapter(requireContext(), prayer, nextPrayersId, this, arrayList ,
+                homeFragmentViewModel.preference.getLanguage()?.let {
+                    PrayerAdapter(
+                        requireContext(), prayer, nextPrayersId, this, arrayList,
                         it
                     )
                 }
 
         } else if (context != null) {
-            vm.getPrayerTimesForSpecificDate(nextDay, requireContext())
+            homeFragmentViewModel.getPrayerTimesForSpecificDate(nextDay, requireContext())
                 .observe(requireActivity(), androidx.lifecycle.Observer { prayer ->
                     if (!prayer.isNullOrEmpty() && context != null) {
                         binding.remainingTimeForNextPrayer.text =
@@ -598,12 +554,12 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                         val nextPrayerTime = prayer[0].time + " " + prayer[0].date
                         val remainingTimeForNextPrayer =
                             remainingTimeForNextPrayer(currentDateForChecking, nextPrayerTime)
-                        /*  binding.remainingTimeForNextPrayerValue.text =
-                              remainingTimeForNextPrayer*/
+
                         counterForNextPrayer(remainingTimeForNextPrayer)
                         binding.prayerTimesList.adapter =
-                            vm.preference.getLanguage()?.let {
-                                PrayerAdapter(requireContext(), prayer, nextPrayersId, this, arrayList,
+                            homeFragmentViewModel.preference.getLanguage()?.let {
+                                PrayerAdapter(
+                                    requireContext(), prayer, nextPrayersId, this, arrayList,
                                     it
                                 )
                             }
@@ -615,7 +571,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
     private fun getAndSetCurrentCityFromLatLon(latitude: String, longitude: String): String {
         if (context != null) {
             val addresses: List<Address>
-            val geocoder = Geocoder(requireContext(), Locale(vm.preference.getLanguage()))
+            val geocoder = Geocoder(requireContext(), Locale(homeFragmentViewModel.preference.getLanguage()))
             try {
 
                 addresses = geocoder.getFromLocation(
@@ -633,10 +589,10 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                         city = addresses[0].getLocality()
                     val country: String = addresses[0].getCountryName()
                     val currentCity = "$country, $city"
-                    if(currentCity != vm.preference.getCity())
+                    if (currentCity != homeFragmentViewModel.preference.getCity())
                         apiCall = true
 
-                    vm.preference.setCity(currentCity)
+                    homeFragmentViewModel.preference.setCity(currentCity)
 
                     return currentCity
                 }
@@ -653,13 +609,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
     @SuppressLint("MissingPermission")
     private fun getLocationUpdates() {
         getUserLocation()
-        locationRequest = LocationRequest()
-        locationRequest.interval = 20 * 1000
-        locationRequest.fastestInterval = 10000
-        locationRequest.smallestDisplacement = 170f // 170 m = 0.1 mile
-        locationRequest.priority =
-            LocationRequest.PRIORITY_HIGH_ACCURACY //set according to your app function
-
         locationCallback = object : LocationCallback() {
             @SuppressLint("MissingPermission")
             @RequiresApi(Build.VERSION_CODES.O)
@@ -671,22 +620,45 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                             locationResult.lastLocation
 //                        initPrayerTimes(location.latitude,location.longitude)
                     } else {
-
-                        fusedLocationClient?.requestLocationUpdates(
-                            locationRequest,
-                            locationCallback,
-                            Looper.getMainLooper()
-                        )
+                        if (homeFragmentViewModel.preference.getLat().isNullOrBlank() ||
+                            homeFragmentViewModel.preference.getLat().isNullOrEmpty()
+                        ) {
+                            fusedLocationClient?.requestLocationUpdates(
+                                locationRequest,
+                                locationCallback,
+                                Looper.getMainLooper()
+                            )
+                        } else {
+                            homeFragmentViewModel.preference.getLong()?.let { it1 ->
+                                homeFragmentViewModel.preference.getLat()?.toDouble()?.let { it2 ->
+                                    initPrayerTimes(
+                                        it2,
+                                        it1.toDouble()
+                                    )
+                                }
+                            }
+                        }
 
                     }
                 } else {
-
-                    fusedLocationClient?.requestLocationUpdates(
-                        locationRequest,
-                        locationCallback,
-                        Looper.getMainLooper()
-                    )
-
+                    if (homeFragmentViewModel.preference.getLat().isNullOrBlank() ||
+                        homeFragmentViewModel.preference.getLat().isNullOrEmpty()
+                    ) {
+                        /*       fusedLocationClient?.requestLocationUpdates(
+                                   locationRequest,
+                                   locationCallback,
+                                   Looper.getMainLooper()
+                               )*/
+                    } else {
+                        homeFragmentViewModel.preference.getLong()?.let { it1 ->
+                            homeFragmentViewModel.preference.getLat()?.toDouble()?.let { it2 ->
+                                initPrayerTimes(
+                                    it2,
+                                    it1.toDouble()
+                                )
+                            }
+                        }
+                    }
 
                 }
             }
@@ -710,113 +682,122 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
             )
         }
     }
-        override fun onSensorChanged(event: SensorEvent?) {
-            val degree: Float = event?.values?.get(0)?.roundToInt()?.toFloat()!!
-            var head: Float = event.values?.get(0)?.roundToInt()?.toFloat()!!
 
-            val destLocation = Location("Destination Location")
-            destLocation.latitude = HomeFragment.QIBLA_LATITUDE
-            destLocation.longitude = HomeFragment.QIBLA_LONGITUDE
+    override fun onSensorChanged(event: SensorEvent?) {
+        val degree: Float = event?.values?.get(0)?.roundToInt()?.toFloat()!!
+        var head: Float = event.values?.get(0)?.roundToInt()?.toFloat()!!
 
-            var bearTo = userLocation?.bearingTo(destLocation)
+        val destLocation = Location("Destination Location")
+        destLocation.latitude = HomeFragment.QIBLA_LATITUDE
+        destLocation.longitude = HomeFragment.QIBLA_LONGITUDE
 
-            val geoField = userLocation?.latitude?.let {
-                userLocation?.longitude?.let { it1 ->
-                    userLocation?.altitude?.let { it2 ->
-                        GeomagneticField(
-                            it.toFloat(),
-                            it1.toFloat(),
-                            it2.toFloat(),
-                            System.currentTimeMillis()
-                        )
-                    }
+        var bearTo = userLocation?.bearingTo(destLocation)
+
+        val geoField = userLocation?.latitude?.let {
+            userLocation?.longitude?.let { it1 ->
+                userLocation?.altitude?.let { it2 ->
+                    GeomagneticField(
+                        it.toFloat(),
+                        it1.toFloat(),
+                        it2.toFloat(),
+                        System.currentTimeMillis()
+                    )
                 }
             }
+        }
 
-            head -= geoField?.declination!!
+        head -= geoField?.declination!!
 
-            if (bearTo != null) {
-                if (bearTo < 0) {
-                    bearTo += 360
-                }
+        if (bearTo != null) {
+            if (bearTo < 0) {
+                bearTo += 360
             }
+        }
 
 
-            var direction = bearTo?.minus(head)
+        var direction = bearTo?.minus(head)
 
-            if (direction != null) {
-                if (direction < 0) {
-                    direction += 360
-                }
+        if (direction != null) {
+            if (direction < 0) {
+                direction += 360
             }
+        }
 
-            binding.qiblahDirection.text = "Heading : $degree + degrees"
+        binding.qiblahDirection.text = "Heading : $degree + degrees"
 
-            binding.qiblahDirection.text = currentNeedleDegree.toString()
+        binding.qiblahDirection.text = currentNeedleDegree.toString()
 
-            needleAnimation = direction?.let {
-                RotateAnimation(
-                    currentNeedleDegree,
-                    it,
-                    Animation.RELATIVE_TO_SELF,
-                    .5f,
-                    Animation.RELATIVE_TO_SELF,
-                    .5f
+        needleAnimation = direction?.let {
+            RotateAnimation(
+                currentNeedleDegree,
+                it,
+                Animation.RELATIVE_TO_SELF,
+                .5f,
+                Animation.RELATIVE_TO_SELF,
+                .5f
+            )
+        }
+        needleAnimation?.fillAfter = true
+        needleAnimation?.duration = 200
+
+        binding.ivQiblaDirection.startAnimation(needleAnimation)
+        if (direction != null) {
+            currentNeedleDegree = direction
+        }
+        currentDegree = -degree
+
+        if (currentNeedleDegree <= 10 || currentNeedleDegree >= 350) {
+            context?.getColor(R.color.logoOrangeColor)?.let {
+                binding.ivQiblaDirection.setColorFilter(
+                    it
                 )
             }
-            needleAnimation?.fillAfter = true
-            needleAnimation?.duration = 200
-
-            binding.ivQiblaDirection.startAnimation(needleAnimation)
-            if (direction != null) {
-                currentNeedleDegree = direction
+            context?.getColor(R.color.logoOrangeColor)?.let {
+                binding.qiblahDirection.setTextColor(
+                    it
+                )
             }
-            currentDegree = -degree
+        } else {
 
-            if (currentNeedleDegree <= 10 || currentNeedleDegree >= 350) {
-                context?.getColor(R.color.logoOrangeColor)?.let {
-                    binding.ivQiblaDirection.setColorFilter(
-                        it
-                    )
-                }
-                context?.getColor(R.color.logoOrangeColor)?.let {
-                    binding.qiblahDirection.setTextColor(
-                        it
-                    )
-                }
-            } else {
+            context?.getColor(R.color.backgroundGreen)?.let {
+                binding.ivQiblaDirection.setColorFilter(
+                    it
+                )
+            }
 
-                context?.getColor(R.color.backgroundGreen)?.let {
-                    binding.ivQiblaDirection.setColorFilter(
-                        it
-                    )
-                }
-
-                context?.getColor(R.color.textColorQiblahDegrees)?.let {
-                    binding.qiblahDirection.setTextColor(
-                        it
-                    )
-                }
-
-
+            context?.getColor(R.color.textColorQiblahDegrees)?.let {
+                binding.qiblahDirection.setTextColor(
+                    it
+                )
             }
 
 
         }
-        override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-        }
 
-        override fun onResume() {
-        super.onResume()
+
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+    }
+
+    override fun onPause() {
+        super.onPause()
+        countDownTimer?.cancel()
         binding.remainingTimeForNextPrayerValue.text = ""
-        getUserLocation()
-        renderLoading(true)
-        sensorManager?.registerListener(
-            this,
-            sensor,
-            SensorManager.SENSOR_DELAY_NORMAL
-        )
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        renderLoading(true)
+        if (!handleLocalPrayerData()) {
+            getUserLocation()
+            sensorManager?.registerListener(
+                this,
+                sensor,
+                SensorManager.SENSOR_DELAY_NORMAL
+            )
+        }
     }
 
     override fun onStop() {
@@ -827,8 +808,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
 
     @SuppressLint("MissingPermission")
     fun getUserLocation() {
-
-        val locationRequest = LocationRequest.create().apply {
+        locationRequest = LocationRequest.create().apply {
             interval = 10000
             fastestInterval = 5000
             smallestDisplacement = 100f
@@ -858,6 +838,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                     Looper.getMainLooper()
                 )
             } else {
+                handleLocalPrayerData()
             }
 
         }
@@ -869,7 +850,8 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                 try {
                     // Show the dialog by calling startResolutionForResult(),
                     // and check the result in onActivityResult().
-                    exception.startResolutionForResult(this.requireActivity(), 0x1)
+//                    exception.startResolutionForResult(this.requireActivity(), 0x1)
+                    handleLocalPrayerData()
                 } catch (sendEx: IntentSender.SendIntentException) {
                     // Ignore the error.
                 }
@@ -879,31 +861,46 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
 
     }
 
+    private fun handleLocalPrayerData(): Boolean {
+        if (!homeFragmentViewModel.preference.getLat().isNullOrEmpty() || !homeFragmentViewModel.preference.getLat().isNullOrBlank()) {
+            homeFragmentViewModel.preference.getLong()?.let { it1 ->
+                homeFragmentViewModel.preference.getLat()?.toDouble()?.let { it2 ->
+                    initPrayerTimes(
+                        it2,
+                        it1.toDouble()
+                    )
+                }
+            }
+            return true
+        }
+        return false
+    }
+
     override fun prayerId(id: Int) {
-        if (id == 0 && vm.preference.getFajr())
-            vm.preference.setFajr(false)
-        else if (id == 0 && !vm.preference.getFajr())
-            vm.preference.setFajr(true)
-        else if (id == 1 && vm.preference.getSunRise())
-            vm.preference.setSunRise(false)
-        else if (id == 1 && !vm.preference.getSunRise())
-            vm.preference.setSunRise(true)
-        else if (id == 2 && vm.preference.getDuhr())
-            vm.preference.setDuhr(false)
-        else if (id == 2 && !vm.preference.getDuhr())
-            vm.preference.setDuhr(true)
-        else if (id == 3 && vm.preference.getAsr())
-            vm.preference.setAsr(false)
-        else if (id == 3 && !vm.preference.getAsr())
-            vm.preference.setAsr(true)
-        else if (id == 4 && vm.preference.getMaghrib())
-            vm.preference.setMaghrib(false)
-        else if (id == 4 && !vm.preference.getMaghrib())
-            vm.preference.setMaghrib(true)
-        else if (id == 5 && vm.preference.getIsha())
-            vm.preference.setIsha(false)
-        else if (id == 5 && !vm.preference.getIsha())
-            vm.preference.setIsha(true)
+        if (id == 0 && homeFragmentViewModel.preference.getFajr())
+            homeFragmentViewModel.preference.setFajr(false)
+        else if (id == 0 && !homeFragmentViewModel.preference.getFajr())
+            homeFragmentViewModel.preference.setFajr(true)
+        else if (id == 1 && homeFragmentViewModel.preference.getSunRise())
+            homeFragmentViewModel.preference.setSunRise(false)
+        else if (id == 1 && !homeFragmentViewModel.preference.getSunRise())
+            homeFragmentViewModel.preference.setSunRise(true)
+        else if (id == 2 && homeFragmentViewModel.preference.getDuhr())
+            homeFragmentViewModel.preference.setDuhr(false)
+        else if (id == 2 && !homeFragmentViewModel.preference.getDuhr())
+            homeFragmentViewModel.preference.setDuhr(true)
+        else if (id == 3 && homeFragmentViewModel.preference.getAsr())
+            homeFragmentViewModel.preference.setAsr(false)
+        else if (id == 3 && !homeFragmentViewModel.preference.getAsr())
+            homeFragmentViewModel.preference.setAsr(true)
+        else if (id == 4 && homeFragmentViewModel.preference.getMaghrib())
+            homeFragmentViewModel.preference.setMaghrib(false)
+        else if (id == 4 && !homeFragmentViewModel.preference.getMaghrib())
+            homeFragmentViewModel.preference.setMaghrib(true)
+        else if (id == 5 && homeFragmentViewModel.preference.getIsha())
+            homeFragmentViewModel.preference.setIsha(false)
+        else if (id == 5 && !homeFragmentViewModel.preference.getIsha())
+            homeFragmentViewModel.preference.setIsha(true)
 
     }
 }

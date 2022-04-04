@@ -79,42 +79,44 @@ class MonthlyAlarmWorker(appContext: Context, params: WorkerParameters):
 
             var hijriDate = data[i].date.hijri.day + " " + data[i].date.hijri.month.ar +
                     " " + data[i].date.hijri.year
+            var hijriDateEn = data[i].date.hijri.day + " " + data[i].date.hijri.month.en +
+                    " " + data[i].date.hijri.year
 
             var fajrAdahanModel = PrayerTimeModel(
                 0, R.drawable.ic_elfajr,
                 "Fajr", getTimeOnlyForPrayer(data.get(i).timings.fajr), 1, date,
-                hijriDate
+                hijriDate,hijriDateEn
             )
 
             var sunRiseAdahanModel = PrayerTimeModel(
                 1, R.drawable.ic_sunrise,
                 "Sunrise", getTimeOnlyForPrayer(data.get(i).timings.sunrise), 1, date,
-                hijriDate
+                hijriDate,hijriDateEn
             )
 
             var dhurAdahanModel = PrayerTimeModel(
                 2, R.drawable.ic_eldhur,
                 "Dhur", getTimeOnlyForPrayer(data.get(i).timings.dhuhr), 1, date,
-                hijriDate
+                hijriDate,hijriDateEn
             )
 
             var asrAdahanModel = PrayerTimeModel(
                 3, R.drawable.ic_elasr,
                 "Asr", getTimeOnlyForPrayer(data.get(i).timings.asr), 1, date,
-                hijriDate
+                hijriDate,hijriDateEn
             )
 
 
             var maghribAdahanModel = PrayerTimeModel(
                 4, R.drawable.ic_elmaghrib,
                 "Maghrib", getTimeOnlyForPrayer(data.get(i).timings.maghrib), 1, date,
-                hijriDate
+                hijriDate,hijriDateEn
             )
 
             var ishaAdahanModel = PrayerTimeModel(
                 5, R.drawable.ic_elisha,
                 "Isha", getTimeOnlyForPrayer(data.get(i).timings.isha), 1, date,
-                hijriDate
+                hijriDate,hijriDateEn
             )
 
 

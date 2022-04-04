@@ -40,7 +40,7 @@ class SahihBukharyActivity : AppCompatActivity() {
             if (sahihBukharyViewModel.preference.getLanguage().equals("ar"))
                 "sahih_bukhary_arabic.pdf"
             else
-                "sahih_bukhary_english.pdf"
+                "sahih_bukhari_english.pdf"
         }else{
             "the_40s.pdf"
         }

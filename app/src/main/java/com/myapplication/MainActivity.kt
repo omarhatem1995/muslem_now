@@ -47,7 +47,7 @@ open class MainActivity : AppCompatActivity() {
     private val fusedLocationProviderClient: FusedLocationProviderClient? = null
     private var mLocationRequest: LocationRequest? = null
     private var currentLocation: Location? = null
-
+    private var firstTimeAskPermission = true
     lateinit var bottomNavigationView: BottomNavigationView
     var homeFragment = HomeFragment()
     var quranFragment = QuranFragment()
@@ -129,7 +129,9 @@ open class MainActivity : AppCompatActivity() {
         if (!checkLocationPermissionCall()) {
             getLocationPermission()
         }else {
-            enableGPS()
+            if(firstTimeAskPermission) {
+                enableGPS()
+            }
         }
     }
 
@@ -327,6 +329,10 @@ open class MainActivity : AppCompatActivity() {
         ) { e: Exception? ->
             if (e is ResolvableApiException) {
                 try {
+                    if(viewModel.preferences.getLat() != null
+                        && viewModel.preferences.getLong() != null){
+                        firstTimeAskPermission = false
+                    }
                     e.startResolutionForResult(
                         this,
                         REQUEST_CHECK_SETTINGS

@@ -23,13 +23,17 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
+
 @DelicateCoroutinesApi
-class ElSalahWorker(appContext: Context, params: WorkerParameters):
+class ElSalahWorker(appContext: Context, params: WorkerParameters) :
     CoroutineWorker(appContext, params) {
 
-    private val sharedPreferencesRepository:SharedPreferencesRepository = SharedPreferencesRepository(
-        appContext as Application
-    )
+    private val sharedPreferencesRepository: SharedPreferencesRepository =
+        SharedPreferencesRepository(
+            appContext as Application
+        )
+
     @InternalCoroutinesApi
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun doWork(): Result {
@@ -38,8 +42,7 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
             setSalahAlarm()
             sharedPreferencesRepository.setAlarmState(true)
             Result.success()
-        }catch (e:Exception)
-        {
+        } catch (e: Exception) {
             Result.retry()
 
         }
@@ -47,23 +50,22 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
     }
 
 
-
-     @InternalCoroutinesApi
-     @RequiresApi(Build.VERSION_CODES.O)
-     @DelicateCoroutinesApi
+    @InternalCoroutinesApi
+    @RequiresApi(Build.VERSION_CODES.O)
+    @DelicateCoroutinesApi
     // @RequiresApi(Build.VERSION_CODES.S)
-     fun setSalahAlarm()
-    {
+    fun setSalahAlarm() {
         val c: Date = Calendar.getInstance().time
         println("Current time => $c")
 
         val df = SimpleDateFormat("dd-MM-yyyy", Locale("en"))
         val currentHourDateFormat = SimpleDateFormat("HH:mm", Locale("en"))
-       // df.calendar.timeInMillis
+        // df.calendar.timeInMillis
         val formattedDate: String = df.format(c)
-        val formattedDate2:String = currentHourDateFormat.format(c)
+        val formattedDate2: String = currentHourDateFormat.format(c)
         val dao = MuslemNowDataBase.getDataBase(applicationContext).alAdahanDao()
-        val alarmManager: AlarmManager = applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val alarmManager: AlarmManager =
+            applicationContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         var hasPermission: Boolean? = true
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             hasPermission = alarmManager.canScheduleExactAlarms()
@@ -84,9 +86,9 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
         GlobalScope.launch {
             val prayerTimes = dao.getSpecificDayPrayerTimes(formattedDate).collect {
 
-               val calendar:Calendar = Calendar.getInstance()
+                val calendar: Calendar = Calendar.getInstance()
 
-                val finalList = prayerFilter(it.toMutableList(),formattedDate2)
+                val finalList = prayerFilter(it.toMutableList(), formattedDate2)
 
 
                 finalList.map { prayerTime ->
@@ -98,23 +100,46 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
                         separateNumbers(prayerTime.time)[1],
                         0
                     )
-
+                 /*   val beforeSalah = setBeforeSalahWith15Minutes(separateNumbers(prayerTime.time)[0]
+                        ,separateNumbers(prayerTime.time)[1])
+                    calendar.set(
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH),
+                        beforeSalah[0],
+                        beforeSalah[1],
+                        0
+                    )*/
                     val bundle: Bundle = Bundle()
-                    bundle.putParcelable("prayerTime",prayerTime)
-                    intent2.putExtra("prayerObject",bundle)
+                    bundle.putParcelable("prayerTime", prayerTime)
+                    intent2.putExtra("prayerObject", bundle)
 
                     //FLAG_UPDATE_CURRENT
-                    val alarmPendingIntent: PendingIntent = PendingIntent.getActivity(applicationContext, prayerTime.prayerId, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
-                    var goOffPendingIntent = PendingIntent.getForegroundService(applicationContext, prayerTime.prayerId, intent2, PendingIntent.FLAG_UPDATE_CURRENT)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-                    {
-                         goOffPendingIntent = PendingIntent.getForegroundService(applicationContext, prayerTime.prayerId, intent2, PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+                    val alarmPendingIntent: PendingIntent = PendingIntent.getActivity(
+                        applicationContext,
+                        prayerTime.prayerId,
+                        intent,
+                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                    )
+                    var goOffPendingIntent = PendingIntent.getForegroundService(
+                        applicationContext,
+                        prayerTime.prayerId,
+                        intent2,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                    )
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        goOffPendingIntent = PendingIntent.getForegroundService(
+                            applicationContext,
+                            prayerTime.prayerId,
+                            intent2,
+                            PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                        )
                     }
 
 
-                    val alarmInfo = AlarmManager.AlarmClockInfo(calendar.timeInMillis,alarmPendingIntent )
-                    if (hasPermission == true)
-                    {
+                    val alarmInfo =
+                        AlarmManager.AlarmClockInfo(calendar.timeInMillis, alarmPendingIntent)
+                    if (hasPermission == true) {
                         alarmManager.setAlarmClock(alarmInfo, goOffPendingIntent)
                     }
 
@@ -145,20 +170,24 @@ class ElSalahWorker(appContext: Context, params: WorkerParameters):
     }
 */
 
-    private fun separateNumbers(time:String):ArrayList<Int>
-    {
-       val hour = time.substringBefore(':').toInt()
+    private fun separateNumbers(time: String): ArrayList<Int> {
+        val hour = time.substringBefore(':').toInt()
         val min = time.substringAfter(':').toInt()
-        val timeArray :ArrayList<Int> = arrayListOf()
+        val timeArray: ArrayList<Int> = arrayListOf()
         timeArray.add(hour)
         timeArray.add(min)
-
 
         return timeArray
 
     }
 
-
+    private fun setBeforeSalahWith15Minutes(hours:Int,minutes:Int) : ArrayList<Int> {
+        val hour = hours - 15
+        val minute = minutes - 15
+        val timeArray : ArrayList <Int> = arrayListOf()
+        timeArray.add(hour,minute)
+        return timeArray
+    }
 
 
 }

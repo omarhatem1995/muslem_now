@@ -1,13 +1,15 @@
 package com.myapplication.ui.fragments.azkar
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.RecyclerView
 import com.myapplication.R
 import com.myapplication.databinding.FragmentAzkarBinding
 import org.json.JSONArray
@@ -39,19 +41,37 @@ class AzkarFragment : Fragment() {
             R.layout.fragment_azkar, container, false
         )
         binding.azkarFragment = vm
+        binding.searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            }
 
-     /*   vm.preference.getLanguage()?.let { context?.let { it1 ->
-            LocaleUtil.applyLocalizedContext(
-                it1,
-                it
-            )
-        } }*/
+            override fun onTextChanged(
+                searchQuery: CharSequence,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+                handleSearchOnTextChange(searchQuery)
+            }
 
+            override fun afterTextChanged(s: Editable) {}
+        })
         loadJSONFromAsset()
         return binding.root
     }
 
-    fun loadJSONFromAsset() {
+    private fun handleSearchOnTextChange(searchQuery: CharSequence) {
+        if (searchQuery.isNotEmpty()) {
+            val filteredList = azkarCategoriesList.filter { p ->
+                p.replace("أ","ا").contains(searchQuery, true)
+            }.toList()
+            loadAdapter(filteredList)
+        }
+
+        }
+    var azkarCategoriesList : MutableList<String> = ArrayList()
+
+    private fun loadJSONFromAsset() {
         var json: String? = null
         try {
             val inputStream: InputStream? = context?.assets?.open("categories.json")
@@ -59,16 +79,20 @@ class AzkarFragment : Fragment() {
 
             var jsonArray = JSONArray(json)
 
-            var strings : MutableList<String> = ArrayList()
             for (i in 0 until jsonArray.length()) {
                 var jsonObj = jsonArray.getString(i)
-                strings.add(jsonObj)
-                binding.azkarRecyclerview.adapter = AzkarAdapter(requireContext(),strings)
+                azkarCategoriesList.add(jsonObj)
+                loadAdapter(azkarCategoriesList)
             }
         } catch (ex: IOException) {
             ex.printStackTrace()
 
         }
+    }
+
+    private fun loadAdapter(list:List<String>){
+        binding.azkarRecyclerview.adapter = AzkarAdapter(requireContext(),list)
+
     }
 
 

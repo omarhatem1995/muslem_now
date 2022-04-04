@@ -73,7 +73,7 @@ class SideMenuFragment : Fragment() {
         }
 
         binding.constraintSebha.setOnClickListener {
-            val intent = Intent(context, SebhaActivity::class.java)
+            val intent = Intent(context, RosaryActivity::class.java)
             context?.startActivity(intent)
         }
         binding.constraintNamesOfAllah.setOnClickListener {

@@ -39,7 +39,7 @@
             android:name=".ui.sidemenu.NearByMosquesActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.sidemenu.SebhaActivity"
+            android:name=".ui.sidemenu.RosaryActivity"
             android:exported="false" />
 
         <receiver

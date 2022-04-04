@@ -26,7 +26,7 @@
             android:layout_height="match_parent" />
 
         <ImageView
-            android:id="@+id/azkar_background_image"
+            android:id="@+id/azkarIconImageView"
             android:layout_width="72dp"
             android:layout_height="72dp"
             android:background="@drawable/image_azkar"
@@ -59,14 +59,29 @@
             app:layout_constraintTop_toBottomOf="@id/dailyAzkarTextView"
             app:layout_constraintStart_toStartOf="@id/dailyAzkarTextView" />
 
+        <EditText
+            android:id="@+id/searchEditText"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginEnd="36dp"
+            android:layout_marginTop="8dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:textColor="@color/black"
+            android:hint="@string/search"
+            android:background="@drawable/rounded_white"
+            app:layout_constraintTop_toBottomOf="@id/azkarIconImageView"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/azkar_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/azkar_background_image"
+            app:layout_constraintTop_toBottomOf="@id/searchEditText"
             tools:listitem="@layout/azkar_item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

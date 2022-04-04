@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class QuranActivity : AppCompatActivity() {
 
-    lateinit var binding:ActivityQuranBinding
+    lateinit var binding: ActivityQuranBinding
     var adapter: QuranPagingAdapter? = null
     val viewModel:QuranViewModel by viewModels()
 
