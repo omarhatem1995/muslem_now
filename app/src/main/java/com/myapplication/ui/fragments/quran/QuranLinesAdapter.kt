@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Typeface
 import android.util.Log
 import android.util.TypedValue
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,27 +45,14 @@ class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>, val c
             var typeface: Typeface?
             entities.forEach {
                 val kelma = it.mobileCode
+                val kelmaText = it.text
+                val kelmaPosition = it.position
                 val text = TextView(context)
                 var pageNumber = it.page
                 var suraNumber = it.sura
                 var ayahNumberInSura = it.aya
                 text.contentDescription = "${it.quranAya}"
-//                if (it.page == 1)
-//                {
-                /*}else if (it.page == 2)
-                {
-                    typeface = ResourcesCompat.getFont(context, R.font.p2)!!
 
-                }else if (it.page == 3)
-                {
-                    typeface = ResourcesCompat.getFont(context, R.font.p3)!!
-                }else if (it.page == 4)
-                {
-                    typeface = ResourcesCompat.getFont(context, R.font.p4)!!
-                }else
-                {
-                    typeface = ResourcesCompat.getFont(context, R.font.p5)!!
-                }*/
                 text.text = kelma
                 if(emptyList.contains(position)){
                     binding.headerQuran.text = "\u00F2"
@@ -95,11 +83,16 @@ class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>, val c
                 binding.constraintQuranItem.setOnClickListener {
                     onClick.invoke(com.myapplication.common.Constants.ONCLICK)
                 }
-                // Log.e(null, "onBind: $kelma", )
-                typeface = Typeface.createFromAsset(context.assets,"p$pageNumber.ttf")!!
-                text.typeface = typeface
+
+                if(kelmaPosition != 27) {
+                    typeface = Typeface.createFromAsset(context.assets, "p$pageNumber.ttf")!!
+                    text.typeface = typeface
+                    text.setTextSize(TypedValue.COMPLEX_UNIT_SP,22f)
+                }else{
+                    text.text = kelmaText
+                    text.setTextSize(TypedValue.COMPLEX_UNIT_SP,18f)
+                }
                 //text.gravity = Gravity.CENTER_HORIZONTAL
-                text.setTextSize(TypedValue.COMPLEX_UNIT_SP,22f)
                 binding.quranLine.addView(text)
             }
 

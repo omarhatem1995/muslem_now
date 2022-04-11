@@ -14,19 +14,18 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:gravity="center_horizontal"
-      android:background="@drawable/image"
       tools:context=".ui.fragments.quran.QuranActivity">
 
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/quranRecycler"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        android:layout_marginEnd="12dp"
         android:layoutDirection="rtl"
         android:layout_gravity="center_horizontal"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
