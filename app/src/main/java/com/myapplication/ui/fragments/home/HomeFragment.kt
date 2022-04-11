@@ -411,13 +411,7 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
     }
 
     override fun renderLoading(show: Boolean) {
-        if (show) {
-            progressDialog.show()
-            ViewUtils.showProgressDialog(
-                progressDialog!!
-            )
-        } else
-            progressDialog.dismiss()
+        binding.isLoading = show
     }
 
     override fun renderNetworkFailure() {
@@ -462,7 +456,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initPrayerTimes(latitude: Double, longitude: Double) {
-//        linearLayoutManager = LinearLayoutManager(requireContext())
         homeFragmentViewModel.getPrayerTimesForSpecificDate(localTime, requireContext())
             .observe(requireActivity(), androidx.lifecycle.Observer { prayer ->
                 if (!prayer.isNullOrEmpty() && !apiCall && context != null) {
