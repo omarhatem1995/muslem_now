@@ -268,8 +268,11 @@ class NearByMosquesActivity : AppCompatActivity() , GooglePlacesUseCases.View {
         nearByViewModel.viewStateGooglePlaces.observe(this
         ) { viewState ->
             when (viewState) {
-                is GooglePlacesViewState.Data -> renderMosques(viewState.data)
-                is GooglePlacesViewState.Loading -> renderLoading(false)
+                is GooglePlacesViewState.Data -> {
+                    renderMosques(viewState.data)
+                    renderLoading(false)
+                }
+                is GooglePlacesViewState.Loading -> renderLoading(viewState.show)
                 is GooglePlacesViewState.NetworkFailure -> renderNetworkFailure()
             }
         }
@@ -282,13 +285,7 @@ class NearByMosquesActivity : AppCompatActivity() , GooglePlacesUseCases.View {
     }
 
     override fun renderLoading(show: Boolean) {
-        if (show) {
-            progressDialog.show()
-            ViewUtils.showProgressDialog(
-                progressDialog!!
-            )
-        } else
-            progressDialog.dismiss()
+        binding.isLoading = show
     }
 
     override fun renderNetworkFailure() {

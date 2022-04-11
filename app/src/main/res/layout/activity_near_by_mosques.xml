@@ -5,6 +5,10 @@
 
     <data>
         <variable
+            name="isLoading"
+            type="Boolean" />
+        <import type="android.view.View"/>
+        <variable
             name="nearbyMosquesViewModel"
             type="com.myapplication.ui.fragments.home.HomeViewModel" />
 
@@ -74,6 +78,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="@{isLoading ? View.VISIBLE : View.GONE}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
