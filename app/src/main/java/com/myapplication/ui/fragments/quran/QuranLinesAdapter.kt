@@ -2,7 +2,6 @@ package com.myapplication.ui.fragments.quran
 
 import android.content.Context
 import android.graphics.Typeface
-import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -28,20 +27,6 @@ class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>, val c
     inner class QuranLinesViewHolder(private val binding: QuranItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun onBind(entities: List<QuranVersesEntity>) {
-            //Log.e("QuranLinesAdapter", "onBind:$list ")
-            Log.e("QuranLinesAdapter", "currentList:$currentList ")
-//           val newList = list.map {
-//
-//                val kelma = it.mobileCode
-//                val text = TextView(context)
-//                val  typeface: Typeface = ResourcesCompat.getFont(context, R.font.p1)!!
-//                text.text= kelma
-//                // Log.e(null, "onBind: $kelma", )
-//                text.typeface = typeface
-//               text.id = View.generateViewId()
-//                return
-//
-//            }
             var typeface: Typeface?
             entities.forEach {
                 val kelma = it.mobileCode
@@ -113,8 +98,6 @@ class QuranLinesAdapter(val context: Context,val emptyList:ArrayList<Int>, val c
 
         val line = currentList[position]
 
-        Log.d("lines", "onBindViewHolder: $line")
-//        Toast.makeText(context, line.text, Toast.LENGTH_LONG).show()
         holder.onBind(line)
     }
 
