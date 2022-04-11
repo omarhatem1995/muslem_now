@@ -28,6 +28,10 @@ class QuranSoundBottomSheet : BottomSheetDialogFragment()
     val ABDELBASET = "AbdelBaset"
     val AJAMI = "Ajami"
     val MENSHAWY = "Menshawy"
+    var suraNumberAndAyaInSura: String? = null
+    var suraNumber: String? = null
+    var ayaInSura: String? = null
+    var pageInQuran: String? = null
 
     //    lateinit var player: SimpleExoPlayer
     override fun onCreateView(
@@ -190,10 +194,10 @@ class QuranSoundBottomSheet : BottomSheetDialogFragment()
                 it1
             )
         }
-        val img = context!!.resources.getDrawable(R.drawable.ic_baseline_check_24)
+        val img = requireContext().resources.getDrawable(R.drawable.ic_baseline_check_24)
         binding.mesharyTv.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null)
 
-        val imgUncheck = context!!.resources.getDrawable(R.drawable.ic_baseline_uncheck_24)
+        val imgUncheck = requireContext().resources.getDrawable(R.drawable.ic_baseline_uncheck_24)
         binding.abdelbasetTv.setCompoundDrawablesWithIntrinsicBounds(
             imgUncheck,
             null,
@@ -242,10 +246,10 @@ class QuranSoundBottomSheet : BottomSheetDialogFragment()
                 it1
             )
         }
-        val img = context!!.resources.getDrawable(R.drawable.ic_baseline_check_24)
+        val img = requireContext().resources.getDrawable(R.drawable.ic_baseline_check_24)
         binding.menshawyTv.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null)
 
-        val imgUncheck = context!!.resources.getDrawable(R.drawable.ic_baseline_uncheck_24)
+        val imgUncheck = requireContext().resources.getDrawable(R.drawable.ic_baseline_uncheck_24)
         binding.abdelbasetTv.setCompoundDrawablesWithIntrinsicBounds(
             imgUncheck,
             null,
@@ -293,10 +297,10 @@ class QuranSoundBottomSheet : BottomSheetDialogFragment()
                 it1
             )
         }
-        val img = context!!.resources.getDrawable(R.drawable.ic_baseline_check_24)
+        val img = requireContext().resources.getDrawable(R.drawable.ic_baseline_check_24)
         binding.abdelbasetTv.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null)
 
-        val imgUncheck = context!!.resources.getDrawable(R.drawable.ic_baseline_uncheck_24)
+        val imgUncheck = requireContext().resources.getDrawable(R.drawable.ic_baseline_uncheck_24)
         binding.mesharyTv.setCompoundDrawablesWithIntrinsicBounds(
             imgUncheck,
             null,
@@ -345,10 +349,10 @@ class QuranSoundBottomSheet : BottomSheetDialogFragment()
                 it1
             )
         }
-        val img = context!!.resources.getDrawable(R.drawable.ic_baseline_check_24)
+        val img = requireContext().resources.getDrawable(R.drawable.ic_baseline_check_24)
         binding.ajamiTv.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null)
 
-        val imgUncheck = context!!.resources.getDrawable(R.drawable.ic_baseline_uncheck_24)
+        val imgUncheck = requireContext().resources.getDrawable(R.drawable.ic_baseline_uncheck_24)
         binding.mesharyTv.setCompoundDrawablesWithIntrinsicBounds(
             imgUncheck,
             null,
@@ -390,11 +394,6 @@ class QuranSoundBottomSheet : BottomSheetDialogFragment()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     }
-
-    var suraNumberAndAyaInSura: String? = null
-    var suraNumber: String? = null
-    var ayaInSura: String? = null
-    var pageInQuran: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.AppBottomSheetDialogTheme)

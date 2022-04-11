@@ -49,20 +49,15 @@ class QuranActivity : AppCompatActivity() {
         }
 
         binding.quranRecycler.adapter = adapter
-
         viewModel.getPagingData(pageNumber)
-
 //        pageNumber -=1
 
         binding.quranRecycler.addOnScrollListener(object: RecyclerView.OnScrollListener() {
-
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (pageNumber  > 604)
                 {
-
-                    if (dx<0)
-                    {
+                    if (dx<0) {
                         this@QuranActivity.finish()
                     }
                 }
@@ -71,11 +66,8 @@ class QuranActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             viewModel.quranFlow.flowWithLifecycle(lifecycle,Lifecycle.State.STARTED).collectLatest {
-
                 if (it != null) {
-
                     adapter!!.submitList(it)
-
                     binding.quranRecycler.scrollToPosition(pageNumber-1)
                 }
 
@@ -84,26 +76,17 @@ class QuranActivity : AppCompatActivity() {
 
         adapter?.let {
             it.getNewPages.observe(this){ position->
-                if (position>0)
-                {
+                if (position>0) {
                     pageNumber = position
                 }
 
-                if (position in 1..603 && position%5 ==0)
-                {
+                if (position in 1..603 && position%5 ==0) {
                     viewModel.getPagingData(position-1)
                 }
-
-
 
             }
         }
 
-
-    }
-
-    override fun onStop() {
-        super.onStop()
 
     }
 

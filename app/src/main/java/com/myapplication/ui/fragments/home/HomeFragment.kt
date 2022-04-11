@@ -644,11 +644,6 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
                     if (homeFragmentViewModel.preference.getLat().isNullOrBlank() ||
                         homeFragmentViewModel.preference.getLat().isNullOrEmpty()
                     ) {
-                        /*       fusedLocationClient?.requestLocationUpdates(
-                                   locationRequest,
-                                   locationCallback,
-                                   Looper.getMainLooper()
-                               )*/
                     } else {
                         homeFragmentViewModel.preference.getLong()?.let { it1 ->
                             homeFragmentViewModel.preference.getLat()?.toDouble()?.let { it2 ->

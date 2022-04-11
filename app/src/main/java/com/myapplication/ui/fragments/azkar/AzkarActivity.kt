@@ -98,28 +98,28 @@ class AzkarActivity : AppCompatActivity() {
         } else {
             if (name != null) {
                 viewModel.getSpecificDayAzkar(name)
-                    viewModel.viewStateAzkar.observe(this, {
+                    viewModel.viewStateAzkar.observe(this) {
                         if (it != null) {
-                        val adapter = AzkarListAdapter { type, data ->
-                            when (type) {
-                                Constants.INCREASEADAPTER -> {
-                                    updateAzkarModel.add(data)
-                                }
-                                Constants.RESETADAPTER -> {
-                                    updateAzkarModel.add(data)
-                                    viewModel.update(2, 3, updateAzkarModel)
+                            val adapter = AzkarListAdapter { type, data ->
+                                when (type) {
+                                    Constants.INCREASEADAPTER -> {
+                                        updateAzkarModel.add(data)
+                                    }
+                                    Constants.RESETADAPTER -> {
+                                        updateAzkarModel.add(data)
+                                        viewModel.update(2, 3, updateAzkarModel)
+                                    }
                                 }
                             }
-                        }
                             adapter.submitList(it)
                             binding.azkarRecyclerViewList.adapter = adapter
                             binding.azkarRecyclerViewList.adapter?.stateRestorationPolicy =
                                 RecyclerView.Adapter.StateRestorationPolicy.ALLOW
                             binding.azkarRecyclerViewList.layoutManager
                                 ?.onRestoreInstanceState(recyclerViewState)
-                    }
+                        }
 
-                })
+                    }
 
             }
 

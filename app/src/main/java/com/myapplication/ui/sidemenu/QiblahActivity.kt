@@ -3,6 +3,9 @@ package com.myapplication.ui.sidemenu
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.hardware.*
 import android.location.Location
@@ -18,13 +21,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import com.google.android.gms.location.LocationServices
 import com.myapplication.databinding.ActivityQiblahBinding
 import com.myapplication.ui.fragments.home.HomeFragment
 import com.myapplication.ui.fragments.home.HomeViewModel
 import kotlin.math.roundToInt
 import android.hardware.SensorManager
 import android.hardware.SensorEventListener
+import android.net.Uri
+import android.os.Looper
+import android.provider.Settings
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
 import com.myapplication.R
 
 
@@ -50,6 +57,7 @@ class QiblahActivity : AppCompatActivity() , SensorEventListener{
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_qiblah)
         binding.homeViewmodel = qiblahViewModel
+        mLocationRequest = LocationRequest.create()
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         qiblahDirectionImageView = findViewById<ImageView>(R.id.qiblahDirectionImageView)
         needleAnimation = RotateAnimation(
@@ -65,9 +73,14 @@ class QiblahActivity : AppCompatActivity() , SensorEventListener{
 
         initLocationPermissions()
     }
-
+    var firstTime = false
     override fun onResume() {
         super.onResume()
+        if(firstTime) {
+            enableGPS()
+            firstTime = true
+        }
+
         sensorManager?.registerListener(
             this,
             sensor,
@@ -89,10 +102,11 @@ class QiblahActivity : AppCompatActivity() , SensorEventListener{
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == ACCESS_FINE_LOCATION_REQ_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                initLocationListener()
+//                initLocationListener()
             }
         }
     }
+    private var mLocationPermissionGranted = false
 
     private fun initLocationPermissions() {
         if (Build.VERSION.SDK_INT >= MARSHMALLOW) {
@@ -101,14 +115,75 @@ class QiblahActivity : AppCompatActivity() , SensorEventListener{
                     Manifest.permission.ACCESS_FINE_LOCATION
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
-                initLocationListener()
+                mLocationPermissionGranted = true
+                enableGPS()
             } else {
-                requestPermission()
+                locationPermissionDeined()
             }
         } else {
-            initLocationListener()
+            locationPermissionDeined()
         }
     }
+    private fun locationPermissionDeined() {
+        mLocationPermissionGranted = false
+        openAppSettings()
+    }
+    private fun openAppSettings() {
+        android.app.AlertDialog.Builder(this)
+            .setTitle(R.string.app_location_permission)
+            .setMessage(R.string.location_permission_msg)
+            .setPositiveButton(android.R.string.ok,
+                DialogInterface.OnClickListener { dialog, which ->
+                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    val uri = Uri.fromParts("package", packageName, null)
+                    intent.data = uri
+                    startActivity(intent)
+                })
+            .setIcon(R.drawable.common_google_signin_btn_icon_dark)
+            .setCancelable(false)
+            .show()
+    }
+    private val fusedLocationProviderClient: FusedLocationProviderClient? = null
+
+    fun openGPS(){
+        mLocationRequest?.let {
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                initLocationListener()
+                return
+            }
+            if (fusedLocationProviderClient != null) {
+                mLocationRequest?.let {
+                    fusedLocationProviderClient.requestLocationUpdates(
+                        it,
+                        mLocationCallback,
+                        Looper.myLooper()!!
+                    )
+                }
+            } // permission already checked before starting service
+            mLocationPermissionGranted = true
+        }
+        enableGPS()
+    }
+    private var currentLocation: Location? = null
+
+    private var mLocationCallback: LocationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            super.onLocationResult(locationResult)
+            val location = locationResult.lastLocation
+            if (currentLocation != null) {
+                currentLocation = location
+            }
+        }
+    }
+
 
     @SuppressLint("MissingPermission")
     private fun initLocationListener() {
@@ -245,6 +320,47 @@ class QiblahActivity : AppCompatActivity() , SensorEventListener{
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
     }
+    private var mLocationRequest: LocationRequest? = null
+    private val REQUEST_CHECK_SETTINGS = 1
 
+    private fun enableGPS() {
+        val builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(mLocationRequest!!)
+        val client = LocationServices.getSettingsClient(this)
+        val task = client.checkLocationSettings(builder.build())
+        task.addOnSuccessListener(
+            this
+        ) {
+            openGPS()
+
+        }
+        task.addOnFailureListener(
+            this
+        ) { e: Exception? ->
+            if (e is ResolvableApiException) {
+                try {
+
+                    e.startResolutionForResult(
+                        this,
+                        REQUEST_CHECK_SETTINGS
+                    )
+                } catch (sendEx: IntentSender.SendIntentException) {
+                    Toast.makeText(this, sendEx.localizedMessage, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            REQUEST_CHECK_SETTINGS -> when (resultCode) {
+                RESULT_OK -> {
+                }
+                RESULT_CANCELED -> {
+                }
+            }
+        }
+    }
 
 }
