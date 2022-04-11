@@ -212,9 +212,9 @@ class HomeFragment : Fragment(), AlAdahanUseCases.View, PrayerSoundClickListener
         currentYear = currentYearFormat.format(currentLocalTime)
 
         if(homeFragmentViewModel.preference.getLanguage().equals("ar")) {
-            binding.dateGeorgian.text = georgianFullDateFormat.format(cal.time).toString()
+            binding.dateGeorgian.text = ", ${georgianFullDateFormat.format(cal.time).toString()}"
         }else{
-            binding.dateGeorgian.text = georgianFullDateFormatEn.format(cal.time).toString()
+            binding.dateGeorgian.text = ", ${georgianFullDateFormatEn.format(cal.time).toString()}"
 
         }
     }

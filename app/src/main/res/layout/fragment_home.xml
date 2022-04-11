@@ -33,47 +33,47 @@
                 android:id="@+id/background"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/man_riding_camel_in_desert_night_generated"
+                android:background="@drawable/ic_background_home_fragment"
+                android:elevation="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintBottom_toBottomOf="@id/backgroundTint" />
 
             <ImageView
                 android:id="@+id/backgroundTint"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:background="@color/transGreenBackground3"
-                android:elevation="2dp"
-                app:layout_constraintBottom_toBottomOf="@id/background"
-                app:layout_constraintEnd_toEndOf="@id/background"
-                app:layout_constraintStart_toStartOf="@id/background"
-                app:layout_constraintTop_toTopOf="@id/background" />
+                android:background="@drawable/ic_background_green_home_fragment"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/date_georgian"
+                android:id="@+id/remainingTimeForNextPrayerValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
                 android:elevation="6dp"
                 android:fontFamily="@font/tajawalbold"
                 android:textColor="@color/appWhite"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@id/background"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/background" />
+                android:layout_marginEnd="4dp"
+                android:layout_marginStart="108dp"
+                app:layout_constraintTop_toTopOf="@id/backgroundTint"
+                app:layout_constraintBottom_toBottomOf="@id/backgroundTint"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/date_hijri"
+                android:id="@+id/remainingTimeForNextPrayer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:elevation="6dp"
-                android:fontFamily="@font/tajawalregular"
+                android:fontFamily="@font/tajawalbold"
                 android:textColor="@color/appWhite"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/date_georgian" />
+                android:textSize="14sp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintStart_toEndOf="@id/remainingTimeForNextPrayerValue"
+                app:layout_constraintTop_toTopOf="@id/remainingTimeForNextPrayerValue"
+                app:layout_constraintBottom_toBottomOf="@id/remainingTimeForNextPrayerValue"/>
 
             <ImageView
                 android:id="@+id/sideMenu"
@@ -83,20 +83,19 @@
                 android:background="@drawable/ic_side_menu_nav_icon"
                 android:elevation="4dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/date_georgian" />
+                app:layout_constraintTop_toTopOf="@id/remainingTimeForNextPrayer" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraint_header"
                 android:layout_width="match_parent"
-                android:layout_height="220dp"
+                android:layout_height="92dp"
                 android:layout_marginStart="12dp"
                 android:layout_marginEnd="12dp"
-                android:layout_marginTop="8dp"
                 android:background="@drawable/view_background_rounded"
                 android:elevation="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/date_hijri">
+                app:layout_constraintTop_toBottomOf="@id/backgroundTint">
 
                 <ImageView
                     android:id="@+id/backgroundImage"
@@ -104,52 +103,18 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/ic_background_constraint_next_prayer" />
 
-                <TextView
-                    android:id="@+id/remainingTimeForNextPrayer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="48dp"
-                    android:fontFamily="@font/tajawalregular"
-                    android:textColor="@color/black"
-                    android:textSize="12sp"
-                    android:textAlignment="center"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/remainingTimeForNextPrayerValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:fontFamily="@font/tajawalbold"
-                    android:text=""
-                    android:textColor="@color/textColorGreen"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/remainingTimeForNextPrayer" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginEnd="16dp"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/remainingTimeForNextPrayerValue">
 
                     <ImageView
                         android:id="@+id/locationIcon"
-                        android:layout_width="8dp"
-                        android:layout_height="12dp"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
                         android:layout_gravity="center"
-                        android:layout_marginStart="4dp"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="20dp"
                         android:layout_marginEnd="4dp"
-                        android:background="@drawable/location_icon" />
+                        android:background="@drawable/location_icon"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"/>
 
                     <TextView
                         android:id="@+id/deviceCurrentLocation"
@@ -159,10 +124,48 @@
                         android:maxWidth="240dp"
                         android:maxLines="2"
                         android:text=""
-                        android:textColor="@color/black"
-                        android:textSize="12sp" />
+                        android:textColor="@color/textColorGreen"
+                        android:textSize="14sp"
+                        android:layout_marginStart="8dp"
+                        app:layout_constraintStart_toEndOf="@id/locationIcon"
+                        app:layout_constraintTop_toTopOf="@id/locationIcon"
+                        app:layout_constraintBottom_toBottomOf="@id/locationIcon"/>
 
-                </LinearLayout>
+                <ImageView
+                    android:id="@+id/dateIcon"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/ic_calendar"
+                    app:layout_constraintTop_toBottomOf="@id/locationIcon"
+                    app:layout_constraintStart_toStartOf="@id/locationIcon"/>
+
+                <TextView
+                    android:id="@+id/date_hijri"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/tajawalregular"
+                    android:text=""
+                    android:textColor="@color/textColorGreen"
+                    android:textSize="14sp"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintStart_toEndOf="@id/dateIcon"
+                    app:layout_constraintTop_toTopOf="@id/dateIcon"
+                    app:layout_constraintBottom_toBottomOf="@id/dateIcon"/>
+
+                <TextView
+                    android:id="@+id/date_georgian"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/tajawalregular"
+                    android:textColor="@color/textColorGreen"
+                    android:textSize="14sp"
+                    android:textAlignment="center"
+                    android:layout_marginStart="4dp"
+                    app:layout_constraintStart_toEndOf="@id/date_hijri"
+                    app:layout_constraintTop_toTopOf="@id/date_hijri"
+                    app:layout_constraintBottom_toBottomOf="@id/date_hijri"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -174,8 +177,8 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/view_background_rounded_with_green_border"
-                android:elevation="2dp"
+                android:background="@drawable/view_background_rounded"
+                android:elevation="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/constraint_header">
@@ -222,8 +225,8 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="20dp"
-                android:background="@drawable/view_background_rounded_with_green_border"
-                android:elevation="2dp"
+                android:background="@drawable/view_background_rounded"
+                android:elevation="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/constraint_body">
