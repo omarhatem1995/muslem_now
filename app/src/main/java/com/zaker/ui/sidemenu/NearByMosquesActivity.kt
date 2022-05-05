@@ -164,15 +164,15 @@ class NearByMosquesActivity : AppCompatActivity() , GooglePlacesUseCases.View {
                 enableGPS()
                 getLocationUpdates()
             } else {
-                locationPermissionDeined()
+                locationPermissionDenied()
                 binding.refreshNearByButton.visibility = View.VISIBLE
             }
         } else {
-            locationPermissionDeined()
+            locationPermissionDenied()
             binding.refreshNearByButton.visibility = View.VISIBLE
         }
     }
-    private fun locationPermissionDeined() {
+    private fun locationPermissionDenied() {
         mLocationPermissionGranted = false
         openAppSettings()
     }
