@@ -7,7 +7,7 @@
 
         <variable
             name="settings_azkar"
-            type="com.myapplication.ui.settings.SettingsViewModel" />
+            type="com.zaker.ui.settings.SettingsViewModel" />
 
     </data>
 

@@ -50,11 +50,14 @@ dependencies {
     def coroutines_version = "1.1.1"
     def room_version = "2.4.1"
 
+    //paging 3
+    def paging_version = "3.1.0"
+
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 
     implementation 'com.google.android.gms:play-services-places:17.0.0'
     implementation 'com.google.android.gms:play-services-fitness:21.0.1'
-    
+
     implementation 'com.google.android.libraries.places:places:2.4.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin_version"
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -89,7 +92,7 @@ dependencies {
     //room dependencies
     implementation "androidx.room:room-runtime:$room_version"
 
-   kapt "androidx.room:room-compiler:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     testImplementation "androidx.room:room-testing:$room_version"
     implementation("androidx.room:room-paging:2.4.1")
@@ -116,17 +119,13 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
-        implementation "androidx.recyclerview:recyclerview:1.2.1"
-        // For control over item selection of both touch and mouse driven selection
-        implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
-
-    //paging 3
-    def paging_version = "3.1.0"
+    implementation "androidx.recyclerview:recyclerview:1.2.1"
+    // For control over item selection of both touch and mouse driven selection
+    implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
 
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 
     implementation 'com.google.android.exoplayer:exoplayer:2.17.0'
-
 
 
 }

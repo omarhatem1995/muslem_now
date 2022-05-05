@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.myapplication">
+    package="com.zaker">
 
     <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".data.core.workmanager.MuslemApp"
+        android:name="com.zaker.data.core.workmanager.MuslemApp"
         android:allowBackup="true"
         android:icon="@drawable/muslem_now_logo"
         android:label="@string/app_name"
@@ -22,10 +22,10 @@
         android:theme="@style/Theme.MuslemNow"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ui.sidemenu.SahihBukharyActivity"
+            android:name="com.zaker.ui.sidemenu.SahihBukharyActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.sidemenu.RadioActivity"
+            android:name="com.zaker.ui.sidemenu.RadioActivity"
             android:exported="false" />
 
         <meta-data
@@ -33,17 +33,17 @@
             android:value="AIzaSyB_mbG3vnY5ABJA4Ay9L_yKbtFy5D5gltg" />
 
         <activity
-            android:name=".ui.sidemenu.NamesOfAllahActivity"
+            android:name="com.zaker.ui.sidemenu.NamesOfAllahActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.sidemenu.NearByMosquesActivity"
+            android:name="com.zaker.ui.sidemenu.NearByMosquesActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.sidemenu.RosaryActivity"
+            android:name="com.zaker.ui.sidemenu.RosaryActivity"
             android:exported="false" />
 
         <receiver
-            android:name=".widgets.QiblaWidget"
+            android:name="com.zaker.widgets.QiblaWidget"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -56,7 +56,7 @@
                 android:resource="@xml/qibla_widget_info" />
         </receiver>
         <receiver
-            android:name=".widgets.NextPrayerWidget"
+            android:name="com.zaker.widgets.NextPrayerWidget"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -75,7 +75,7 @@
                 android:resource="@xml/next_prayer_widget_info" />
         </receiver>
         <receiver
-            android:name=".widgets.PrayerTimesWidget"
+            android:name="com.zaker.widgets.PrayerTimesWidget"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -89,7 +89,7 @@
                 android:resource="@xml/prayer_times_widget_info" />
         </receiver>
         <receiver
-            android:name=".widgets.AzkarWidget"
+            android:name="com.zaker.widgets.AzkarWidget"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -103,7 +103,7 @@
                 android:resource="@xml/azkar_widget_info" />
         </receiver>
         <receiver
-            android:name=".MyNotificationPublisher"
+            android:name="com.zaker.MyNotificationPublisher"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -111,7 +111,7 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".data.core.workmanager.AzkarReciever"
+            android:name="com.zaker.data.core.workmanager.AzkarReciever"
             android:enabled="true"
             android:exported="true"
             android:process=":remote">
@@ -121,40 +121,40 @@
         </receiver>
 
         <activity
-            android:name=".ui.fragments.quran.QuranActivity"
+            android:name="com.zaker.ui.fragments.quran.QuranActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.settings.SettingsActivity"
+            android:name="com.zaker.ui.settings.SettingsActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.QiblahActivityNewLogic"
+            android:name="com.zaker.ui.QiblahActivityNewLogic"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.settings.SettingsInAppActivity"
+            android:name="com.zaker.ui.settings.SettingsInAppActivity"
             android:exported="false"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/AppFullScreenTheme" />
         <activity
-            android:name=".ui.fragments.azkar.AzkarActivity"
+            android:name="com.zaker.ui.fragments.azkar.AzkarActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.sidemenu.QiblahActivity"
+            android:name="com.zaker.ui.sidemenu.QiblahActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.zaker.MainActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.splash.SplashActivity"
+            android:name="com.zaker.ui.splash.SplashActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait">
@@ -166,7 +166,7 @@
         </activity>
 
         <service
-            android:name=".data.core.workmanager.AlarmService"
+            android:name="com.zaker.data.core.workmanager.AlarmService"
             android:enabled="true"
             android:exported="true" />
     </application>

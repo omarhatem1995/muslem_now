@@ -6,7 +6,7 @@
     <data>
         <variable
             name="sebha_viewModel"
-            type="com.myapplication.ui.fragments.home.HomeViewModel" />
+            type="com.zaker.ui.fragments.home.HomeViewModel" />
 
     </data>
 

@@ -1,0 +1,166 @@
+package com.zaker.data.entities.model.googleplaces
+
+import com.google.gson.annotations.Expose
+
+import com.google.gson.annotations.SerializedName
+
+
+
+class GooglePlacesResponse (
+    @SerializedName("html_attributions")
+    @Expose
+    var htmlAttributions: List<Any>? = null,
+    @SerializedName("next_page_token")
+    @Expose
+    var nextPageToken: String? = null,
+    @SerializedName("results")
+    @Expose
+    var resultGooglePlaces: List<Result>? = null,
+    @SerializedName("status")
+    @Expose
+    var status: String? = null,
+)
+
+class Geometry (
+    @SerializedName("location")
+    @Expose
+    var location: Location? = null,
+    @SerializedName("viewport")
+    @Expose
+    var viewport: Viewport? = null
+)
+
+class Location (
+    @SerializedName("lat")
+    @Expose
+    var lat: Double? = null,
+    @SerializedName("lng")
+    @Expose
+    var lng: Double? = null
+)
+class Northeast (
+    @SerializedName("lat")
+    @Expose
+    var lat: Double? = null,
+    @SerializedName("lng")
+    @Expose
+    var lng: Double? = null
+)
+class OpeningHours (
+    @SerializedName("open_now")
+    @Expose
+    var openNow: Boolean? = null
+)
+class Photo (
+    @SerializedName("height")
+    @Expose
+    var height: Int? = null,
+
+    @SerializedName("html_attributions")
+    @Expose
+    var htmlAttributions: List<String>? = null,
+
+    @SerializedName("photo_reference")
+    @Expose
+    var photoReference: String? = null,
+
+    @SerializedName("width")
+    @Expose
+    var width: Int? = null
+    )
+class PlusCode (
+    @SerializedName("compound_code")
+    @Expose
+    var compoundCode: String? = null,
+
+    @SerializedName("global_code")
+    @Expose
+    var globalCode: String? = null
+)
+class Result (
+    @SerializedName("business_status")
+    @Expose
+    var businessStatus: String? = null,
+
+    @SerializedName("geometry")
+    @Expose
+    var geometry: Geometry? = null,
+
+    @SerializedName("icon")
+    @Expose
+    var icon: String? = null,
+
+    @SerializedName("icon_background_color")
+    @Expose
+    var iconBackgroundColor: String? = null,
+
+    @SerializedName("icon_mask_base_uri")
+    @Expose
+    var iconMaskBaseUri: String? = null,
+
+    @SerializedName("name")
+    @Expose
+    var name: String? = null,
+
+    @SerializedName("opening_hours")
+    @Expose
+    var openingHours: OpeningHours? = null,
+
+    @SerializedName("photos")
+    @Expose
+    var photos: List<Photo>? = null,
+
+    @SerializedName("place_id")
+    @Expose
+    var placeId: String? = null,
+
+    @SerializedName("plus_code")
+    @Expose
+    var plusCode: PlusCode? = null,
+
+    @SerializedName("rating")
+    @Expose
+    var rating: Double? = null,
+
+    @SerializedName("reference")
+    @Expose
+    var reference: String? = null,
+
+    @SerializedName("scope")
+    @Expose
+    var scope: String? = null,
+
+    @SerializedName("types")
+    @Expose
+    var types: List<String>? = null,
+
+    @SerializedName("user_ratings_total")
+    @Expose
+    var userRatingsTotal: Int? = null,
+
+    @SerializedName("vicinity")
+    @Expose
+    var vicinity: String? = null,
+
+    @SerializedName("price_level")
+    @Expose
+    var priceLevel: Int? = null,
+)
+class Southwest (
+    @SerializedName("lat")
+    @Expose
+    var lat: Double? = null,
+
+    @SerializedName("lng")
+    @Expose
+    var lng: Double? = null
+)
+class Viewport (
+    @SerializedName("northeast")
+    @Expose
+    var northeast: Northeast? = null,
+
+    @SerializedName("southwest")
+    @Expose
+    var southwest: Southwest? = null
+)

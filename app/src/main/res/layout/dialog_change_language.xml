@@ -5,7 +5,7 @@
     <data>
         <variable
             name="changelanguageViewModel"
-            type="com.myapplication.ui.settings.SettingsViewModel" />
+            type="com.zaker.ui.settings.SettingsViewModel" />
 
     </data>
 

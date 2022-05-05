@@ -6,7 +6,7 @@
     <data>
         <variable
             name="azkarFragment"
-            type="com.myapplication.ui.fragments.azkar.AzkarViewModel" />
+            type="com.zaker.ui.fragments.azkar.AzkarViewModel" />
 
     </data>
 

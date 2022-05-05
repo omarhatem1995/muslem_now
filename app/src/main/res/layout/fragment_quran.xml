@@ -6,7 +6,7 @@
     <data>
         <variable
             name="quranFragment"
-            type="com.myapplication.ui.fragments.quran.QuranViewModel" />
+            type="com.zaker.ui.fragments.quran.QuranViewModel" />
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout

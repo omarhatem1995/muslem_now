@@ -31,7 +31,9 @@ buildscript {
 
 allprojects {
     repositories {
-        jcenter()
+        jcenter {
+            url "http://jcenter.bintray.com/"
+        }
         mavenCentral()
         google()
         maven { url "http://api.tplmaps.com:8081/artifactory/example-repo-local/" }

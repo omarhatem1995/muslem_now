@@ -6,7 +6,7 @@
   <data>
     <variable
         name="quranViewModel"
-        type="com.myapplication.ui.fragments.quran.QuranActivity" />
+        type="com.zaker.ui.fragments.quran.QuranActivity" />
 
   </data>
 

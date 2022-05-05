@@ -10,7 +10,7 @@
         <import type="android.view.View"/>
         <variable
             name="home_viewmodel"
-            type="com.myapplication.ui.fragments.home.HomeViewModel" />
+            type="com.zaker.ui.fragments.home.HomeViewModel" />
 
     </data>
 

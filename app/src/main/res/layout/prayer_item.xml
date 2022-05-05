@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
-    <com.myapplication.ui.AutoFitTextView
+    <com.zaker.ui.AutoFitTextView
         android:id="@+id/prayer_name"
         android:layout_width="54dp"
         android:layout_height="wrap_content"
